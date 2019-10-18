@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title> Blue.Planet.II.S02E07.1080p </title>
+<title> Blue Planet II S02E07 </title>
 <style type="text/css">
     body {font-family: arial,verdana,geneva,sans-serif; font-size: 18px; color: #000; background-color: #eee;}
     .chapter_part {margin: 50px auto;
@@ -11,47 +11,29 @@
         border-radius:25px;
         -moz-border-radius:25px; /* Old Firefox */
     }
-    .paragraph_part {
-        margin: 0;
-        text-indent:2em;
-    }
+    .paragraph_part { margin: 0; text-indent:2em; }
     .eng {display:inline;}
     .eng-b {display:block;}
-    .panel{
-        position: fixed;
-        margin-left: 6%;
-        top: 64%;
+    .panel{ position: fixed; margin-left: 6%; top: 75%;
     }
     .panel-btn{
-        position:relative;
-        margin-bottom:.75rem;
-        text-align: center;
-        font-size:1.8em;
-        color:#888;
-        width:3rem;
-        height:3rem;
+        position:relative; margin-bottom:.75rem;
+        text-align: center; font-size:1.8em;
+        color:#888; width:3rem; height:3rem;
         background-color:#fff;
         background-repeat:no-repeat;
-        border:5px solid #ddd;
-        border-radius:50%;
+        border:5px solid #ddd; border-radius:50%;
         box-shadow:0 2px 4px 0 rgba(0,0,0,.04);
-        cursor:pointer
+        cursor:pointer;
     }
-    .word_hot{
-        font-weight:bold;
-        color:#ff4500;
-    }
-    .word_hot_rare{
-        font-weight:bold;
-        color:#8fbc8f;
-    }
+    .word_hot{ font-weight:bold; color:#ff4500; }
+    .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
 </style>
 </head>
 <body>
 <div class="panel">
 <div class="panel-btn" title="切换展开中文" onclick="display_chs()">➽</div>
 <div class="panel-btn" title="切换按句显示" onclick="display_lines()">✿</div>
-<div class="panel-btn" title="其他">✂</div>
 </div>
 
 <div class="chapter_part">
@@ -542,7 +524,7 @@ function display_chs(){
     for (var i = 0; i < $cnLines.length; i++) {
         var line = $cnLines[i];
         if(line.title) { line.innerHTML = line.title; line.removeAttribute("title");  }
-        else if(line.innerHTML!="➤") {line.title=line.innerHTML; line.innerHTML = "➤"; }
+        else if(line.innerHTML!="➤") {line.title=line.innerHTML; if (line.innerHTML!="") line.innerHTML = "➤"; }
         line.style.color=font_default_color;
     }
 }
@@ -567,8 +549,10 @@ var handler = function(event) {
             else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
             else if (window.document.selection) { txt = window.document.selection.createRange().text;}
             if (txt != '')    break;
-            if(event.target.title) { event.target.innerHTML = event.target.title; event.target.removeAttribute("title"); event.target.style.color="#aaa" }
-            else {event.target.title=event.target.innerHTML; event.target.innerHTML = "➤"; event.target.style.color="red";}
+            if(event.target.title) { event.target.innerHTML = event.target.title; event.target.removeAttribute("title"); event.target.style.color=font_default_color }
+            else {event.target.title=event.target.innerHTML;
+                if (event.target.innerHTML!="") event.target.innerHTML = "➤";
+                event.target.style.color="red";}
             break;
         case "mouseover":
             if(event.target.title)    event.target.style.color="red";
@@ -579,10 +563,15 @@ var handler = function(event) {
     }
 }
 var $cnLines = document.getElementsByClassName("chs");
+if ($cnLines.length==0){
+   var btns = document.getElementsByClassName("panel")[0];
+    btns.removeChild(btns.children[0])
+} else
 for (var i = 0; i < $cnLines.length; i++) {
     var line = $cnLines[i];
-    line.style.fontSize = "90%"; line.style.color=font_default_color;
-    line.innerHTML = "➤"; line.style.marginLeft="1em";
+    line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
+    if (line.title=="") {line.innerHTML =""; continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML = "➤"; 
     line.addEventListener("click",handler,false);
     line.addEventListener("mouseover",handler,false);
     line.addEventListener("mouseout",handler,false);
