@@ -1,2 +1,7 @@
 .ul_one {margin: 0px;padding: 0px;}  
-.ul_one li {display:inline;background-color: #ccd;margin: 0px 20px 10px 0px;}  
+.ul_one li {display:inline;margin: 0px 20px 10px 0px;}  
+a{text-decoration:none;background-color: #fafafe;}
+a:link{color:#009aff;}
+a:visited{color:purple;}
+a:hover{color:blue;}
+a:active{color:red;}
