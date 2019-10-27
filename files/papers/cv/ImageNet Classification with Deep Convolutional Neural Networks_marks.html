@@ -1,0 +1,458 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title> ImageNet Classification with Deep Convolutional Neural Networks </title>
+<style type="text/css">
+    body {font-family: arial,verdana,geneva,sans-serif; font-size: 18px; color: #000; background-color: #eee;}
+    .chapter_part {margin: 50px auto;
+        width: 72%; background-color: #fefefe;
+        padding:10px 10px 0;
+        box-shadow: 0 0 0 20px #f8f8f8;
+        border-radius:25px;
+        -moz-border-radius:25px; /* Old Firefox */
+    }
+    .paragraph_part { margin: 0; text-indent:2em; }
+    .panel{ position: fixed; margin-left: 6%; top: 75%;
+    }
+    .panel-btn{
+        position:relative; margin-bottom:.75rem;
+        text-align: center; font-size:1.8em;
+        color:#888; width:3rem; height:3rem;
+        background-color:#fff;
+        background-repeat:no-repeat;
+        border:5px solid #ddd; border-radius:50%;
+        box-shadow:0 2px 4px 0 rgba(0,0,0,.04);
+        cursor:pointer;
+    }
+    .word_hot{ font-weight:bold; color:#ff4500; }
+    .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
+    .eng {display:inline;}
+    .eng.line {display:block;}
+    .eng.para {display:inline;}
+    .chs:before{content:"➤"; font-size:%25;}
+    .chs.on:before{content:"➤"; font-size:%25;}
+    .chs.off:before{content:"";}
+</style>
+</head>
+<body>
+<div class="chapter_part">
+<div class="paragraph_part">    <div class="eng">ImageNet Classification with Deep Convolutional Neural Networks<span class="chs" title="基于深度卷积神经网络的ImageNet分类"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Abstract<span class="chs" title="摘要"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 different classes.<span class="chs" title="我们训练了一个大型深度卷积神经网络来将ImageNet LSVRC-2010竞赛的120万高分辨率的图像分到1000不同的类别中。"><span></div>
+    <div class="eng">On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0% which is considerably better than the previous state-of-the-art.<span class="chs" title="在测试数据上，我们得到了top-1 37.5%, top-5 17.0%的错误率，这个结果比目前的最好结果好很多。"><span></div>
+    <div class="eng">The neural network, which has 60 million parameters and 650,000 neurons, consists of five convolutional layers, some of which are followed by <span class="word_hot_rare">max-pooling</span> layers, and three <span class="word_hot_rare">fully-connected</span> layers with a final 1000-way softmax.<span class="chs" title="这个神经网络有6000万参数和650000个神经元，包含5个卷积层（某些卷积层后面带有池化层）和3个全连接层，最后是一个1000维的softmax。"><span></div>
+    <div class="eng">To make training faster, we used <span class="word_hot_rare">non-saturating</span> neurons and a very efficient GPU implementation of the convolution operation.<span class="chs" title="为了训练的更快，我们使用了非饱和神经元并对卷积操作进行了非常有效的GPU实现。"><span></div>
+    <div class="eng">To reduce overfitting in the <span class="word_hot_rare">fully-connected</span> layers we employed a <span class="word_hot_rare">recently-developed</span> regularization method called “dropout” that proved to be very effective.<span class="chs" title="为了减少全连接层的过拟合，我们采用了一个最近开发的名为dropout的正则化方法，结果证明是非常有效的。"><span></div>
+    <div class="eng">We also entered a <span class="word_hot" title="[ˈveəriənt]">variant</span> of this model in the <span class="word_hot_rare">ILSVRC</span>-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the second-best entry.<span class="chs" title="我们也使用这个模型的一个变种参加了ILSVRC-2012竞赛，赢得了冠军并且与第二名 top-5 26.2%的错误率相比，我们取得了top-5 15.3%的错误率。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">1 Introduction<span class="chs" title="1 引言"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Current approaches to object recognition make essential use of machine learning methods.<span class="chs" title="当前的目标识别方法基本上都使用了机器学习方法。"><span></div>
+    <div class="eng">To improve their performance, we can collect larger datasets, learn more powerful models, and use better techniques for preventing overfitting.<span class="chs" title="为了提高目标识别的性能，我们可以收集更大的数据集，学习更强大的模型，使用更好的技术来防止过拟合。"><span></div>
+    <div class="eng">Until recently, datasets of labeled images were relatively small -- on the order of tens of thousands of images (e.g., <span class="word_hot_rare">NORB</span> [16], <span class="word_hot" title="['kæltek]">Caltech</span>-101/256 [8, 9], and <span class="word_hot_rare">CIFAR</span>-10/100 [12]).<span class="chs" title="直到最近，标注图像的数据集都相对较小--在几万张图像的数量级上（例如，NORB[16]，Caltech-101/256 [8, 9]和CIFAR-10/100 [12]）。"><span></div>
+    <div class="eng">Simple recognition tasks can be solved quite well with datasets of this size, especially if they are <span class="word_hot" title="[ɔ:gˈment]">augment</span>ed with <span class="word_hot_rare">label-preserving</span> transformations.<span class="chs" title="简单的识别任务在这样大小的数据集上可以被解决的相当好，尤其是如果通过标签保留变换进行数据增强的情况下。"><span></div>
+    <div class="eng">For example, the current best error rate on the <span class="word_hot_rare">MNIST</span> <span class="word_hot_rare">digit-recognition</span> task (&lt;0.3%) approaches human performance [4].<span class="chs" title="例如，目前在MNIST数字识别任务上（&amp;lt;0.3%）的最好准确率已经接近了人类水平[4]。"><span></div>
+    <div class="eng">But objects in realistic settings exhibit considerable <span class="word_hot" title="[ˌveəriəˈbɪləti]">variability</span>, so to learn to recognize them it is necessary to use much larger training sets.<span class="chs" title="但真实环境中的对象表现出了相当大的可变性，因此为了学习识别它们，有必要使用更大的训练数据集。"><span></div>
+    <div class="eng">And indeed, the shortcomings of small image datasets have been widely recognized (e.g., <span class="word_hot" title="[ˈpɪntəʊ]">Pinto</span> et al.[21]), but it has only recently become possible to collect labeled datasets with millions of images.<span class="chs" title="实际上，小图像数据集的缺点已经被广泛认识到（例如，Pinto et al. [21]），但收集上百万图像的标注数据仅在最近才变得的可能。"><span></div>
+    <div class="eng">The new larger datasets include <span class="word_hot_rare">LabelMe</span> [23], which consists of hundreds of thousands of <span class="word_hot_rare">fully-segmented</span> images, and ImageNet [6], which consists of over 15 million labeled high-resolution images in over 22,000 categories.<span class="chs" title="新的更大的数据集包括LabelMe [23]，它包含了数十万张完全分割的图像，ImageNet[6]，它包含了22000个类别上的超过1500万张标注的高分辨率的图像。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">To learn about thousands of objects from millions of images, we need a model with a large learning capacity.<span class="chs" title="为了从数百万张图像中学习几千个对象，我们需要一个有很强学习能力的模型。"><span></div>
+    <div class="eng">However, the <span class="word_hot" title="[ɪˈmens]">immense</span> complexity of the object recognition task means that this problem cannot be specified even by a dataset as large as ImageNet, so our model should also have lots of prior knowledge to compensate for all the data we don’t have.<span class="chs" title="然而对象识别任务的巨大复杂性意味着这个问题不能被指定，即使通过像ImageNet这样的大数据集，因此我们的模型应该也有许多先验知识来补偿我们所没有的数据。"><span></div>
+    <div class="eng">Convolutional neural networks (CNNs) <span class="word_hot" title="[ˈkɒnstɪtju:t]">constitute</span> one such class of models [16, 11, 13, 18, 15, 22, 26].<span class="chs" title="卷积神经网络(CNNs)构成了一个这样的模型[16, 11, 13, 18, 15, 22, 26]。"><span></div>
+    <div class="eng">Their capacity can be controlled by varying their depth and breadth, and they also make strong and mostly correct assumptions about the nature of images (namely, <span class="word_hot" title="[steɪʃə'nærɪtɪ]">stationarity</span> of statistics and locality of pixel dependencies).<span class="chs" title="它们的能力可以通过改变它们的广度和深度来控制，它们也可以对图像的本质进行强大且通常正确的假设（也就是说，统计的稳定性和像素依赖的局部性）。"><span></div>
+    <div class="eng">Thus, compared to standard <span class="word_hot" title="[fi:d'fɔ:wəd]">feedforward</span> neural networks with <span class="word_hot_rare">similarly-sized</span> layers, CNNs have much fewer connections and parameters and so they are easier to train, while their <span class="word_hot_rare">theoretically-best</span> performance is likely to be only slightly worse.<span class="chs" title="因此，与具有层次大小相似的标准前馈神经网络，CNNs有更少的连接和参数，因此它们更容易训练，而它们理论上的最佳性能可能仅比标准前馈神经网络差一点。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Despite the attractive qualities of CNNs, and despite the relative efficiency of their local architecture, they have still been <span class="word_hot" title="[prəʊˈhɪbɪtɪvlɪ]">prohibitively</span> expensive to apply in large scale to high-resolution images.<span class="chs" title="尽管CNN具有引人注目的质量，尽管它们的局部架构相当有效，但将它们大规模的应用到到高分辨率图像中仍然是极其昂贵的。"><span></div>
+    <div class="eng">Luckily, current GPUs, paired with a <span class="word_hot_rare">highly-optimized</span> implementation of 2D convolution, are powerful enough to facilitate the training of <span class="word_hot_rare">interestingly-large</span> CNNs, and recent datasets such as ImageNet contain enough labeled examples to train such models without severe overfitting.<span class="chs" title="幸运的是，目前的GPU，搭配了高度优化的2D卷积实现，强大到足够促进有趣地大量CNN的训练，最近的数据集例如ImageNet包含足够的标注样本来训练这样的模型而没有严重的过拟合。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The specific contributions of this paper are as follows: we trained one of the largest convolutional neural networks to date on the subsets of ImageNet used in the <span class="word_hot_rare">ILSVRC</span>-2010 and <span class="word_hot_rare">ILSVRC</span>-2012 competitions [2] and achieved by far the best results ever reported on these datasets.<span class="chs" title="本文具体的贡献如下：我们在ILSVRC-2010和ILSVRC-2012[2]的ImageNet子集上训练了到目前为止最大的神经网络之一，并取得了迄今为止在这些数据集上报道过的最好结果。"><span></div>
+    <div class="eng">We wrote a <span class="word_hot_rare">highly-optimized</span> GPU implementation of 2D convolution and all the other operations inherent in training convolutional neural networks, which we make available publicly.<span class="chs" title="我们编写了高度优化的2D卷积GPU实现以及训练卷积神经网络内部的所有其它操作，我们把它公开了。"><span></div>
+    <div class="eng">Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 3.<span class="chs" title="我们的网络包含许多新的不寻常的特性，这些特性提高了神经网络的性能并减少了训练时间，详见第三节。"><span></div>
+    <div class="eng">The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 4.<span class="chs" title="即使使用了120万标注的训练样本，我们的网络尺寸仍然使过拟合成为一个明显的问题，因此我们使用了一些有效的技术来防止过拟合，详见第四节。"><span></div>
+    <div class="eng">Our final network contains five convolutional and three <span class="word_hot_rare">fully-connected</span> layers, and this depth seems to be important: we found that removing any convolutional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.<span class="chs" title="我们最终的网络包含5个卷积层和3个全连接层，深度似乎是非常重要的：我们发现移除任何卷积层（每个卷积层包含的参数不超过模型参数的1%）都会导致更差的性能。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate.<span class="chs" title="最后，网络尺寸主要受限于目前GPU的内存容量和我们能忍受的训练时间。"><span></div>
+    <div class="eng">Our network takes between five and six days to train on two <span class="word_hot_rare">GTX</span> 580 3GB GPUs.<span class="chs" title="我们的网络在两个GTX 580 3GB GPU上训练五六天。"><span></div>
+    <div class="eng">All of our experiments suggest that our results can be improved simply by waiting for faster GPUs and bigger datasets to become available.<span class="chs" title="我们的所有实验表明我们的结果可以简单地通过等待更快的GPU和更大的可用数据集来提高。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">2 The Dataset<span class="chs" title="2 数据集"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">ImageNet is a dataset of over 15 million labeled high-resolution images belonging to roughly 22,000 categories.<span class="chs" title="ImageNet数据集有超过1500万的标注高分辨率图像，这些图像属于大约22000个类别。"><span></div>
+    <div class="eng">The images were collected from the web and labeled by human <span class="word_hot_rare">labelers</span> using Amazon’s Mechanical <span class="word_hot" title="[tә:k]">Turk</span> <span class="word_hot_rare">crowd-sourcing</span> tool.<span class="chs" title="这些图像是从网上收集的，使用了Amazon’s Mechanical Turk的众包工具通过人工标注的。"><span></div>
+    <div class="eng">Starting in 2010, as part of the <span class="word_hot" title="['pæskәl]">Pascal</span> Visual Object Challenge, an annual competition called the ImageNet Large-Scale Visual Recognition Challenge (<span class="word_hot_rare">ILSVRC</span>) has been held.<span class="chs" title="从2010年起，作为Pascal视觉对象挑战赛的一部分，每年都会举办ImageNet大规模视觉识别挑战赛（ILSVRC）。"><span></div>
+    <div class="eng"><span class="word_hot_rare">ILSVRC</span> uses a subset of ImageNet with roughly 1000 images in each of 1000 categories.<span class="chs" title="ILSVRC使用ImageNet的一个子集，1000个类别每个类别大约1000张图像。"><span></div>
+    <div class="eng">In all, there are roughly 1.2 million training images, 50,000 validation images, and 150,000 testing images.<span class="chs" title="总计，大约120万训练图像，50000张验证图像和15万测试图像。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng"><span class="word_hot_rare">ILSVRC</span>-2010 is the only version of <span class="word_hot_rare">ILSVRC</span> for which the test set labels are available, so this is the version on which we performed most of our experiments.<span class="chs" title="ILSVRC-2010是ILSVRC竞赛中唯一可以获得测试集标签的版本，因此我们大多数实验都是在这个版本上运行的。"><span></div>
+    <div class="eng">Since we also entered our model in the <span class="word_hot_rare">ILSVRC</span>-2012 competition, in Section 6 we report our results on this version of the dataset as well, for which test set labels are unavailable.<span class="chs" title="由于我们也使用我们的模型参加了ILSVRC-2012竞赛，因此在第六节我们也报告了模型在这个版本的数据集上的结果，这个版本的测试标签是不可获得的。"><span></div>
+    <div class="eng">On ImageNet, it is customary to report two error rates: top-1 and top-5, where the top-5 error rate is the fraction of test images for which the correct label is not among the five labels considered most probable by the model.<span class="chs" title="在ImageNet上，按照惯例报告两个错误率：top-1和top-5，top-5错误率是指测试图像的正确标签不在模型认为的五个最可能的便签之中。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">ImageNet consists of <span class="word_hot_rare">variable-resolution</span> images, while our system requires a constant input dimensionality.<span class="chs" title="ImageNet包含各种分辨率的图像，而我们的系统要求不变的输入维度。"><span></div>
+    <div class="eng">Therefore, we <span class="word_hot_rare">down-sampled</span> the images to a fixed resolution of 256 × 256.<span class="chs" title="因此，我们将图像进行下采样到固定的256×256分辨率。"><span></div>
+    <div class="eng">Given a <span class="word_hot" title="[rek'tæŋɡjələ(r)]">rectangular</span> image, we first <span class="word_hot" title="[ri:'skeɪl]">rescale</span>d the image such that the shorter side was of length 256, and then cropped out the central 256×256 patch from the resulting image.<span class="chs" title="给定一个矩形图像，我们首先缩放图像短边长度为256，然后从结果图像中裁剪中心的256×256大小的图像块。"><span></div>
+    <div class="eng">We did not pre-process the images in any other way, except for subtracting the mean activity over the training set from each pixel.<span class="chs" title="除了在训练集上对像素减去平均活跃度外，我们不对图像做任何其它的预处理。"><span></div>
+    <div class="eng">So we trained our network on the (centered) raw RGB values of the pixels.<span class="chs" title="因此我们在原始的RGB像素值（中心的）上训练我们的网络。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3 The Architecture<span class="chs" title="3 架构"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The architecture of our network is summarized in Figure 2. It contains eight learned layers — five convolutional and three <span class="word_hot_rare">fully-connected</span>.<span class="chs" title="我们的网络架构概括为图2。它包含八个学习层--5个卷积层和3个全连接层。"><span></div>
+    <div class="eng">Below, we describe some of the novel or unusual features of our network’s architecture.<span class="chs" title="下面，我们将描述我们网络结构中的一些新奇的不寻常的特性。"><span></div>
+    <div class="eng">Sections 3.1-3.4 are sorted according to our estimation of their importance, with the most important first.<span class="chs" title="3.1-3.4小节按照我们对它们评估的重要性进行排序，最重要的最有先。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3.1 <span class="word_hot_rare">ReLU</span> <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">Nonlinearity</span><span class="chs" title="3.1 ReLU非线性"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The standard way to model a neuron’s output f as a function of its input x is with f(x) = tanh(x) or f(x) = (1 + e−x)−1. In terms of training time with gradient <span class="word_hot" title="[dɪˈsent]">descent</span>, these <span class="word_hot" title="[ˈsætʃəreɪt]">saturat</span>ing <span class="word_hot_rare">nonlinearities</span> are much slower than the non-<span class="word_hot" title="[ˈsætʃəreɪt]">saturat</span>ing <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> f(x) = max(0,x).<span class="chs" title="将神经元输出f建模为输入x的函数的标准方式是用f(x) = tanh(x)或f(x) = (1 + e−x)−1。考虑到梯度下降的训练时间，这些饱和的非线性比非饱和非线性f(x) = max(0,x)更慢。"><span></div>
+    <div class="eng">Following <span class="word_hot" title="['nɑ:ɪə]">Nair</span> and <span class="word_hot_rare">Hinton</span> [20], we refer to neurons with this <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> as <span class="word_hot" title="[ˈrektɪfaɪ]">Rectif</span>ied Linear Units (<span class="word_hot_rare">ReLUs</span>).<span class="chs" title="根据Nair和Hinton[20]的说法，我们将这种非线性神经元称为修正线性单元(ReLU)。"><span></div>
+    <div class="eng">Deep convolutional neural networks with <span class="word_hot_rare">ReLUs</span> train several times faster than their equivalents with tanh units.<span class="chs" title="采用ReLU的深度卷积神经网络训练时间比等价的tanh单元要快几倍。"><span></div>
+    <div class="eng">This is demonstrated in Figure 1, which shows the number of iterations required to reach 25% training error on the <span class="word_hot_rare">CIFAR</span>-10 dataset for a particular four-layer convolutional network.<span class="chs" title="在图1中，对于一个特定的四层卷积网络，在CIFAR-10数据集上达到25%的训练误差所需要的迭代次数可以证实这一点。"><span></div>
+    <div class="eng">This plot shows that we would not have been able to experiment with such large neural networks for this work if we had used traditional <span class="word_hot" title="[ˈsætʃəreɪt]">saturat</span>ing neuron models.<span class="chs" title="这幅图表明，如果我们采用传统的饱和神经元模型，我们将不能在如此大的神经网络上实验该工作。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Figure 1: A four-layer convolutional neural network with <span class="word_hot_rare">ReLUs</span> (solid line) reaches a 25% training error rate on <span class="word_hot_rare">CIFAR</span>-10 six times faster than an equivalent network with tanh neurons (<span class="word_hot" title="[dæʃ]">dash</span>ed line).<span class="chs" title="图1：使用ReLU的四层卷积神经网络在CIFAR-10数据集上达到25%的训练误差比使用tanh神经元的等价网络（虚线）快六倍。"><span></div>
+    <div class="eng">The learning rates for each network were chosen independently to make training as fast as possible.<span class="chs" title="为了使训练尽可能快，每个网络的学习率是单独选择的。"><span></div>
+    <div class="eng">No regularization of any kind was employed.<span class="chs" title="没有采用任何类型的正则化。"><span></div>
+    <div class="eng">The magnitude of the effect demonstrated here varies with network architecture, but networks with <span class="word_hot_rare">ReLUs</span> consistently learn several times faster than equivalents with <span class="word_hot" title="[ˈsætʃəreɪt]">saturat</span>ing neurons.<span class="chs" title="影响的大小随着网络结构的变化而变化，这一点已得到证实，但使用ReLU的网络都比等价的饱和神经元快几倍。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We are not the first to consider alternatives to traditional neuron models in CNNs.<span class="chs" title="我们不是第一个考虑替代CNN中传统神经元模型的人。"><span></div>
+    <div class="eng">For example, <span class="word_hot_rare">Jarrett</span> et al. [11] claim that the <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> f(x) = |tanh(x)| works particularly well with their type of contrast normalization followed by local average pooling on the <span class="word_hot" title="['kæltek]">Caltech</span>-101 dataset.<span class="chs" title="例如，Jarrett等人[11]声称非线性函数f(x) = |tanh(x)|与其对比度归一化一起，然后是局部均值池化，在Caltech-101数据集上工作的非常好。"><span></div>
+    <div class="eng">However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using <span class="word_hot_rare">ReLUs</span>.<span class="chs" title="然而，在这个数据集上主要的关注点是防止过拟合，因此他们观测到的影响不同于我们使用ReLU拟合数据集时的加速能力。"><span></div>
+    <div class="eng">Faster learning has a great influence on the performance of large models trained on large datasets.<span class="chs" title="更快的学习对大型数据集上大型模型的性能有很大的影响。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3.2 Training on Multiple GPUs<span class="chs" title="3.2 多GPU训练"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">A single <span class="word_hot_rare">GTX</span> 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it.<span class="chs" title="单个GTX580 GPU只有3G内存，这限制了可以在GTX580上进行训练的网络最大尺寸。"><span></div>
+    <div class="eng">It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU.<span class="chs" title="事实证明120万图像用来进行网络训练是足够的，但网络太大因此不能在单个GPU上进行训练。"><span></div>
+    <div class="eng">Therefore we spread the net across two GPUs.<span class="chs" title="因此我们将网络分布在两个GPU上。"><span></div>
+    <div class="eng">Current GPUs are particularly well-suited to <span class="word_hot_rare">cross-GPU</span> <span class="word_hot" title="[pærəlɪlaɪ'zeɪʃn]">parallelization</span>, as they are able to read from and write to one another’s memory directly, without going through host machine memory.<span class="chs" title="目前的GPU非常适合跨GPU并行，因为它们可以直接互相读写内存，而不需要通过主机内存。"><span></div>
+    <div class="eng">The <span class="word_hot" title="[pærəlɪlaɪ'zeɪʃn]">parallelization</span> scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one additional trick: the GPUs communicate only in certain layers.<span class="chs" title="我们采用的并行方案基本上每个GPU放置一半的核（或神经元），还有一个额外的技巧：只在某些特定的层上进行GPU通信。"><span></div>
+    <div class="eng">This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.<span class="chs" title="这意味着，例如，第3层的核会将第2层的所有核映射作为输入。然而，第4层的核只将位于相同GPU上的第3层的核映射作为输入。"><span></div>
+    <div class="eng">Choosing the pattern of <span class="word_hot" title="[ˌkɒnekˈtɪvɪti]">connectivity</span> is a problem for <span class="word_hot" title="[k'rɒsvælɪd'eɪʃn]">cross-validation</span>, but this allows us to precisely tune the amount of communication until it is an acceptable fraction of the amount of computation.<span class="chs" title="连接模式的选择是一个交叉验证问题，但这可以让我们准确地调整通信数量，直到它的计算量在可接受的范围内。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The <span class="word_hot" title="[rɪˈzʌltənt]">resultant</span> architecture is somewhat similar to that of the “<span class="word_hot" title="[kə'lʌmnə]">columnar</span>” CNN employed by <span class="word_hot_rare">Ciresan</span> et al. [5], except that our columns are not independent (see Figure 2).<span class="chs" title="除了我们的列不是独立的之外（看图2），最终的架构有点类似于Ciresan等人[5]采用的“columnar” CNN。"><span></div>
+    <div class="eng">This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU.<span class="chs" title="与每个卷积层一半的核在单GPU上训练的网络相比，这个方案降分别低了我们的top-1 1.7%，top-5 1.2%的错误率。"><span></div>
+    <div class="eng">The two-GPU net takes slightly less time to train than the one-GPU net.<span class="chs" title="双GPU网络比单GPU网络稍微减少了训练时间。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Figure 2: An illustration of the architecture of our CNN, explicitly showing the <span class="word_hot" title="[dɪˌlɪnɪ'eɪʃn]">delineation</span> of responsibilities between the two GPUs.<span class="chs" title="图 2：我们CNN架构图解，明确描述了两个GPU之间的责任。"><span></div>
+    <div class="eng">One GPU runs the <span class="word_hot_rare">layer-parts</span> at the top of the figure while the other runs the <span class="word_hot_rare">layer-parts</span> at the bottom.<span class="chs" title="在图的顶部，一个GPU运行在部分层上，而在图的底部，另一个GPU运行在部分层上。"><span></div>
+    <div class="eng">The GPUs communicate only at certain layers.<span class="chs" title="GPU只在特定的层进行通信。"><span></div>
+    <div class="eng">The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 253,440–186,624–64,896–64,896–43,264– 4096–4096–1000.<span class="chs" title="网络的输入是150,528维，网络剩下层的神经元数目分别是253,440–186,624–64,896–64,896–43,264–4096–4096–1000（8层）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3.3 Local Response Normalization<span class="chs" title="3.3 局部响应归一化"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng"><span class="word_hot_rare">ReLUs</span> have the desirable property that they do not require input normalization to prevent them from <span class="word_hot" title="[ˈsætʃəreɪt]">saturat</span>ing.<span class="chs" title="ReLU具有让人满意的特性，它不需要通过输入归一化来防止饱和。"><span></div>
+    <div class="eng">If at least some training examples produce a positive input to a <span class="word_hot_rare">ReLU</span>, learning will happen in that neuron.<span class="chs" title="如果至少一些训练样本对ReLU产生了正输入，那么那个神经元上将发生学习。"><span></div>
+    <div class="eng">However, we still find that the following local normalization scheme aids generalization.<span class="chs" title="然而，我们仍然发现接下来的局部响应归一化有助于泛化。"><span></div>
+    <div class="eng">Denoting by <span class="word_hot_rare">aix</span>,y the activity of a neuron computed by applying kernel i at position (x,y) and then applying the <span class="word_hot_rare">ReLU</span> <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span>, the <span class="word_hot_rare">response-normalized</span> activity bix,y is given by the expression<span class="chs" title="aix,y表示神经元激活，通过在(x,y)位置应用核i，然后应用ReLU非线性来计算，响应归一化激活bix,y通过下式给定："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">bix,y=aix,y/(k+α∑j=max(0,i−n/2)min(N−1,i+n/2)(ajx,y)2)β<span class="chs" title="bix,y=aix,y/(k+α∑j=max(0,i−n/2)min(N−1,i+n/2)(aix,y)2)β"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer.<span class="chs" title="其中，求和运算在n个“毗邻的”核映射的同一位置上执行，N是本层的卷积核数目。"><span></div>
+    <div class="eng">The ordering of the kernel maps is of course <span class="word_hot" title="[ˈɑ:bɪtrəri]">arbitrary</span> and determined before training begins.<span class="chs" title="核映射的顺序当然是任意的，在训练开始前确定。"><span></div>
+    <div class="eng">This sort of response normalization implements a form of <span class="word_hot" title="[ˈlætərəl]">lateral</span> <span class="word_hot" title="[ˌɪnhɪˈbɪʃn]">inhibition</span> inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels.<span class="chs" title="响应归一化的顺序实现了一种侧抑制形式，灵感来自于真实神经元中发现的类型，为使用不同核进行神经元输出计算的较大活动创造了竞争。"><span></div>
+    <div class="eng">The constants k, n, α, and β are <span class="word_hot_rare">hyper-parameters</span> whose values are determined using a validation set; we used k = 2, n = 5, α = 0.0001, and β = 0.75. We applied this normalization after applying the <span class="word_hot_rare">ReLU</span> <span class="word_hot" title="[nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> in certain layers (see Section 3.5).<span class="chs" title="常量k，n，α，β是超参数，它们的值通过验证集确定；我们设k=2，n=5，α=0.0001，β=0.75。我们在特定的层使用的ReLU非线性之后应用了这种归一化（请看3.5小节）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">This scheme bears some resemblance to the local contrast normalization scheme of <span class="word_hot_rare">Jarrett</span> et al. [11], but ours would be more correctly termed “<span class="word_hot" title="['braɪtnəs]">brightness</span> normalization”, since we do not subtract the mean activity.<span class="chs" title="这个方案与Jarrett等人[11]的局部对比度归一化方案有一定的相似性，但我们更恰当的称其为“亮度归一化”，因此我们没有减去均值。"><span></div>
+    <div class="eng">Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively.<span class="chs" title="响应归一化分别减少了top-1 1.4%，top-5 1.2%的错误率。"><span></div>
+    <div class="eng">We also verified the effectiveness of this scheme on the <span class="word_hot_rare">CIFAR</span>-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.<span class="chs" title="我们也在CIFAR-10数据集上验证了这个方案的有效性：一个乜嘢归一化的四层CNN取得了13%的错误率，而使用归一化取得了11%的错误率。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3.4 Overlapping Pooling<span class="chs" title="3.4 重叠池化"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Pooling layers in CNNs summarize the outputs of <span class="word_hot" title="['neɪbərɪŋ]">neighboring</span> groups of neurons in the same kernel map.<span class="chs" title="CNN中的池化层归纳了同一核映射上相邻组神经元的输出。"><span></div>
+    <div class="eng">Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., [17, 11, 4]).<span class="chs" title="习惯上，相邻池化单元归纳的区域是不重叠的（例如[17, 11, 4]）。"><span></div>
+    <div class="eng">To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z×z centered at the location of the pooling unit.<span class="chs" title="更确切的说，池化层可看作由池化单元网格组成，网格间距为s个像素，每个网格归纳池化单元中心位置z×z大小的邻居。"><span></div>
+    <div class="eng">If we set s=z, we obtain traditional local pooling as commonly employed in CNNs.<span class="chs" title="如果设置s=z，我们会得到通常在CNN中采用的传统局部池化。"><span></div>
+    <div class="eng">If we set s&lt;z, we obtain overlapping pooling.<span class="chs" title="如果设置s&amp;lt;z，我们会得到重叠池化。"><span></div>
+    <div class="eng">This is what we use throughout our network, with s=2 and z=3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non-overlapping scheme s=2,z=2, which produces output of equivalent dimensions.<span class="chs" title="这就是我们网络中使用的方法，设置s=2，z=3。这个方案分别降低了top-1 0.4%，top-5 0.3%的错误率，与非重叠方案s=2，z=2相比，输出的维度是相等的。"><span></div>
+    <div class="eng">We generally observe during training that models with overlapping pooling find it slightly more difficult to <span class="word_hot_rare">overfit</span>.<span class="chs" title="我们在训练过程中通常观察采用重叠池化的模型，发现它更难过拟合。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">3.5 Overall Architecture<span class="chs" title="3.5 整体架构"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Now we are ready to describe the overall architecture of our CNN.<span class="chs" title="现在我们准备描述我们的CNN的整体架构。"><span></div>
+    <div class="eng">As depicted in Figure 2, the net contains eight layers with weights; the first five are convolutional and the remaining three are <span class="word_hot_rare">fully-connected</span>.<span class="chs" title="如图2所示，我们的网络包含8个带权重的层；前5层是卷积层，剩下的3层是全连接层。"><span></div>
+    <div class="eng">The output of the last <span class="word_hot_rare">fully-connected</span> layer is fed to a 1000-way softmax which produces a distribution over the 1000 class labels.<span class="chs" title="最后一层全连接层的输出是1000维softmax的输入，softmax会产生1000类标签的分布。"><span></div>
+    <div class="eng">Our network maximizes the <span class="word_hot" title="[ˌmʌltɪ'nəʊmɪəl]">multinomial</span> logistic regression objective, which is equivalent to maximizing the average across training cases of the <span class="word_hot_rare">log-probability</span> of the correct label under the prediction distribution.<span class="chs" title="我们的网络最大化多项逻辑回归的目标，这等价于最大化预测分布下训练样本正确标签的对数概率的均值。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2).<span class="chs" title="第2，4，5卷积层的核只与位于同一GPU上的前一层的核映射相连接（看图2）。"><span></div>
+    <div class="eng">The kernels of the third convolutional layer are connected to all kernel maps in the second layer.<span class="chs" title="第3卷积层的核与第2层的所有核映射相连。"><span></div>
+    <div class="eng">The neurons in the <span class="word_hot_rare">fully-connected</span> layers are connected to all neurons in the previous layer.<span class="chs" title="全连接层的神经元与前一层的所有神经元相连。"><span></div>
+    <div class="eng"><span class="word_hot_rare">Response-normalization</span> layers follow the first and second convolutional layers.<span class="chs" title="第1，2卷积层之后是响应归一化层。"><span></div>
+    <div class="eng"><span class="word_hot_rare">Max-pooling</span> layers, of the kind described in Section 3.4, follow both <span class="word_hot_rare">response-normalization</span> layers as well as the fifth convolutional layer.<span class="chs" title="3.4节描述的这种最大池化层在响应归一化层和第5卷积层之后。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">ReLU</span> <span class="word_hot" title="['nɒnlaɪn'ərɪtɪ]">non-linearity</span> is applied to the output of every convolutional and <span class="word_hot_rare">fully-connected</span> layer.<span class="chs" title="ReLU非线性应用在每个卷积层和全连接层的输出上。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the <span class="word_hot" title="[rɪˈseptɪv]">receptive</span> field centers of <span class="word_hot" title="['neɪbərɪŋ]">neighboring</span> neurons in a kernel map).<span class="chs" title="第1卷积层使用96个核对224 × 224 × 3的输入图像进行滤波，核大小为11 × 11 × 3，步长是4个像素（核映射中相邻神经元感受野中心之间的距离）。"><span></div>
+    <div class="eng">The second convolutional layer takes as input the (<span class="word_hot_rare">response-normalized</span> and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48.<span class="chs" title="第2卷积层使用用第1卷积层的输出（响应归一化和池化）作为输入，并使用256个核进行滤波，核大小为5 × 5 × 48。"><span></div>
+    <div class="eng">The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.<span class="chs" title="第3，4，5卷积层互相连接，中间没有接入池化层或归一化层。"><span></div>
+    <div class="eng">The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (<span class="word_hot" title="[ˈnɔ:məlaɪz]">normalize</span>d, pooled) outputs of the second convolutional layer.<span class="chs" title="第3卷积层有384个核，核大小为3 × 3 × 256，与第2卷积层的输出（归一化的，池化的）相连。"><span></div>
+    <div class="eng">The fourth convolutional layer has 384 kernels of size 3 × 3 × 192 , and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192.<span class="chs" title="第4卷积层有384个核，核大小为3 × 3 × 192，第5卷积层有256个核，核大小为3 × 3 × 192。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">fully-connected</span> layers have 4096 neurons each.<span class="chs" title="每个全连接层有4096个神经元。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">4 Reducing Overfitting<span class="chs" title="4 减少过拟合"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Our neural network architecture has 60 million parameters.<span class="chs" title="我们的神经网络架构有6000万参数。"><span></div>
+    <div class="eng">Although the 1000 classes of <span class="word_hot_rare">ILSVRC</span> make each training example impose 10 bits of constraint on the mapping from image to label, this turns out to be insufficient to learn so many parameters without considerable overfitting.<span class="chs" title="尽管ILSVRC的1000类使每个训练样本从图像到标签的映射上强加了10比特的约束，但这不足以学习这么多的参数而没有相当大的过拟合。"><span></div>
+    <div class="eng">Below, we describe the two primary ways in which we combat overfitting.<span class="chs" title="下面，我们会描述我们用来克服过拟合的两种主要方式。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">4.1 Data <span class="word_hot" title="[ˌɔ:ɡmen'teɪʃn]">Augmentation</span><span class="chs" title="4.1 数据增强"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The easiest and most common method to reduce overfitting on image data is to <span class="word_hot" title="[ˌɑ:tɪ'fɪʃəlɪ]">artificially</span> enlarge the dataset using <span class="word_hot_rare">label-preserving</span> transformations (e.g., [25, 4, 5]).<span class="chs" title="图像数据上最简单常用的用来减少过拟合的方法是使用标签保留变换（例如[25, 4, 5]）来人工增大数据集。"><span></div>
+    <div class="eng">We employ two distinct forms of data <span class="word_hot" title="[ˌɔ:ɡmen'teɪʃn]">augmentation</span>, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.<span class="chs" title="我们使用了两种独特的数据增强方式，这两种方式都可以从原始图像通过非常少的计算量产生变换的图像，因此变换图像不需要存储在硬盘上。"><span></div>
+    <div class="eng">In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images.<span class="chs" title="在我们的实现中，变换图像通过CPU的Python代码生成，而此时GPU正在训练前一批图像。"><span></div>
+    <div class="eng">So these data <span class="word_hot" title="[ˌɔ:ɡmen'teɪʃn]">augmentation</span> schemes are, in effect, <span class="word_hot_rare">computationally</span> free.<span class="chs" title="因此，实际上这些数据增强方案是计算免费的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The first form of data <span class="word_hot" title="[ˌɔ:ɡmen'teɪʃn]">augmentation</span> consists of generating image translations and horizontal reflections.<span class="chs" title="第一种数据增强方式包括产生图像变换和水平翻转。"><span></div>
+    <div class="eng">We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256×256 images and training our network on these extracted patches.<span class="chs" title="我们从256×256图像上通过随机提取224 × 224的图像块实现了这种方式，然后在这些提取的图像块上进行训练。"><span></div>
+    <div class="eng">This increases the size of our training set by a factor of 2048, though the resulting training examples are, of course, highly <span class="word_hot" title="[ˌɪntədɪˈpendənt]">interdependent</span>.<span class="chs" title="这通过一个2048因子增大了我们的训练集，尽管最终的训练样本是高度相关的。"><span></div>
+    <div class="eng">Without this scheme, our network suffers from substantial overfitting, which would have forced us to use much smaller networks.<span class="chs" title="没有这个方案，我们的网络会有大量的过拟合，这会迫使我们使用更小的网络。"><span></div>
+    <div class="eng">At test time, the network makes a prediction by extracting five 224 × 224 patches (the four corner patches and the center patch) as well as their horizontal reflections (hence ten patches in all), and averaging the predictions made by the network’s softmax layer on the ten patches.<span class="chs" title="在测试时，网络会提取5个224 × 224的图像块（四个角上的图像块和中心的图像块）和它们的水平翻转（因此总共10个图像块）进行预测，然后对网络在10个图像块上的softmax层进行平均。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">The second form of data <span class="word_hot" title="[ˌɔ:ɡmen'teɪʃn]">augmentation</span> consists of altering the intensities of the RGB channels in training images.<span class="chs" title="第二种数据增强方式包括改变训练图像的RGB通道的强度。"><span></div>
+    <div class="eng"><span class="word_hot" title="[spəˈsɪfɪkli]">Specifically</span>, we perform <span class="word_hot_rare">PCA</span> on the set of RGB pixel values throughout the ImageNet training set.<span class="chs" title="具体地，我们在整个ImageNet训练集上对RGB像素值集合执行PCA。"><span></div>
+    <div class="eng">To each training image, we add multiples of the found principal components, with magnitudes <span class="word_hot" title="[prəˈpɔ:ʃənl]">proportional</span> to the corresponding <span class="word_hot" title="['aɪdʒənˌvælju:]">eigenvalue</span>s times a random variable drawn from a <span class="word_hot" title="['gaʊsɪən]">Gaussian</span> with mean zero and standard <span class="word_hot" title="[ˌdi:viˈeɪʃn]">deviation</span> 0.1.<span class="chs" title="对于每幅训练图像，我们加上多倍找到的主成分，大小成正比的对应特征值乘以一个随机变量，随机变量通过均值为0，标准差为0.1的高斯分布得到。"><span></div>
+    <div class="eng">Therefore to each RGB image pixel Ixy=[IRxy,IGxy,IBxy]T we add the following quantity:<span class="chs" title="因此对于每幅RGB图像像素Ixy=[IRxy,IGxy,IBxy]T，我们加上下面的数量："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">[p1,p2,p3][α1λ1,α2λ2,α3λ3]T<span class="chs" title="[p1,p2,p3][α1λ1,α2λ2,α3λ3]T"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">where pi and λi are ith <span class="word_hot" title="['aɪgənvektə(r)]">eigenvector</span> and <span class="word_hot" title="['aɪdʒənˌvælju:]">eigenvalue</span> of the 3 × 3 <span class="word_hot" title="[kəʊ'veərɪəns]">covariance</span> matrix of RGB pixel values, respectively, and αi is the <span class="word_hot" title="[əˌfɔ:ˈmenʃənd]">aforementioned</span> random variable.<span class="chs" title="pi，λi分别是RGB像素值3 × 3协方差矩阵的第i个特征向量和特征值，αi是前面提到的随机变量。"><span></div>
+    <div class="eng">Each αi is drawn only once for all the pixels of a particular training image until that image is used for training again, at which point it is <span class="word_hot" title="[ri'drɔ]">re-draw</span>n.<span class="chs" title="对于某个训练图像的所有像素，每个αi只获取一次，直到图像进行下一次训练时才重新获取。"><span></div>
+    <div class="eng">This scheme approximately captures an important property of natural images, namely, that object identity is <span class="word_hot" title="[ɪnˈveəriənt]">invariant</span> to changes in the intensity and color of the illumination.<span class="chs" title="这个方案近似抓住了自然图像的一个重要特性，即光照的颜色和强度发生变化时，目标身份是不变的。"><span></div>
+    <div class="eng">This scheme reduces the top-1 error rate by over 1%.<span class="chs" title="这个方案减少了top 1错误率1%以上。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">4.2 Dropout<span class="chs" title="4.2 失活(Dropout)"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Combining the predictions of many different models is a very successful way to reduce test errors [1, 3], but it appears to be too expensive for big neural networks that already take several days to train.<span class="chs" title="将许多不同模型的预测结合起来是降低测试误差[1, 3]的一个非常成功的方法，但对于需要花费几天来训练的大型神经网络来说，这似乎太昂贵了。"><span></div>
+    <div class="eng">There is, however, a very efficient version of model combination that only costs about a factor of two during training.<span class="chs" title="然而，有一个非常有效的模型结合版本，它只花费两倍的训练成本。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">recently-introduced</span> technique, called “dropout” [10], consists of setting to zero the output of each hidden neuron with probability 0.5. The neurons which are “dropped out” in this way do not contribute to the forward pass and do not participate in <span class="word_hot_rare">back-propagation</span>.<span class="chs" title="这种最近引入的技术，叫做“dropout”[10]，它会以0.5的概率对每个隐层神经元的输出设为0。那些“失活的”的神经元不再进行前向传播并且不参与反向传播。"><span></div>
+    <div class="eng">So every time an input is presented, the neural network samples a different architecture, but all these architectures share weights.<span class="chs" title="因此每次输入时，神经网络会采样一个不同的架构，但所有架构共享权重。"><span></div>
+    <div class="eng">This technique reduces complex <span class="word_hot_rare">co-adaptations</span> of neurons, since a neuron cannot rely on the presence of particular other neurons.<span class="chs" title="这个技术减少了复杂的神经元互适应，因为一个神经元不能依赖特定的其它神经元的存在。"><span></div>
+    <div class="eng">It is, therefore, forced to learn more robust features that are useful in <span class="word_hot" title="[kənˈdʒʌŋkʃn]">conjunction</span> with many different random subsets of the other neurons.<span class="chs" title="因此，神经元被强迫学习更鲁棒的特征，它在与许多不同的其它神经元的随机子集结合时是有用的。"><span></div>
+    <div class="eng">At test time, we use all the neurons but multiply their outputs by 0.5, which is a reasonable <span class="word_hot" title="[əˌprɒksɪˈmeɪʃn]">approximation</span> to taking the <span class="word_hot" title="[ˌdʒi:əˈmetrɪk]">geometric</span> mean of the <span class="word_hot" title="[prɪˈdɪktɪv]">predictive</span> distributions produced by the <span class="word_hot_rare">exponentially-many</span> dropout networks.<span class="chs" title="在测试时，我们使用所有的神经元但它们的输出乘以0.5，对指数级的许多失活网络的预测分布进行几何平均，这是一种合理的近似。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We use dropout in the first two <span class="word_hot_rare">fully-connected</span> layers of Figure 2. Without dropout, our network exhibits substantial overfitting.<span class="chs" title="我们在图2中的前两个全连接层使用失活。如果没有失活，我们的网络表现出大量的过拟合。"><span></div>
+    <div class="eng">Dropout roughly doubles the number of iterations required to <span class="word_hot" title="[kənˈvɜ:dʒ]">converge</span>.<span class="chs" title="失活大致上使要求收敛的迭代次数翻了一倍。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">5 Details of learning<span class="chs" title="5 学习细节"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We trained our models using <span class="word_hot" title="[stə'kæstɪk]">stochastic</span> gradient <span class="word_hot" title="[dɪˈsent]">descent</span> with a batch size of 128 examples, <span class="word_hot" title="[məˈmentəm]">momentum</span> of 0.9, and weight decay of 0.0005.<span class="chs" title="我们使用随机梯度下降来训练我们的模型，样本的batch size为128，动量为0.9，权重衰减为0.0005。"><span></div>
+    <div class="eng">We found that this small amount of weight decay was important for the model to learn.<span class="chs" title="我们发现少量的权重衰减对于模型的学习是重要的。"><span></div>
+    <div class="eng">In other words, weight decay here is not merely a <span class="word_hot_rare">regularizer</span>: it reduces the model’s training error.<span class="chs" title="换句话说，权重衰减不仅仅是一个正则项：它减少了模型的训练误差。"><span></div>
+    <div class="eng">The update rule for weight w was<span class="chs" title="权重w的更新规则是"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">vi+1:=0.9∙vi−0.0005∙ε∙wi−ε∙⟨∂L∂w|wi⟩Di<span class="chs" title="vi+1:=0.9∙vi−0.0005∙ε∙wi−ε∙⟨∂L∂w|wi⟩Di"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">where i is the iteration index, v is the <span class="word_hot" title="[məˈmentəm]">momentum</span> variable, ε is the learning rate, and ⟨∂L∂w|wi⟩Di is the average over the ith batch Di of the <span class="word_hot" title="[dɪˈrɪvətɪv]">derivative</span> of the objective with respect to w, evaluated at wi.<span class="chs" title="其中，i是迭代索引，v是动量变量，ε是学习率，⟨∂L∂w|wi⟩Di是目标函数对w，在wi上的第i批微分Di的平均。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We <span class="word_hot" title="[ɪˈnɪʃəlaɪz]">initialize</span>d the weights in each layer from a zero-mean <span class="word_hot" title="['gaʊsɪən]">Gaussian</span> distribution with standard <span class="word_hot" title="[ˌdi:viˈeɪʃn]">deviation</span> 0.01.<span class="chs" title="我们使用均值为0，标准差为0.01的高斯分布对每一层的权重进行初始化。"><span></div>
+    <div class="eng">We <span class="word_hot" title="[ɪˈnɪʃəlaɪz]">initialize</span>d the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the <span class="word_hot_rare">fully-connected</span> hidden layers, with the constant 1.<span class="chs" title="我们在第2，4，5卷积层和全连接隐层将神经元偏置初始化为常量1。"><span></div>
+    <div class="eng">This <span class="word_hot" title="[ɪˌnɪʃəlaɪ'zeɪʃn]">initialization</span> accelerates the early stages of learning by providing the <span class="word_hot_rare">ReLUs</span> with positive inputs.<span class="chs" title="这个初始化通过为ReLU提供正输入加速了学习的早期阶段。"><span></div>
+    <div class="eng">We <span class="word_hot" title="[ɪˈnɪʃəlaɪz]">initialize</span>d the neuron biases in the remaining layers with the constant 0.<span class="chs" title="我们在剩下的层将神经元偏置初始化为0。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We used an equal learning rate for all layers, which we adjusted manually throughout training.<span class="chs" title="我们对所有的层使用相等的学习率，这个是在整个训练过程中我们手动调整得到的。"><span></div>
+    <div class="eng">The <span class="word_hot" title="[hjuˈrɪstɪk]">heuristic</span> which we followed was to divide the learning rate by 10 when the validation error rate stopped improving with the current learning rate.<span class="chs" title="当验证误差在当前的学习率下停止提供时，我们遵循启发式的方法将学习率除以10。"><span></div>
+    <div class="eng">The learning rate was <span class="word_hot" title="[ɪˈnɪʃəlaɪz]">initialize</span>d at 0.01 and reduced three times prior to <span class="word_hot" title="[ˌtɜ:mɪˈneɪʃn]">termination</span>.<span class="chs" title="学习率初始化为0.01，在训练停止之前降低三次。"><span></div>
+    <div class="eng">We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took five to six days on two <span class="word_hot" title="[ɪn'vɪdɪə]">NVIDIA</span> <span class="word_hot_rare">GTX</span> 580 3GB GPUs.<span class="chs" title="我们在120万图像的训练数据集上训练神经网络大约90个循环，在两个NVIDIA GTX 580 3GB GPU上花费了五到六天。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">6 Results<span class="chs" title="6 结果"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Our results on <span class="word_hot_rare">ILSVRC</span>-2010 are summarized in Table 1. Our network achieves top-1 and top-5 test set error rates of 37.5% and 17.0%.<span class="chs" title="我们在ILSVRC-2010上的结果概括为表1。"><span></div>
+    <div class="eng">The best performance achieved during the <span class="word_hot_rare">ILSVRC</span>-2010 competition was 47.1% and 28.2% with an approach that averages the predictions produced from six <span class="word_hot_rare">sparse-coding</span> models trained on different features [2], and since then the best published results are 45.7% and 25.7% with an approach that averages the predictions of two classifiers trained on Fisher Vectors (<span class="word_hot_rare">FVs</span>) computed from two types of <span class="word_hot_rare">densely-sampled</span> features [24].<span class="chs" title="我们的神经网络取得了top-1 37.5%，top-5 17.0%的错误率。在ILSVRC-2010竞赛中最佳结果是top-1 47.1%，top-5 28.2%，使用的方法是对6个在不同特征上训练的稀疏编码模型生成的预测进行平均，从那时起已公布的最好结果是top-1 45.7%，top-5 25.7%，使用的方法是平均在Fisher向量（FV）上训练的两个分类器的预测结果，Fisher向量是通过两种密集采样特征计算得到的[24]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Table 1: Comparison of results on <span class="word_hot_rare">ILSVRC</span>-2010 test set.<span class="chs" title="表1：ILSVRC-2010测试集上的结果对比。"><span></div>
+    <div class="eng">In <span class="word_hot" title="[ɪˈtælɪk]">italic</span>s are best results achieved by others.<span class="chs" title="斜体是其它人取得的最好结果。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">We also entered our model in the <span class="word_hot_rare">ILSVRC</span>-2012 competition and report our results in Table 2.<span class="chs" title="我们也用我们的模型参加了ILSVRC-2012竞赛并在表2中报告了我们的结果。"><span></div>
+    <div class="eng">Since the <span class="word_hot_rare">ILSVRC</span>-2012 test set labels are not publicly available, we cannot report test error rates for all the models that we tried.<span class="chs" title="由于ILSVRC-2012的测试集标签不可以公开得到，我们不能报告我们尝试的所有模型的测试错误率。"><span></div>
+    <div class="eng">In the remainder of this paragraph, we use validation and test error rates <span class="word_hot" title="[ɪntəˈtʃeɪndʒəblɪ]">interchangeably</span> because in our experience they do not differ by more than 0.1% (see Table 2).<span class="chs" title="在这段的其余部分，我们会使用验证误差率和测试误差率互换，因为在我们的实验中它们的差别不会超过0.1%（看图2）。"><span></div>
+    <div class="eng">The CNN described in this paper achieves a top-5 error rate of 18.2%.<span class="chs" title="本文中描述的CNN取得了top-5 18.2%的错误率。"><span></div>
+    <div class="eng">Averaging the predictions of five similar CNNs gives an error rate of 16.4%.<span class="chs" title="五个类似的CNN预测的平均误差率为16.4%。"><span></div>
+    <div class="eng">Training one CNN, with an extra sixth convolutional layer over the last pooling layer, to classify the entire ImageNet Fall 2011 release (15M images, 22K categories), and then “<span class="word_hot" title="[faɪn tju:n]">fine-tun</span>ing” it on <span class="word_hot_rare">ILSVRC</span>-2012 gives an error rate of 16.6%.<span class="chs" title="为了对ImageNet 2011秋季发布的整个数据集（1500万图像，22000个类别）进行分类，我们在最后的池化层之后有一个额外的第6卷积层，训练了一个CNN，然后在它上面进行“fine-tuning”，在ILSVRC-2012取得了16.6%的错误率。"><span></div>
+    <div class="eng">Averaging the predictions of two CNNs that were pre-trained on the entire Fall 2011 release with the <span class="word_hot" title="[əˌfɔ:ˈmenʃənd]">aforementioned</span> five CNNs gives an error rate of 15.3%.<span class="chs" title="对在ImageNet 2011秋季发布的整个数据集上预训练的两个CNN和前面提到的五个CNN的预测进行平均得到了15.3%的错误率。"><span></div>
+    <div class="eng">The second-best contest entry achieved an error rate of 26.2% with an approach that averages the predictions of several classifiers trained on <span class="word_hot_rare">FVs</span> computed from different types of <span class="word_hot_rare">densely-sampled</span> features [7].<span class="chs" title="第二名的最好竞赛输入取得了26.2%的错误率，他的方法是对FV上训练的一些分类器的预测结果进行平均，FV在不同类型密集采样特征计算得到的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Table 2: Comparison of error rates on <span class="word_hot_rare">ILSVRC</span>-2012 validation and test sets.<span class="chs" title="表2：ILSVRC-2012验证集和测试集的误差对比。"><span></div>
+    <div class="eng">In <span class="word_hot" title="[ɪˈtælɪk]">italic</span>s are best results achieved by others.<span class="chs" title="斜线部分是其它人取得的最好的结果。"><span></div>
+    <div class="eng">Models with an <span class="word_hot" title="[ˈæstərɪsk]">asterisk</span> were “pre-trained” to classify the entire ImageNet 2011 Fall release.<span class="chs" title="带星号的是“预训练的”对ImageNet 2011秋季数据集进行分类的模型。"><span></div>
+    <div class="eng">See Section 6 for details.<span class="chs" title="更多细节请看第六节。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Finally, we also report our error rates on the Fall 2009 version of ImageNet with 10,184 categories and 8.9 million images.<span class="chs" title="最后，我们也报告了我们在ImageNet 2009秋季数据集上的误差率，ImageNet 2009秋季数据集有10,184个类，890万图像。"><span></div>
+    <div class="eng">On this dataset we follow the <span class="word_hot" title="[kənˈvenʃn]">convention</span> in the literature of using half of the images for training and half for testing.<span class="chs" title="在这个数据集上我们按照惯例用一半的图像来训练，一半的图像来测试。"><span></div>
+    <div class="eng">Since there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results <span class="word_hot" title="[ə'pri:ʃəblɪ]">appreciably</span>.<span class="chs" title="由于没有建立测试集，我们的数据集分割有必要不同于以前作者的数据集分割，但这对结果没有明显的影响。"><span></div>
+    <div class="eng">Our top-1 and top-5 error rates on this dataset are 67.4% and 40.9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer.<span class="chs" title="我们在这个数据集上的的top-1和top-5错误率是67.4%和40.9%，使用的是上面描述的在最后的池化层之后有一个额外的第6卷积层网络。"><span></div>
+    <div class="eng">The best published results on this dataset are 78.1% and 60.9% [19].<span class="chs" title="这个数据集上公开可获得的最好结果是78.1%和60.9%[19]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">6.1 <span class="word_hot" title="[ˈkwɒlɪtətɪv]">Qualitative</span> Evaluations<span class="chs" title="6.1 定性评估"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Figure 3 shows the convolutional kernels learned by the network’s two <span class="word_hot_rare">data-connected</span> layers.<span class="chs" title="图3显示了网络的两个数据连接层学习到的卷积核。"><span></div>
+    <div class="eng">The network has learned a variety of frequency and <span class="word_hot_rare">orientation-selective</span> kernels, as well as various colored <span class="word_hot" title="[blɒb]">blob</span>s.<span class="chs" title="网络学习到了大量的频率核、方向选择核，也学到了各种颜色点。"><span></div>
+    <div class="eng">Notice the <span class="word_hot" title="[ˌspeʃəlaɪ'zeɪʃn]">specialization</span> exhibited by the two GPUs, a result of the restricted <span class="word_hot" title="[ˌkɒnekˈtɪvɪti]">connectivity</span> described in Section 3.5. The kernels on GPU 1 are largely <span class="word_hot_rare">color-agnostic</span>, while the kernels on on GPU 2 are largely <span class="word_hot_rare">color-specific</span>.<span class="chs" title="注意两个GPU表现出的专业化，3.5小节中描述的受限连接的结果。GPU 1上的核主要是没有颜色的，而GPU 2上的核主要是针对颜色的。"><span></div>
+    <div class="eng">This kind of <span class="word_hot" title="[ˌspeʃəlaɪ'zeɪʃn]">specialization</span> occurs during every run and is independent of any particular random weight <span class="word_hot" title="[ɪˌnɪʃəlaɪ'zeɪʃn]">initialization</span> (<span class="word_hot" title="['mɒdjʊləʊ]">modulo</span> a <span class="word_hot" title="['ri:'nʌmbə]">renumber</span>ing of the GPUs).<span class="chs" title="这种专业化在每次运行时都会发生，并且是与任何特别的随机权重初始化（以GPU的重新编号为模）无关的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Figure 3: 96 convolutional kernels of size 11×11×3 learned by the first convolutional layer on the 224×224×3 input images.<span class="chs" title="图3：第一卷积层在224×224×3的输入图像上学习到的大小为11×11×3的96个卷积核。"><span></div>
+    <div class="eng">The top 48 kernels were learned on GPU 1 while the bottom 48 kernels were learned on GPU 2. See Section 6.1 for details.<span class="chs" title="上面的48个核是在GPU 1上学习到的而下面的48个卷积核是在GPU 2上学习到的。更多细节请看6.1小节。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">In the left panel of Figure 4 we <span class="word_hot" title="['kwɒlɪtətɪvlɪ]">qualitatively</span> assess what the network has learned by computing its top-5 predictions on eight test images.<span class="chs" title="在图4的左边部分，我们通过在8张测试图像上计算它的top-5预测定性地评估了网络学习到的东西。"><span></div>
+    <div class="eng">Notice that even <span class="word_hot" title="['ɔ:fs'entə]">off-center</span> objects, such as the <span class="word_hot" title="[maɪt]">mite</span> in the <span class="word_hot_rare">top-left</span>, can be recognized by the net.<span class="chs" title="注意即使是不在图像中心的目标也能被网络识别，例如左上角的小虫。"><span></div>
+    <div class="eng">Most of the top-5 labels appear reasonable.<span class="chs" title="大多数的top-5标签似乎是合理的。"><span></div>
+    <div class="eng">For example, only other types of cat are considered plausible labels for the <span class="word_hot" title="[ˈlepəd]">leopard</span>.<span class="chs" title="例如，对于美洲豹来说，只有其它类型的猫被认为是看似合理的标签。"><span></div>
+    <div class="eng">In some cases (<span class="word_hot" title="[ɡrɪl]">grille</span>, cherry) there is genuine ambiguity about the intended focus of the photograph.<span class="chs" title="在某些案例（格栅，樱桃）中，网络在意的图片焦点真的很含糊。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Figure 4: (Left) Eight <span class="word_hot_rare">ILSVRC</span>-2010 test images and the five labels considered most probable by our model.<span class="chs" title="图4：（左）8张ILSVRC-2010测试图像和我们的模型认为最可能的5个标签。"><span></div>
+    <div class="eng">The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).<span class="chs" title="每张图像的下面是它的正确标签，正确标签的概率用红条表示（如果正确标签在top 5中）。"><span></div>
+    <div class="eng">(Right) Five <span class="word_hot_rare">ILSVRC</span>-2010 test images in the first column.<span class="chs" title="（右）第一列是5张ILSVRC-2010测试图像。"><span></div>
+    <div class="eng">The remaining columns show the six training images that produce feature vectors in the last hidden layer with the smallest <span class="word_hot" title="[ju:ˈklidiən]">Euclidean</span> distance from the feature vector for the test image.<span class="chs" title="剩下的列展示了6张训练图像，这些图像在最后的隐藏层的特征向量与测试图像的特征向量有最小的欧氏距离。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Another way to <span class="word_hot" title="[prəʊb]">probe</span> the network’s visual knowledge is to consider the feature <span class="word_hot" title="[,æktɪ'veɪʃən]">activations</span> <span class="word_hot" title="[ɪnˈdju:s]">induce</span>d by an image at the last, 4096-dimensional hidden layer.<span class="chs" title="探索网络可视化知识的另一种方式是思考最后的4096维隐藏层在图像上得到的特征激活。"><span></div>
+    <div class="eng">If two images produce feature <span class="word_hot" title="[ˌæktɪ'veɪʃn]">activation</span> vectors with a small <span class="word_hot" title="[ju:ˈklidiən]">Euclidean</span> separation, we can say that the higher levels of the neural network consider them to be similar.<span class="chs" title="如果两幅图像生成的特征激活向量之间有较小的欧式距离，我们可以认为神经网络的更高层特征认为它们是相似的。"><span></div>
+    <div class="eng">Figure 4 shows five images from the test set and the six images from the training set that are most similar to each of them according to this measure.<span class="chs" title="图4表明根据这个度量标准，测试集的5张图像和训练集的6张图像中的每一张都是最相似的。"><span></div>
+    <div class="eng">Notice that at the pixel level, the <span class="word_hot" title="[rɪˈtri:v]">retrieve</span>d training images are generally not close in L2 to the query images in the first column.<span class="chs" title="注意在像素级别，检索到的训练图像与第一列的查询图像在L2上通常是不接近的。"><span></div>
+    <div class="eng">For example, the <span class="word_hot" title="[rɪˈtri:v]">retrieve</span>d dogs and elephants appear in a variety of poses.<span class="chs" title="例如，检索的狗和大象似乎有很多姿态。"><span></div>
+    <div class="eng">We present the results for many more test images in the <span class="word_hot" title="[ˌsʌplɪˈmentri]">supplementary</span> material.<span class="chs" title="我们在补充材料中对更多的测试图像呈现了这种结果。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Computing similarity by using <span class="word_hot" title="[ju:ˈklidiən]">Euclidean</span> distance between two 4096-dimensional, <span class="word_hot" title="['reɪɑ:lv'ælju:d]">real-valued</span> vectors is inefficient, but it could be made efficient by training an <span class="word_hot_rare">auto-encoder</span> to compress these vectors to short binary codes.<span class="chs" title="通过两个4096维实值向量间的欧氏距离来计算相似性是效率低下的，但通过训练一个自动编码器将这些向量压缩为短二值编码可以使其变得高效。"><span></div>
+    <div class="eng">This should produce a much better image <span class="word_hot" title="[rɪˈtri:vl]">retrieval</span> method than applying <span class="word_hot_rare">auto-encoders</span> to the raw pixels [14], which does not make use of image labels and hence has a tendency to <span class="word_hot" title="[rɪˈtri:v]">retrieve</span> images with similar patterns of edges, whether or not they are <span class="word_hot" title="[sɪ'mæntɪklɪ]">semantically</span> similar.<span class="chs" title="这应该会产生一种比将自动编码器应用到原始像素上[14]更好的图像检索方法，自动编码器应用到原始像素上的方法没有使用图像标签，因此会趋向于检索与要检索的图像具有相似边缘模式的图像，无论它们是否是语义上相似。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">7 Discussion<span class="chs" title="7 探讨"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">Our results show that a large, deep convolutional neural network is capable of achieving <span class="word_hot" title="['rekɔ:d,breikiŋ, 'rekəd-]">record-breaking</span> results on a highly challenging dataset using purely supervised learning.<span class="chs" title="我们的结果表明一个大型深度卷积神经网络在一个具有高度挑战性的数据集上使用纯有监督学习可以取得破纪录的结果。"><span></div>
+    <div class="eng">It is notable that our network’s performance degrades if a single convolutional layer is removed.<span class="chs" title="值得注意的是，如果移除一个卷积层，我们的网络性能会降低。"><span></div>
+    <div class="eng">For example, removing any of the middle layers results in a loss of about 2% for the top-1 performance of the network.<span class="chs" title="例如，移除任何中间层都会引起网络损失大约2%的top-1性能。"><span></div>
+    <div class="eng">So the depth really is important for achieving our results.<span class="chs" title="因此深度对于实现我们的结果非常重要。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">To simplify our experiments, we did not use any <span class="word_hot" title="[ˌʌn'sju:pəvaɪzd]">unsupervised</span> pre-training even though we expect that it will help, especially if we obtain enough <span class="word_hot" title="[ˌkɒmpjuˈteɪʃənl]">computational</span> power to significantly increase the size of the network without obtaining a corresponding increase in the amount of labeled data.<span class="chs" title="为了简化我们的实验，我们没有使用任何无监督的预训练，尽管我们希望它会有所帮助，特别是在如果我们能获得足够的计算能力来显著增加网络的大小而标注的数据量没有对应增加的情况下。"><span></div>
+    <div class="eng">Thus far, our results have improved as we have made our network larger and trained it longer but we still have many orders of magnitude to go in order to match the <span class="word_hot_rare">infero-temporal</span> <span class="word_hot" title="[ˈpɑ:θweɪ]">pathway</span> of the human visual system.<span class="chs" title="到目前为止，我们的结果已经提高了，因为我们的网络更大、训练时间更长，但为了匹配人类视觉系统的下颞线（视觉专业术语）我们仍然有许多数量级要达到。"><span></div>
+    <div class="eng">Ultimately we would like to use very large and deep convolutional nets on video sequences where the temporal structure provides very helpful information that is missing or far less obvious in <span class="word_hot" title="[ˈstætɪk]">static</span> images.<span class="chs" title="最后我们想在视频序列上使用非常大的深度卷积网络，视频序列的时序结构会提供非常有帮助的信息，这些信息在静态图像上是缺失的或远不那么明显。"><span></div>
+</div>
+    <br>
+
+</div>
+<div class="panel">
+<div class="panel-btn" title="切换展开中文" onclick="display_chs()">➽</div>
+<div class="panel-btn" title="切换按句显示" onclick="display_lines()">✿</div>
+</div>
+</body>
+
+<script type="text/javascript">
+font_default_color = "#888"
+function display_chs(){  
+    var $cnLines = document.getElementsByClassName("chs");
+    for (var i = 0; i < $cnLines.length; i++) {
+        var line = $cnLines[i];
+        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
+        else if(line.innerHTML!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
+        line.style.color=font_default_color;
+    }
+}
+function display_lines(){  
+    var $cnLines = document.getElementsByClassName("eng");
+    for (var i = $cnLines.length - 1; i >= 0; i--) {
+        if ($cnLines[i].className == "eng line")
+            $cnLines[i].className = "eng para";
+        else
+            $cnLines[i].className = "eng line";
+    }
+}
+var handler = function(event) {
+    line = event.target;
+    switch (event.type){
+        case "click":
+            var txt = "";
+            if (window.getSelection) { txt = window.getSelection().toString();}
+            else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
+            else if (window.document.selection) { txt = window.document.selection.createRange().text;}
+            if (txt != '')    break;
+            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
+            else {line.title=line.innerHTML;
+                line.innerHTML = "";
+                line.className="chs on";
+                line.style.color="red";}
+            break;
+        case "mouseover":
+            if(line.title)    line.style.color="red";
+            break;
+        case "mouseout":
+            if(line.title)    line.style.color=font_default_color
+            break;
+    }
+}
+var $cnLines = document.getElementsByClassName("chs");
+if ($cnLines.length==0){
+   var btns = document.getElementsByClassName("panel")[0];
+    btns.removeChild(btns.children[0])
+} else
+for (var i = 0; i < $cnLines.length; i++) {
+    var line = $cnLines[i];
+    line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
+    if (line.title=="") {line.innerHTML =""; continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML ="";
+    line.addEventListener("click",handler,false);
+    line.addEventListener("mouseover",handler,false);
+    line.addEventListener("mouseout",handler,false);
+}
+</script>
+</html>

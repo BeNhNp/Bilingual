@@ -12,8 +12,6 @@
         -moz-border-radius:25px; /* Old Firefox */
     }
     .paragraph_part { margin: 0; text-indent:2em; }
-    .eng {display:inline;}
-    .eng-b {display:block;}
     .panel{ position: fixed; margin-left: 6%; top: 75%;
     }
     .panel-btn{
@@ -28,6 +26,12 @@
     }
     .word_hot{ font-weight:bold; color:#ff4500; }
     .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
+    .eng {display:inline;}
+    .eng.line {display:block;}
+    .eng.para {display:inline;}
+    .chs:before{content:"➤"; font-size:%25;}
+    .chs.on:before{content:"➤"; font-size:%25;}
+    .chs.off:before{content:"";}
 </style>
 </head>
 <body>
@@ -40,7 +44,9 @@
     <div class="eng">ただ<span class="chs" title="只是"><span></div>
     <div class="eng">何かが消えてしまうという感覚だけが<span class="chs" title="有一种什么东西要消失的感觉"><span></div>
     <div class="eng">目覚めてからも 長く残る<span class="chs" title="即使醒来后 也一直挥之不去"><span></div>
-    <div class="eng">ずっと何かを 誰かを 探している<span class="chs" title="一直在寻找着什么 寻找着谁"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">ずっと何かを 誰かを 探している<span class="chs" title="一直在寻找着什么 寻找着谁"><span></div>
     <div class="eng"> そいう気持ちに取り憑かれたのは<span class="chs" title=" 陷入这种情绪"><span></div>
     <div class="eng">多分あの日から<span class="chs" title="大概 是从那天开始的"><span></div>
     <div class="eng">あの日 星が降った日<span class="chs" title="那天 彗星划过天际的那天"><span></div>
@@ -48,31 +54,29 @@
     <div class="eng">まるで 夢の景色のように<span class="chs" title="好像梦一样的景色"><span></div>
     <div class="eng">ただひたすらに<span class="chs" title="让人感觉到"><span></div>
     <div class="eng">美しい眺めだった<span class="chs" title="如此美不胜收"><span></div>
-    <div class="eng">あぁ　このまま僕たちの声が<span class="chs" title="啊　如果我们的声音"><span></div>
+    <div class="eng">♪ あぁ　このまま僕たちの声が ♪<span class="chs" title="啊　如果我们的声音"><span></div>
+    <div class="eng">君 の 名 は。<span class="chs" title="你 的 名 字。"><span></div>
+    <div class="eng">♪ 世界の端っこまで消えることなく ♪<span class="chs" title="能传到世界的尽头也不会消失"><span></div>
+    <div class="eng">♪ 届いたりしたらいいのにな ♪<span class="chs" title="那该有多好啊"><span></div>
+    <div class="eng">♪ そしたらねぇ　二人で ♪<span class="chs" title="那样的话　呐，我们会"><span></div>
+    <div class="eng">♪ どんな言葉を放とう ♪<span class="chs" title="留下怎样的话语呢？"><span></div>
+    <div class="eng">♪ 消えることない約束を ♪<span class="chs" title="不如一起喊着“一、二”"><span></div>
+    <div class="eng">♪ 二人で　｢せーの｣で　言おう ♪<span class="chs" title="定下一个永不磨灭的约定吧"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">君の名は。<span class="chs" title="你的名字。"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">世界の端っこまで消えることなく<span class="chs" title="能传到世界的尽头也不会消失"><span></div>
-    <div class="eng">届いたりしたらいいのにな<span class="chs" title="那该有多好啊"><span></div>
-    <div class="eng">そしたらねぇ　二人で<span class="chs" title="那样的话　呐，我们会"><span></div>
-    <div class="eng">どんな言葉を放とう<span class="chs" title="留下怎样的话语呢？"><span></div>
-    <div class="eng">消えることない約束を<span class="chs" title="不如一起喊着“一、二”"><span></div>
-    <div class="eng">二人で　｢せーの｣で　言おう<span class="chs" title="定下一个永不磨灭的约定吧"><span></div>
-    <div class="eng">あぁ　｢願ったらなにがしかが叶う｣<span class="chs" title="啊　“只要许愿梦想终会实现”"><span></div>
-    <div class="eng">その言葉の眼を　もう見れなくなったのは<span class="chs" title="这样的话　眼下已说不出口"><span></div>
-    <div class="eng">一体いつからだろうか　なにゆえだろうか<span class="chs" title="究竟是从何时变成这样的呢？已无从知晓"><span></div>
-    <div class="eng">あぁ　雨の止むまさにその切れ間と<span class="chs" title="啊　在雨停的瞬间"><span></div>
-    <div class="eng">虹の出発点　終点と<span class="chs" title="在彩虹的起点终点"><span></div>
-    <div class="eng">この命果てる場所に　何かがあるって<span class="chs" title="在这生命的尽头　一定有什么在等我"><span></div>
-    <div class="eng">いつも言い張っていた<span class="chs" title="我一直这样坚信着"><span></div>
-    <div class="eng">いつか行こう　全生命も未到　未開拓<span class="chs" title="总有一天　我们会与"><span></div>
-    <div class="eng">の感情にハイタッチして　時間にキスを<span class="chs" title="从未抵达过的感情击掌　从未体验过的时光接吻"><span></div>
-    <div class="eng">５次元にからかわれて<span class="chs" title="即便被困在五次元"><span></div>
-    <div class="eng">それでも君をみるよ<span class="chs" title="我也依然会注视着你"><span></div>
-    <div class="eng">また｢はじめまして｣の合図を　決めよう<span class="chs" title="一起定下　再次“初次见面”时的暗号吧"><span></div>
-    <div class="eng">君の名を　今追いかけるよ<span class="chs" title="你的名字　现在起是我追寻的目标"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ あぁ　｢願ったらなにがしかが叶う｣ ♪<span class="chs" title="啊　“只要许愿梦想终会实现”"><span></div>
+    <div class="eng">♪ その言葉の眼を　もう見れなくなったのは ♪<span class="chs" title="这样的话　眼下已说不出口"><span></div>
+    <div class="eng">♪ 一体いつからだろうか　なにゆえだろうか ♪<span class="chs" title="究竟是从何时变成这样的呢？已无从知晓"><span></div>
+    <div class="eng">♪ あぁ　雨の止むまさにその切れ間と ♪<span class="chs" title="啊　在雨停的瞬间"><span></div>
+    <div class="eng">♪ 虹の出発点　終点と ♪<span class="chs" title="在彩虹的起点终点"><span></div>
+    <div class="eng">♪ この命果てる場所に　何かがあるって ♪<span class="chs" title="在这生命的尽头　一定有什么在等我"><span></div>
+    <div class="eng">♪ いつも言い張っていた ♪<span class="chs" title="我一直这样坚信着"><span></div>
+    <div class="eng">♪ いつか行こう　全生命も未到　未開拓 ♪<span class="chs" title="总有一天　我们会与"><span></div>
+    <div class="eng">♪ の感情にハイタッチして　時間にキスを ♪<span class="chs" title="从未抵达过的感情击掌　从未体验过的时光接吻"><span></div>
+    <div class="eng">♪ ５次元にからかわれて ♪<span class="chs" title="即便被困在五次元"><span></div>
+    <div class="eng">♪ それでも君をみるよ ♪<span class="chs" title="我也依然会注视着你"><span></div>
+    <div class="eng">♪ また｢はじめまして｣の合図を　決めよう ♪<span class="chs" title="一起定下　再次“初次见面”时的暗号吧"><span></div>
+    <div class="eng">♪ 君の名を　今追いかけるよ ♪<span class="chs" title="你的名字　现在起是我追寻的目标"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">タキくん タキくん<span class="chs" title="泷君 泷君"><span></div>
@@ -103,26 +107,12 @@
     <div class="eng">町役場から 朝のお知らせです<span class="chs" title="现在是镇公所的清晨广播"><span></div>
     <div class="eng">来月二十日に行われる 糸守町町長選挙について<span class="chs" title="关于下个月20日将举行的糸守镇镇长选举"><span></div>
     <div class="eng">町の選挙…<span class="chs" title="镇选举..."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">1200年に一度という彗星の来訪が いよいよ一月後に迫っています<span class="chs" title="1200年一度的彗星 终于将在一个月后到来"><span></div>
-    <div class="eng">ニュース(news)<span class="chs" title="彗星 1个月后可用肉眼观测  m 0 0 l 850 0 850 78 0 78"><span></div>
+    <div class="eng">1200年に一度という彗星の来訪が いよいよ一月後に迫っています<span class="chs" title="1200年一度的彗星 终于将在一个月后到来"><span></div>
     <div class="eng">彗星は数日間にわたって 肉眼でも観測できると見られており<span class="chs" title="彗星将在几天内 都能用肉眼看到"><span></div>
-    <div class="eng">ニュース(news)<span class="chs" title="彗星 1个月后可用肉眼观测  m 0 0 l 270 0 270 25 0 25"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">いい加減仲直りしないよ<span class="chs" title="也差不多该和好了吧"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">世紀の天体ショーを目前に<span class="chs" title="面对这场世纪天体秀"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">大人の問題<span class="chs" title="这是大人们的问题"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="彗星 1个月后可用肉眼观测  m 0 0 l 1557 0 1557 150 0 150"><span></div>
-    <div class="eng">ニュース(news)<span class="chs" title="迪亚马特彗星的位置  m 0 0 l 580 0 580 100 0 100"><span></div>
-    <div class="eng">JAXA をはじめとした世界中の研究機関は観測のための準備に追われています<span class="chs" title="JAXA等世界研究机关正在着手观测的准备"><span></div>
+    <div class="eng">いい加減仲直りしないよ<span class="chs" title="也差不多该和好了吧"><span></div>
+    <div class="eng">世紀の天体ショーを目前に<span class="chs" title="面对这场世纪天体秀"><span></div>
+    <div class="eng">大人の問題<span class="chs" title="这是大人们的问题"><span></div>
+    <div class="eng">JAXAをはじめとした世界中の研究機関は観測のための準備に追われています<span class="chs" title="JAXA等世界研究机关正在着手观测的准备"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">いってきまーす<span class="chs" title="我出门了"><span></div>
@@ -130,9 +120,7 @@
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">确り勉強しといで<span class="chs" title="好好学习喔"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">おはよう サヤちん テッシー<span class="chs" title="早 沙耶亲 敕使"><span></div>
     <div class="eng">おはよう<span class="chs" title="早"><span></div>
     <div class="eng">お前早く降りろ<span class="chs" title="你快点下来"><span></div>
@@ -165,32 +153,22 @@
     <div class="eng">子供からお年寄りまで 誰もが安心して活き活きと活躍できる町作りを完遂させていただきたい<span class="chs" title="创造一个从孩子到老人 所有人都能安心生活的小镇"><span></div>
     <div class="eng">町長と土建屋は その子供も仲ええなあ<span class="chs" title="镇长和土木建筑公司社长 他们的孩子关系也很好呢"><span></div>
     <div class="eng">いややわ<span class="chs" title="真糟糕"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉!<span class="chs" title="三叶!"><span></div>
+    <div class="eng">三葉!<span class="chs" title="三叶!"><span></div>
     <div class="eng">胸張って歩かんか!<span class="chs" title="走路要抬头挺胸!"><span></div>
     <div class="eng">身内も厳しいなあ<span class="chs" title="对家人也很严厉呢"><span></div>
     <div class="eng">さすが町長やわ<span class="chs" title="真不愧是镇长"><span></div>
     <div class="eng">恥ずかしい<span class="chs" title="羞死人了"><span></div>
     <div class="eng">ちょっとかわいそう<span class="chs" title="有点可怜"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">こんな時ばっかり<span class="chs" title="老是这种时候"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">「誰そ彼」<span class="chs" title="(你是谁啊)"><span></div>
-    <div class="eng">これが「黄昏時」の語源ね<span class="chs" title="「他是谁」 就是「黄昏」的语源"><span></div>
+<div class="paragraph_part">    <div class="eng">「誰そ彼」 これが「黄昏時」の語源ね<span class="chs" title="「他是谁」 就是「黄昏」的语源"><span></div>
     <div class="eng">黄昏時は分かるでしょう?<span class="chs" title="黄昏之时大家都知道的吧"><span></div>
     <div class="eng">夕方 昼でも夜でもない時間<span class="chs" title="傍晚 非昼非夜的时段"><span></div>
-    <div class="eng">世界の輪郭がほやけて<span class="chs" title="世界的轮廓变得模糊"><span></div>
-    <div class="eng">人ならざるものに出会うかもしれない時間<span class="chs" title="可能会看到非人之物的时段"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">「誰そ彼とわれをな問ひそ、九月の露に濡れつつ、君待つわれそ」<span class="chs" title="休问我，彼为谁；九月露沾衣，是我，待君会。 ——作者不详，《万叶集》(https://www.zhihu.com/question/50760149)"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">もっと古くは 「彼誰そ時」とか<span class="chs" title="更久以前 也叫作「谁那是」"><span></div>
+    <div class="eng">世界の輪郭がほやけて 人ならざるものに出会うかもしれない時間<span class="chs" title="世界的轮廓变得模糊 可能会看到非人之物的时段"><span></div>
+    <div class="eng">「誰そ彼とわれをな問ひそ、九月の露に濡れつつ、君待つわれそ」<span class="chs" title="休问我，彼为谁；九月露沾衣，是我，待君会。 ——作者不详，《万叶集》"><span></div>
+    <div class="eng">もっと古くは 「彼誰そ時」とか<span class="chs" title="更久以前 也叫作「谁那是」"><span></div>
     <div class="eng">「彼は誰れ時」とか言ったそうです<span class="chs" title="或者是「那是谁」"><span></div>
     <div class="eng">しつもーん<span class="chs" title="我有疑问"><span></div>
     <div class="eng">「カタワレ時」やなって<span class="chs" title="不是叫「谁他是」吗"><span></div>
@@ -201,9 +179,7 @@
     <div class="eng">じゃあ 次 宮水さん<span class="chs" title="那 下一个 宫水同学"><span></div>
     <div class="eng">あ はい<span class="chs" title="啊 是"><span></div>
     <div class="eng">あら 今日自分の名前 覚えてるのね<span class="chs" title="啊 看来今天记得自己的名字呢"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">覚えとらんの?<span class="chs" title="你不记得了?"><span></div>
+    <div class="eng">覚えとらんの?<span class="chs" title="你不记得了?"><span></div>
     <div class="eng">うん<span class="chs" title="嗯"><span></div>
     <div class="eng">あんただって 昨日は自分の机もロッカーも忘れたって言って<span class="chs" title="因为你昨天啊 连自己的桌子和鞋柜都忘了在哪儿"><span></div>
     <div class="eng">髪は寝癖ついとったし リボンはしとらんかったし<span class="chs" title="头发乱糟糟的 丝带也没有扎起来"><span></div>
@@ -320,9 +296,7 @@
     <div class="eng">神様は嬉しいかなあ あんなお酒もらって<span class="chs" title="神明大人真的会高兴吗 这样的酒"><span></div>
     <div class="eng">そりゃ嬉しいやろう<span class="chs" title="那当然高兴了"><span></div>
     <div class="eng">ほれ みてみい 宮水や<span class="chs" title="你们看 是宫水"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">私絶対無理<span class="chs" title="我绝对做不到"><span></div>
+    <div class="eng">私絶対無理<span class="chs" title="我绝对做不到"><span></div>
     <div class="eng">よく人前でやりよるよな<span class="chs" title="亏她真好意思在别人面前做呢"><span></div>
     <div class="eng">信じられんわ<span class="chs" title="真是难以置信"><span></div>
 </div>
@@ -336,9 +310,6 @@
     <div class="eng">生写真とメイキング動画とかつけてさ<span class="chs" title="拍些照片 制作流程的影片"><span></div>
     <div class="eng">巫女の口嚙み酒って名前とかつけてさ<span class="chs" title="打着「巫女口嚼酒」的名号"><span></div>
     <div class="eng">きっと売れるさ<span class="chs" title="肯定很赚"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">現役女子中高生……(picture)<span class="chs" title="现役女子高中生制作  内附原照片"><span></div>
     <div class="eng">ターメ 酒税法違反!<span class="chs" title="不行 违反酒税法了"><span></div>
     <div class="eng">そういう問題なん?<span class="chs" title="问题在这吗?"><span></div>
     <div class="eng">もうこんな町いやや<span class="chs" title="我受够这样的小镇了"><span></div>
@@ -349,7 +320,9 @@
     <br>
 <div class="paragraph_part">    <div class="eng">いてっ<span class="chs" title="痛"><span></div>
     <div class="eng">いったた…<span class="chs" title="好痛…"><span></div>
-    <div class="eng">どこ?<span class="chs" title="这是哪儿"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">どこ?<span class="chs" title="这是哪儿"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">何や ある<span class="chs" title="这里 有什么"><span></div>
@@ -369,15 +342,14 @@
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">へんな夢<span class="chs" title="好奇怪的梦"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">メール(message)<span class="chs" title="司：你该不会还在家吧？赶紧跑过来"><span></div>
     <div class="eng">ええ 何々 ツカサ?<span class="chs" title="什么什么? 司?"><span></div>
+    <div class="eng">誰?<span class="chs" title="谁啊"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">誰?<span class="chs" title="谁啊"><span></div>
-    <div class="eng">トイレ 行きたい<span class="chs" title="想去厕所"><span></div>
-    <div class="eng">リアルすぎ<span class="chs" title="这也太真实了"><span></div>
+<div class="paragraph_part">    <div class="eng">トイレ 行きたい<span class="chs" title="想去厕所"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">リアルすぎ<span class="chs" title="这也太真实了"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">東京や<span class="chs" title="是东京啊"><span></div>
@@ -420,9 +392,6 @@
     <div class="eng">ああ 手がかかってんなあ<span class="chs" title="啊 很讲究呢"><span></div>
     <div class="eng">たーき 決まった<span class="chs" title="泷 点好了吗"><span></div>
     <div class="eng">こ このパンケーキ代で 俺一ヶ月は暮らせる<span class="chs" title="这个蛋糕的价格够我吃一个月了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="            精品菜单甜饼类椰子薄煎饼  ——  1600巧克力香蕉薄煎饼  —— 1900蓝莓奶酪薄煎饼  —— 2100焦糖苹果薄煎饼  ——  2500热带风情薄煎饼  —— 2900碧根果薄煎饼  —— 3000  主食类色拉类"><span></div>
     <div class="eng">いつの時代のヒトだよ お前は<span class="chs" title="哪个时代的人啊你"><span></div>
     <div class="eng">ま いいか 夢やし<span class="chs" title="不管了 反正是梦"><span></div>
     <div class="eng">いい夢<span class="chs" title="好美的梦"><span></div>
@@ -433,9 +402,6 @@
     <div class="eng">うん<span class="chs" title="嗯"><span></div>
     <div class="eng">あ あっ あの<span class="chs" title="啊 那 那个"><span></div>
     <div class="eng">俺のバイト先って どこやっけ<span class="chs" title="我打工的地方在哪来着?"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">IL GIARDINO DELLE PAROLE<span class="chs" title="言叶之庭（意大利语）"><span></div>
     <div class="eng">6番 7番 10番様オーダー待ちです<span class="chs" title="6号 7号 10号 等着上菜"><span></div>
     <div class="eng">12番テーブル 瀧<span class="chs" title="12号桌 泷"><span></div>
     <div class="eng">はい<span class="chs" title="是"><span></div>
@@ -444,9 +410,7 @@
     <div class="eng">頼んでませんけど<span class="chs" title="我们没点这个"><span></div>
     <div class="eng">瀧 トリュフは品切れだって言ったろう!?<span class="chs" title="泷 不是跟你说松露没货了吗"><span></div>
     <div class="eng">瀧 声が小せえよ<span class="chs" title="泷 声音太小了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧<span class="chs" title="泷"><span></div>
+    <div class="eng">瀧<span class="chs" title="泷"><span></div>
     <div class="eng">この夢いつ覚めるんやさ<span class="chs" title="这个梦什么时候才醒啊"><span></div>
     <div class="eng">ちょっと ちょっとお兄さん<span class="chs" title="等下 等下小哥"><span></div>
     <div class="eng">あ はい<span class="chs" title="是"><span></div>
@@ -464,12 +428,12 @@
     <div class="eng">お代は結構ですので<span class="chs" title="今天给您免单"><span></div>
     <div class="eng">そう<span class="chs" title="是吗"><span></div>
     <div class="eng">お怪我はございませんでしたか<span class="chs" title="您没有受伤吧"><span></div>
-    <div class="eng">あの<span class="chs" title="那个"><span></div>
-    <div class="eng">奥寺さん<span class="chs" title="奥寺小姐…"><span></div>
-    <div class="eng">先輩だろう<span class="chs" title="是前辈"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">奥寺先輩<span class="chs" title="奥寺前辈"><span></div>
+<div class="paragraph_part">    <div class="eng">あの<span class="chs" title="那个"><span></div>
+    <div class="eng">奥寺さん<span class="chs" title="奥寺小姐…"><span></div>
+    <div class="eng">先輩だろう<span class="chs" title="是前辈"><span></div>
+    <div class="eng">奥寺先輩<span class="chs" title="奥寺前辈"><span></div>
     <div class="eng">さっきは<span class="chs" title="刚才"><span></div>
     <div class="eng">今日は災難だったね<span class="chs" title="今天真是灾难啊"><span></div>
     <div class="eng">いえ あの<span class="chs" title="不 那个"><span></div>
@@ -497,31 +461,21 @@
     <div class="eng">瀧君弱いくせに 喧嘩っぱやいから<span class="chs" title="泷君明明很弱 却还是老跟人打架"><span></div>
     <div class="eng">今日の君の方がいいよ<span class="chs" title="今天的你更好哦"><span></div>
     <div class="eng">女子力高いんだねえ 瀧君て<span class="chs" title="女子力真高呢 泷君"><span></div>
-    <div class="eng">良くできた夢やなー<span class="chs" title="好真实的梦啊"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">良くできた夢やなー<span class="chs" title="好真实的梦啊"><span></div>
     <div class="eng">我ながら<span class="chs" title="我真厉害"><span></div>
     <div class="eng">この子日記つけとる<span class="chs" title="这人有写日记"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="第二学期作业完成了...电影打工时挨批了"><span></div>
-    <div class="eng">日記(content)<span class="chs" title="和高木他们一起购物结业式奥寺前辈打工发售日交班失误"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">マメやなあ<span class="chs" title="好正经啊"><span></div>
+    <div class="eng">マメやなあ<span class="chs" title="好正经啊"><span></div>
     <div class="eng">いいなあ 東京生活<span class="chs" title="真好啊 东京生活"><span></div>
     <div class="eng">あの人や<span class="chs" title="是那个人"><span></div>
     <div class="eng">片思いかな<span class="chs" title="是单相思吗"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">(三葉)<span class="chs" title="(三叶)"><span></div>
-</div>
-    <br>
 <div class="paragraph_part">    <div class="eng">何だ これ<span class="chs" title="这是什么"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="朋友们都是很好的人，人家也觉得自己长得有点帅呢。在餐厅打工的经历吓到人家啦，就像电影里的世界一样令人兴奋！多亏了人家的失败，跟大美女奥寺前辈交上了朋友。下班后, 到车站的那段路是跟奥寺前辈一起走的哦！多亏了人家的女子力..."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">何だ これ<span class="chs" title="什么啊这是"><span></div>
+    <div class="eng">な<span class="chs" title="什"><span></div>
+    <div class="eng">な<span class="chs" title="什"><span></div>
+    <div class="eng">何だ これ<span class="chs" title="什么啊这是"><span></div>
     <div class="eng">今日もカフェ行かね<span class="chs" title="今天也去咖啡厅吧"><span></div>
     <div class="eng">あ 悪い 俺 今日これからバイト<span class="chs" title="啊不好意思 我等下就要去打工了"><span></div>
     <div class="eng">行き先は分かるのか<span class="chs" title="知道在哪吗"><span></div>
@@ -545,11 +499,6 @@
     <div class="eng">ね たーきくん<span class="chs" title="对吧 泷君"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="三叶？？你是谁？"><span></div>
-    <div class="eng">提示(notice)<span class="chs" title="三叶？？你是谁？  你到底是啥？"><span></div>
-    <div class="eng">提示(notice)<span class="chs" title="三叶？？你是谁？  你到底是谁？"><span></div>
-</div>
-    <br>
 <div class="paragraph_part">    <div class="eng">お姉ちゃん 今日はおっぱい触っとらんにん?<span class="chs" title="姐姐 今天不揉胸吗?"><span></div>
     <div class="eng">ご·は·ん!はよ来ない!<span class="chs" title="吃•饭•了!快起床!"><span></div>
     <div class="eng">おっぱい!?<span class="chs" title="揉胸!?"><span></div>
@@ -559,7 +508,6 @@
     <div class="eng">ちょっと見直したわ<span class="chs" title="对她刮目相看了"><span></div>
     <div class="eng">な なんか視線を感じるんやけど<span class="chs" title="吶 感觉大家都在看着我"><span></div>
     <div class="eng">昨日のアレは目立ったもんなあ<span class="chs" title="昨天那个太引人注目了啊"><span></div>
-    <div class="eng">静物の写生<span class="chs" title="静物写生"><span></div>
     <div class="eng">ポスター見た?<span class="chs" title="海报看到了吗?"><span></div>
     <div class="eng">町長選の<span class="chs" title="镇长选举的"><span></div>
     <div class="eng">誰がやったって同じや<span class="chs" title="谁做还不一样"><span></div>
@@ -567,123 +515,84 @@
     <div class="eng">そのおかげで生活できる子もおるんやで<span class="chs" title="嘁 有人要靠这个吃饭呢"><span></div>
     <div class="eng">あれって 私のことだよね?<span class="chs" title="那些 是在说我对吧"><span></div>
     <div class="eng">ちょ 三葉!<span class="chs" title="等 三叶!"><span></div>
-    <div class="eng">な な 何よそれ<span class="chs" title="什 什 什么啊这"><span></div>
-    <div class="eng">お姉ちゃん?<span class="chs" title="姐姐?"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="宫水三叶？            祖母     妹妹      四叶    父亲 →好像是镇长二年三班             勅使河原克彦♂  神秘学爱好者  笨蛋   但人挺好                早耶香♀             广播部  老实的孩子  搞不懂？？       宫水家做着巫女     没啥朋友                        与父亲分开住胸部有料                        妈妈好像已经去世  家里人貌似是神主           这算什么样的人生嘛乡下"><span></div>
+<div class="paragraph_part">    <div class="eng">な な 何よそれ<span class="chs" title="什 什 什么啊这"><span></div>
+    <div class="eng">お姉ちゃん?<span class="chs" title="姐姐?"><span></div>
     <div class="eng">これって<span class="chs" title="这难道"><span></div>
     <div class="eng">これってもしかして<span class="chs" title="这难道是"><span></div>
     <div class="eng">これってもしかしてホントに<span class="chs" title="这难道是真的"><span></div>
-    <div class="eng">日記(content)<span class="chs" title="9月12日 东京生活4❤逛瞭望台和跳蚤市场❤9月12日 东京生活4❤去霞关❤造访了父亲的工作场所9月11日 打工9月9日 东京生活3❤和两个男生一起去台场的水族馆❤9月8日 期中考试开始9月7日 东京生活2❤初次❤在原宿表参道享受帕尼尼三明治9月6日 无标题9月5日 东京生活❤9月4日 打工  日记"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="这都是啥？"><span></div>
     <div class="eng">私 夢の中であの男の子と<span class="chs" title="我和梦中的那个男孩子"><span></div>
     <div class="eng">俺は 夢の中のあの女と<span class="chs" title="我和梦中的那个女的"><span></div>
-    <div class="eng">日記(content)<span class="chs" title="这算什么样的人生嘛             东京生活4造访了父亲的工作场所"><span></div>
+    <div class="eng">入れ替わっとる?/入れ替わってる?<span class="chs" title="交换身体了?"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">入れ替わっとる?/入れ替わってる?<span class="chs" title="交换身体了?"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">やっと眼を　覚ましたかい<span class="chs" title="终于醒来了吗？"><span></div>
-    <div class="eng">それなのになぜ眼も合わせやしないんだい？<span class="chs" title="可为何还是不愿与我对视呢？"><span></div>
-    <div class="eng">『遅いよ』と怒る君<span class="chs" title="“太迟啦”你生气的说"><span></div>
-    <div class="eng">これでもやれるだけ飛ばしてきたんだよ<span class="chs" title="可我已经竭尽全力飞奔到你身边了哟"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ やっと眼を　覚ましたかい ♪<span class="chs" title="终于醒来了吗？"><span></div>
+    <div class="eng">♪ それなのになぜ眼も合わせやしないんだい？ ♪<span class="chs" title="可为何还是不愿与我对视呢？"><span></div>
+    <div class="eng">♪ 『遅いよ』と怒る君 ♪<span class="chs" title="“太迟啦”你生气的说"><span></div>
+    <div class="eng">♪ これでもやれるだけ飛ばしてきたんだよ ♪<span class="chs" title="可我已经竭尽全力飞奔到你身边了哟"><span></div>
     <div class="eng">何が起きているのか だんだん分かってきた<span class="chs" title="渐渐明白过来发生了什么事"><span></div>
-    <div class="eng">心が身体を追い越してきたんだよ<span class="chs" title="我的心甚至超越身体　先一步赶到你面前了哟"><span></div>
+    <div class="eng">♪ 心が身体を追い越してきたんだよ ♪<span class="chs" title="我的心甚至超越身体　先一步赶到你面前了哟"><span></div>
     <div class="eng">瀧君は東京に住む同じ歳の高校生で<span class="chs" title="泷君是在东京的同龄高中生"><span></div>
-    <div class="eng">どっから話すかな<span class="chs" title="该从何说起呢"><span></div>
+    <div class="eng">♪ どっから話すかな ♪<span class="chs" title="该从何说起呢"><span></div>
     <div class="eng">ド田舎らしの三葉との入れ替わりは不定期で<span class="chs" title="不定期会和乡下的三叶交换身体"><span></div>
     <div class="eng">週に二、三度 ふいに訪れる<span class="chs" title="每周2到3次 都很突然"><span></div>
-    <div class="eng">君が眠っていた間のストーリー<span class="chs" title="你沉睡时发生的故事"><span></div>
+    <div class="eng">♪ 君が眠っていた間のストーリー ♪<span class="chs" title="你沉睡时发生的故事"><span></div>
     <div class="eng">トリガーは眠ること 原因は不明<span class="chs" title="触发点是在睡觉的时候 原因不明"><span></div>
-    <div class="eng">何億　何光年分の物語を語りにきたんだよ<span class="chs" title="我正是为了述说这数亿　数光年的故事才来到这里的哦"><span></div>
+    <div class="eng">♪ 何億　何光年分の物語を語りにきたんだよ ♪<span class="chs" title="我正是为了述说这数亿　数光年的故事才来到这里的哦"><span></div>
     <div class="eng">入れ替わっていた時の記憶は<span class="chs" title="交换身体时的记忆"><span></div>
     <div class="eng">目覚めるとすぐに不鮮明になってしまう<span class="chs" title="在睡醒后会越来越模糊"><span></div>
     <div class="eng">それでも 俺たちは確かに入れ替わっている<span class="chs" title="但是 我们确实是交换了身体"><span></div>
     <div class="eng">周囲の反応がそれを証明している<span class="chs" title="周围的反应也证明了这一点"><span></div>
-    <div class="eng">けどいざその姿この眼に映すと<span class="chs" title="可是你的身姿一旦出现在我眼前"><span></div>
+    <div class="eng">♪ けどいざその姿この眼に映すと ♪<span class="chs" title="可是你的身姿一旦出现在我眼前"><span></div>
     <div class="eng">だから<span class="chs" title="所以"><span></div>
     <div class="eng">だから 私たちはお互いの生活を守るのため<span class="chs" title="所以 我们为了不破坏双方的生活"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">君の髪や瞳だけで胸が痛いよ<span class="chs" title="仅仅望着你的发梢和眼眸　就会开始心痛"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ルールを決めた<span class="chs" title="决定了规则"><span></div>
-    <div class="eng">筆記(note)<span class="chs" title="绝对禁止"><span></div>
-    <div class="eng">筆記(note)<span class="chs" title="绝对禁止！！！！"><span></div>
-    <div class="eng">筆記(note)<span class="chs" title="绝对禁止的事      其二绝绝绝绝对禁止洗澡!!!!!! 不准看身体！/不准触摸身体！！                               不要张开腿！                                不许触碰男生！                        女生也不许！"><span></div>
+    <div class="eng">♪ 君の髪や瞳だけで胸が痛いよ ♪<span class="chs" title="仅仅望着你的发梢和眼眸　就会开始心痛"><span></div>
+    <div class="eng">ルールを決めた<span class="chs" title="决定了规则"><span></div>
     <div class="eng">入れ替わってしまっている時の注意点<span class="chs" title="交换身体后的注意点"><span></div>
-    <div class="eng">同じ時を吸いこんで離したくないよ<span class="chs" title="想与你在同一时空下呼吸　不愿分离"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="禁止事项       第5版   禁止乱花钱！   禁止说方言！   不要迟到！  女生用语NG！不要和奥寺前辈过分亲近！不要和司黏在一起！"><span></div>
+    <div class="eng">♪ 同じ時を吸いこんで離したくないよ ♪<span class="chs" title="想与你在同一时空下呼吸　不愿分离"><span></div>
     <div class="eng">守るべき禁止事項<span class="chs" title="和必须遵守的禁止事项"><span></div>
     <div class="eng">それから 入れ替わった日の出来事を 携帯に残す事<span class="chs" title="还有交换后做的事 都要记在手机上"><span></div>
-    <div class="eng">遥か昔から知る　その声に<span class="chs" title="听着从遥远的过去就熟悉的　这个声音"><span></div>
+    <div class="eng">♪ 遥か昔から知る　その声に ♪<span class="chs" title="听着从遥远的过去就熟悉的　这个声音"><span></div>
     <div class="eng">この謎現象をとにかくも乗り切るために<span class="chs" title="总之为了解除这个迷之现象"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="乡下生活4  这种现象还不知道会持续多久,不过多少也开始习惯了.除了女孩子的躯体外, 日子其实还挺容易打发的.乡下生活也不坏嘛.朋友勅使和早耶香, 也都是不错的家伙.他们一开始还会惊讶一下, 不过该说他们适应能力很不错吗?  虽然我比起原版的你来说还是能看出不小的差异, 但他们已经习以为常了.今天的美术课是静物画.也没什么需要认真画的东西, 我就画了在附近看到的建筑物.看起来应该是小学校舍.妹妹(四叶?)在那里上学.是一座木结构西洋风格带有钟楼的, 很漂亮的建筑物.上课的时候我听到有人在说你的坏话, 所以我踢翻桌子让他们闭嘴了.我是不知道他们是哪儿来的谁谁谁, 但是我认为你应该活得更堂堂正正才是.婆婆做的便当真好吃."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">協力し合うこと<span class="chs" title="要互相协助"><span></div>
-    <div class="eng">生まれてはじめて　何を言えばいい？<span class="chs" title="有生以来第一次　不知该说些什么才好"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">それなのに<span class="chs" title="虽然这样"><span></div>
+    <div class="eng">協力し合うこと<span class="chs" title="要互相协助"><span></div>
+    <div class="eng">♪ 生まれてはじめて　何を言えばいい？ ♪<span class="chs" title="有生以来第一次　不知该说些什么才好"><span></div>
+    <div class="eng">それなのに<span class="chs" title="虽然这样"><span></div>
     <div class="eng">それなのに<span class="chs" title="虽然这样"><span></div>
     <div class="eng">あの男は!! あの女は!!<span class="chs" title="那个男的!! 那个女的!!"><span></div>
-    <div class="eng">君の前前前世から僕は　君を探しはじめたよ<span class="chs" title="从你的前前前世开始　我就一直在寻找你的踪迹"><span></div>
-    <div class="eng">そのぶきっちょな笑い方をめがけて　やってきたんだよ<span class="chs" title="想着你那略显笨拙的笑容　终于找到了你"><span></div>
-    <div class="eng">君が全然全部なくなって　チリヂリになったって<span class="chs" title="即使你再次化落为乌有　散落成碎片"><span></div>
-    <div class="eng">もう迷わない　また１から探しはじめるさ<span class="chs" title="我也会毫不犹豫　再次重头开始寻觅"><span></div>
+    <div class="eng">♪ 君の前前前世から僕は　君を探しはじめたよ ♪<span class="chs" title="从你的前前前世开始　我就一直在寻找你的踪迹"><span></div>
+    <div class="eng">♪ そのぶきっちょな笑い方をめがけて　やってきたんだよ ♪<span class="chs" title="想着你那略显笨拙的笑容　终于找到了你"><span></div>
+    <div class="eng">♪ 君が全然全部なくなって　チリヂリになったって ♪<span class="chs" title="即使你再次化落为乌有　散落成碎片"><span></div>
+    <div class="eng">♪ もう迷わない　また１から探しはじめるさ ♪<span class="chs" title="我也会毫不犹豫　再次重头开始寻觅"><span></div>
     <div class="eng">男子の視線<span class="chs" title="注意男生的视线！"><span></div>
     <div class="eng">スカート注意<span class="chs" title="注意裙子！"><span></div>
     <div class="eng">人生の基本でしょう<span class="chs" title="这是做人的基本常识吧"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="注意男生的视线啊！注意裙子啊！这是做人的基本常识吧？"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">むしろ０から　また宇宙をはじめてみようか<span class="chs" title="不如说让整个宇宙都从头开始吧"><span></div>
+    <div class="eng">♪ むしろ０から　また宇宙をはじめてみようか ♪<span class="chs" title="不如说让整个宇宙都从头开始吧"><span></div>
     <div class="eng">人の金を無駄遣いすんな<span class="chs" title="别乱花别人的钱啊"><span></div>
     <div class="eng">食べてるのは君の体<span class="chs" title="吃的是你自己的身体"><span></div>
     <div class="eng">私だってバイトしてるし<span class="chs" title="我也在打工啊"><span></div>
     <div class="eng">組紐とか これ無理だろう<span class="chs" title="结绳我可编不了啊"><span></div>
     <div class="eng">あなたバイト入れすぎ<span class="chs" title="你打工也太多了吧"><span></div>
     <div class="eng">お前の無駄遣いのせいだろう<span class="chs" title="是因为你乱花钱的错吧"><span></div>
-    <div class="eng">私たち越えれるかな　この先の未来数え切れぬ困難を<span class="chs" title="未来还有无数的困难　我们能克服过来吗"><span></div>
-    <div class="eng">言ったろう？　二人なら<span class="chs" title="说过了吧　两个人的话"><span></div>
-    <div class="eng">笑って返り討ちにきっとできるさ<span class="chs" title="一定能笑着完成反击的"><span></div>
-    <div class="eng">君以外の武器は他にはいらないんだ<span class="chs" title="你就是我唯一的最强武器"><span></div>
+    <div class="eng">♪ 私たち越えれるかな　この先の未来数え切れぬ困難を ♪<span class="chs" title="未来还有无数的困难　我们能克服过来吗"><span></div>
+    <div class="eng">♪ 言ったろう？　二人なら ♪<span class="chs" title="说过了吧　两个人的话"><span></div>
+    <div class="eng">♪ 笑って返り討ちにきっとできるさ ♪<span class="chs" title="一定能笑着完成反击的"><span></div>
+    <div class="eng">♪ 君以外の武器は他にはいらないんだ ♪<span class="chs" title="你就是我唯一的最强武器"><span></div>
     <div class="eng">今日は帰り道に 奥寺先輩とお茶<span class="chs" title="今天回家路上和奥寺前辈去喝茶了"><span></div>
     <div class="eng">君たちの仲は順調だよ<span class="chs" title="你们的关系很顺利哦"><span></div>
     <div class="eng">てめえ 三葉<span class="chs" title="你这家伙 三叶"><span></div>
-    <div class="eng">前前前世から僕は　君を探しはじめたよ<span class="chs" title="从前前前世开始　我就一直在寻找你的踪迹"><span></div>
+    <div class="eng">♪ 前前前世から僕は　君を探しはじめたよ ♪<span class="chs" title="从前前前世开始　我就一直在寻找你的踪迹"><span></div>
     <div class="eng">俺の人間関係変えるなよ<span class="chs" title="不要改变我的人际关系啊"><span></div>
     <div class="eng">ちょっと 瀧君<span class="chs" title="等下 泷君"><span></div>
-    <div class="eng">もう迷わない　君のハートに旗を立てるよ<span class="chs" title="我已不再迷茫　一定要占据你的心里"><span></div>
+    <div class="eng">♪ もう迷わない　君のハートに旗を立てるよ ♪<span class="chs" title="我已不再迷茫　一定要占据你的心里"><span></div>
     <div class="eng">何で女子に告白されてんの<span class="chs" title="为什么会有女生跟我告白"><span></div>
     <div class="eng">お前 俺に人生預けたほうがモテるんじゃね?<span class="chs" title="你因为我变得更受欢迎了吧"><span></div>
-    <div class="eng">君は僕から諦め方を　奪い取ったの<span class="chs" title="毕竟你已经夺走了我　放弃的权利"><span></div>
+    <div class="eng">♪ 君は僕から諦め方を　奪い取ったの ♪<span class="chs" title="毕竟你已经夺走了我　放弃的权利"><span></div>
     <div class="eng">うぬぼれといでよね<span class="chs" title="别在那里自恋了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="少自恋了！"><span></div>
     <div class="eng">彼女もおらんくせに<span class="chs" title="明明自己都没有女朋友"><span></div>
     <div class="eng">お前だっていねえじゃねえか<span class="chs" title="你不是也没有嘛"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="傻瓜  (白痴)"><span></div>
     <div class="eng">私は<span class="chs" title="我"><span></div>
-    <div class="eng">俺は<span class="chs" title="我"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="傻瓜  笨蛋"><span></div>
+    <div class="eng">俺は<span class="chs" title="我  笨蛋"><span></div>
     <div class="eng">いないんじゃなくて 作らないの<span class="chs" title="才不是没有 只是不交而已"><span></div>
 </div>
     <br>
@@ -694,21 +603,20 @@
     <div class="eng">数日前から 肉眼でも見え始めた<span class="chs" title="几天前开始 已经能直接用肉眼看到的"><span></div>
     <div class="eng">ティアマト彗星<span class="chs" title="迪亚马特彗星"><span></div>
     <div class="eng">いつ どこに見えるんでしょうか<span class="chs" title="什么时候 在哪能看到呢"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="迪亚马特彗星 终于到达近地点  m 0 0 l 1200 0 1200 105 0 105"><span></div>
-    <div class="eng">ティアマト彗星は 太陽を追うようにして東から西の空に移動して見えています<span class="chs" title="迪亚马特彗星跟随太阳 从东向西移动"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ですから日没直後…<span class="chs" title="所以在日落后…"><span></div>
+    <div class="eng">ティアマト彗星は 太陽を追うようにして東から西の空に移動して見えています<span class="chs" title=""><span></div>
+    <div class="eng">ですから日没直後…<span class="chs" title="所以在日落后…"><span></div>
     <div class="eng">何で制服着とんの<span class="chs" title="你为什么穿制服"><span></div>
     <div class="eng">おばあちゃん 何でうちのご神体はこんなに遠いの?<span class="chs" title="外婆 为什么我们神社侍奉的神体这么远啊"><span></div>
     <div class="eng">繭五郎のせいで ワシにも分からん<span class="chs" title="都是关五郎害的 我也不知道"><span></div>
     <div class="eng">誰だっけ<span class="chs" title="是谁来着"><span></div>
     <div class="eng">え?有名やよ?<span class="chs" title="额?他很有名的哟?"><span></div>
-    <div class="eng">おばあちゃん<span class="chs" title="外婆"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">おばあちゃん<span class="chs" title="外婆"><span></div>
     <div class="eng">お姉ちゃん<span class="chs" title="姐姐"><span></div>
-    <div class="eng">三葉 四葉 「ムスビ」って知っとるか<span class="chs" title="三叶 四叶 你们知道「结」吗"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">三葉 四葉 「ムスビ」って知っとるか<span class="chs" title="三叶 四叶 你们知道「结」吗"><span></div>
     <div class="eng">「ムスビ」?<span class="chs" title="「产灵」"><span></div>
     <div class="eng">土地の氏神様をな 古い言葉で「產靈」って呼ぶんやさ<span class="chs" title="是土地的守护神 古时候称之为「结（产灵）」"><span></div>
     <div class="eng">この言葉には 深い意味がある<span class="chs" title="这个词语有深层的意义"><span></div>
@@ -747,20 +655,19 @@
     <br>
 <div class="paragraph_part">    <div class="eng">もう 「カタワレ時」やなあ<span class="chs" title="已经是「黄昏之时」了啊"><span></div>
     <div class="eng">「カタワレ時」?<span class="chs" title="「黄昏之时」?"><span></div>
-    <div class="eng">そうや 彗星見えるかな<span class="chs" title="对了 看得到彗星吗"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">彗星?<span class="chs" title="彗星?"><span></div>
+<div class="paragraph_part">    <div class="eng">そうや 彗星見えるかな<span class="chs" title="对了 看得到彗星吗"><span></div>
+    <div class="eng">彗星?<span class="chs" title="彗星?"><span></div>
     <div class="eng">おや<span class="chs" title="哦呀"><span></div>
     <div class="eng">三葉 あんた今 夢を見とるなあ<span class="chs" title="三叶 你现在在做梦吗"><span></div>
-    <div class="eng">涙?何で?<span class="chs" title="泪水?为什么?"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">涙?何で?<span class="chs" title="泪水?为什么?"><span></div>
     <div class="eng">奥寺先輩?何のこと?<span class="chs" title="奥寺前辈?在说什么?"><span></div>
     <div class="eng">まさか また三葉が<span class="chs" title="难道说又是三叶她"><span></div>
     <div class="eng">デートォ!?<span class="chs" title="约会"><span></div>
     <div class="eng">明日は 奥寺先輩と東京デート<span class="chs" title="明天和奥寺前辈在东京约会"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="东京生活 10  继续继续!明天要跟奥寺前辈在东京约会!约好车站碰头, 10点半钟!  虽然人家是很想去这个约会啦.但要是不巧变成泷君本人去赴约的话, 你就满怀感激地享受吧!"><span></div>
     <div class="eng">駅前待ち合わせ 10時半<span class="chs" title="在车站前汇合 10点半"><span></div>
     <div class="eng">…のはつやったのになあ<span class="chs" title="…本来是这样准备的吶"><span></div>
 </div>
@@ -768,21 +675,18 @@
 <div class="paragraph_part">    <div class="eng">たーきくん<span class="chs" title="泷君"><span></div>
     <div class="eng">ごめん 待った?<span class="chs" title="抱歉 等很久了吗"><span></div>
     <div class="eng">あ はい あ、いや あ、あの えっと<span class="chs" title="啊 是 啊不 那个"><span></div>
-    <div class="eng">今 来たとこっす<span class="chs" title="我刚刚到"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">今 来たとこっす<span class="chs" title="我刚刚到"><span></div>
     <div class="eng">よかった<span class="chs" title="太好了"><span></div>
     <div class="eng">行こうか<span class="chs" title="走吧"><span></div>
     <div class="eng">いいなあ<span class="chs" title="真好啊"><span></div>
     <div class="eng">今頃二人は一緒か<span class="chs" title="现在他们应该在一起吧"><span></div>
     <div class="eng">あれ<span class="chs" title="奇怪"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">私…<span class="chs" title="我…"><span></div>
+    <div class="eng">私…<span class="chs" title="我…"><span></div>
     <div class="eng">…何で?<span class="chs" title="为什么?"><span></div>
     <div class="eng">凄い私が行きたいデートやけど<span class="chs" title="好厉害  虽然我很想去这个约会"><span></div>
     <div class="eng">もし不本意に瀧君になっちゃったしたら<span class="chs" title="但万一我没变成泷君的话"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="约好车站碰头, 10点半钟!  虽然人家是很想去这个约会啦.但要是不巧变成泷君本人去赴约的话, 你就满怀感激地享受吧!"><span></div>
     <div class="eng">ありがたく 楽しんでくること!<span class="chs" title="那就怀着感激的我的心情 开心地享受吧"><span></div>
     <div class="eng">私 このカフェ 初めて来たよ<span class="chs" title="这个咖啡店我还是第一次来"><span></div>
     <div class="eng">とは言え<span class="chs" title="话是这样说"><span></div>
@@ -791,30 +695,14 @@
     <div class="eng">だから以下<span class="chs" title="所以 以下"><span></div>
     <div class="eng">奥手な君をための厳選リンク集<span class="chs" title="这是我为了救你这个不成熟的家伙而精选的网站"><span></div>
     <div class="eng">え マジか<span class="chs" title="真的吗"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="...没跟女生约会过吧?所以看下面! 这是人家为了帮助你这个晚熟的孩子而准备的精选链接套餐哦!  为泷君精选的链接套餐"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="为泷君精选的链接套餐制作：三叶❤"><span></div>
-    <div class="eng">日記(content)<span class="chs" title="没救了的你    也能追到她!必看! 废柴男三个月追到女友的经验谈"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="为泷君精选的链接套餐  ...没跟女生约会过吧?所以看下面! 这是人家为了帮助你这个晚熟的孩子而准备的精选链接套餐哦!"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="交流障碍者    把妹须知1.无名氏: 也罢, 姑且听听看 2.无名氏...."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="不会被嫌弃啦!    充满爱意的短信特集与在意的人, 喜欢的人的短信往来..."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">馬鹿にしやがって<span class="chs" title="把我当白痴耍"><span></div>
+    <div class="eng">馬鹿にしやがって<span class="chs" title="把我当白痴耍"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">瀧君ってさ<span class="chs" title="泷君啊"><span></div>
     <div class="eng">今日は 何だか 別人みたいね<span class="chs" title="总觉得你今天好像变了一个人"><span></div>
-    <div class="eng">あの 先輩<span class="chs" title="那个 前辈"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">あの 先輩<span class="chs" title="那个 前辈"><span></div>
     <div class="eng">腹減りませんか<span class="chs" title="肚子饿了吗"><span></div>
     <div class="eng">晩飯とか<span class="chs" title="去吃晚餐吧"><span></div>
     <div class="eng">今日は解散にしようか<span class="chs" title="今天就先这样吧"><span></div>
@@ -834,12 +722,8 @@
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">デートが終わる頃には<span class="chs" title="约会结束的时候"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">约会结束的时候应该就能看到天空的彗星了吧好期待明天啊！不管最后是谁去赴约都要加油哟                                     三叶<span class="chs" title="ちょうど空に彗星が見えるね"><span></div>
-    <div class="eng">正好可以看到彗星吧<span class="chs" title="何言ってんだ こいつ"><span></div>
-    <div class="eng">说什么呢这家伙<span class="chs" title=""><span></div>
-    <div class="eng">筆記(note)<span class="chs" title="紧急时刻以外禁止拨打 日记 三叶的日记 禁止事项 想去的商店备忘"><span></div>
+    <div class="eng">ちょうど空に彗星が見えるね<span class="chs" title="正好可以看到彗星吧"><span></div>
+    <div class="eng">何言ってんだ こいつ<span class="chs" title="说什么呢这家伙"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">なんーだ テッシーか<span class="chs" title="什么啊 敕使啊"><span></div>
@@ -861,7 +745,9 @@
     <div class="eng">ちょっと どしたの 三葉<span class="chs" title="等下 怎么了 三叶"><span></div>
     <div class="eng">髪が<span class="chs" title="你的头发"><span></div>
     <div class="eng">ヤッパ 変かなあ<span class="chs" title="果然 很奇怪吧"><span></div>
-    <div class="eng">やっぱ男関係なんかな<span class="chs" title="的确是因为男生吧"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">やっぱ男関係なんかな<span class="chs" title="的确是因为男生吧"><span></div>
     <div class="eng">失恋とか<span class="chs" title="失恋了吗"><span></div>
     <div class="eng">男子って すぐ恋愛に結びつけるなあ<span class="chs" title="男生什么事都能和恋爱扯在一起"><span></div>
     <div class="eng">何となく 切っただけやって言っとったにん<span class="chs" title="她说了就是想剪掉而已吧"><span></div>
@@ -947,12 +833,12 @@
     <div class="eng">そうです この近くですよね<span class="chs" title="没错 是这附近对吧"><span></div>
     <div class="eng">あんた<span class="chs" title="你是要"><span></div>
     <div class="eng">糸守ってのは<span class="chs" title="糸守"><span></div>
+    <div class="eng">糸守<span class="chs" title="糸守"><span></div>
+    <div class="eng">まさか<span class="chs" title="不会吧"><span></div>
+    <div class="eng">もしかして あの彗星の?<span class="chs" title="难道是那个被彗星"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">糸守  糸守<span class="chs" title="まさか"><span></div>
-    <div class="eng">不会吧<span class="chs" title="もしかして あの彗星の?"><span></div>
-    <div class="eng">难道是那个被彗星<span class="chs" title=""><span></div>
-    <div class="eng">ホントにこの場所なの?<span class="chs" title="真的是这个地方吗"><span></div>
+<div class="paragraph_part">    <div class="eng">ホントにこの場所なの?<span class="chs" title="真的是这个地方吗"><span></div>
     <div class="eng">まさか<span class="chs" title="不会吧"><span></div>
     <div class="eng">だから 瀧の勘違いっすよ<span class="chs" title="所以说 是泷弄错了"><span></div>
     <div class="eng">違う<span class="chs" title="不"><span></div>
@@ -967,33 +853,16 @@
     <div class="eng">3年前に 死んだ?<span class="chs" title="3年前 死了?"><span></div>
     <div class="eng">まさか<span class="chs" title="怎么可能"><span></div>
     <div class="eng">だって あいつの書いたメモだってちゃんと<span class="chs" title="因为 她写的日记还好好地…"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">日記(content)<span class="chs" title="约会结束的时候应该就能看到天空的彗星了吧好期待明天啊！不管最后是谁去赴约都要加油哟                             三叶"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="无条目"><span></div>
     <div class="eng">消えてく<span class="chs" title="消失了"><span></div>
-    <div class="eng">1200年周期で太陽を回るティアマト彗星が<span class="chs" title="1200年绕太阳一周的迪亚马特彗星"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="《消失的糸守镇 • 照片全记录》、《迪亚马特彗星的悲剧》"><span></div>
+<div class="paragraph_part">    <div class="eng">1200年周期で太陽を回るティアマト彗星が<span class="chs" title="1200年绕太阳一周的迪亚马特彗星"><span></div>
     <div class="eng">地球に再接近したのが 3年前の10月<span class="chs" title="再次接近地球 是3年前的10月"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">《一夜间沉入水下的乡村 • 糸守镇》<span class="chs" title="近地点でその核が砕けるのを 誰も予想できなかった"><span></div>
-    <div class="eng">没人预测到它会在近地点破碎<span class="chs" title=""><span></div>
-    <div class="eng">提示(notice)<span class="chs" title="2013年10月4日 —— 糸守镇突然消失了"><span></div>
+    <div class="eng">近地点でその核が砕けるのを 誰も予想できなかった<span class="chs" title="没人预测到它会在近地点破碎"><span></div>
     <div class="eng">割れた彗星の一部は隕石となって 日本に落下<span class="chs" title="彗星破碎出来的一部分变成了陨石 坠落到日本"><span></div>
     <div class="eng">その日は ちょうど秋祭りの日だったみたい<span class="chs" title="那天 好像正好是秋祭"><span></div>
     <div class="eng">落地点はここ<span class="chs" title="坠落地点是这里"><span></div>
     <div class="eng">8時42分 祭りで人が集まっている場所に ちょうど落ちたんだ<span class="chs" title="8点42分 正好砸中祭典的人们聚集的地方"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="糸守宫水神社  蒸发  新陨石湖  房屋全毁  旧陨石湖  房屋半毁  糸守高中"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="糸守小学"><span></div>
     <div class="eng">町の3分の1<span class="chs" title="小镇的三分之一"><span></div>
     <div class="eng">500以上が亡くなって<span class="chs" title="500人以上死亡"><span></div>
     <div class="eng">今はもう 糸守には誰も住んでいないそうだ<span class="chs" title="现在好像没人住在糸守了"><span></div>
@@ -1032,16 +901,11 @@
     <div class="eng">それだけは 確かないじゃないかな<span class="chs" title="只有这点 一定不会错"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="史上最严重的糸守彗星灾害  为何没能预测到呢  彗星冰层下藏着直径40米的“铁块”"><span></div>
-</div>
-    <br>
 <div class="paragraph_part">    <div class="eng">全部 ただの夢で<span class="chs" title="全部都只是梦"><span></div>
     <div class="eng">景色に見覚えがあったのは<span class="chs" title="会对那里的风景有印象"><span></div>
     <div class="eng">3年前のニュースを無意識に覚えていたから<span class="chs" title="只是无意识地记住了3年前的新闻"><span></div>
     <div class="eng">そうじゃないければ<span class="chs" title="不然的话"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">幽霊?<span class="chs" title="是幽灵?"><span></div>
+    <div class="eng">幽霊?<span class="chs" title="是幽灵?"><span></div>
     <div class="eng">いや 全部 俺の 妄想?<span class="chs" title="不 全部是我的妄想?"><span></div>
     <div class="eng">あいつの名前<span class="chs" title="她的名字…"><span></div>
     <div class="eng">何だっけ?<span class="chs" title="叫什么来着"><span></div>
@@ -1058,19 +922,18 @@
     <div class="eng">誰から?<span class="chs" title="谁给我的?"><span></div>
     <div class="eng">お風呂 瀧君も入ってきたら?<span class="chs" title="泷君 你也去洗个澡吧"><span></div>
     <div class="eng">はい…いえ<span class="chs" title="是…不"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">俺<span class="chs" title="我"><span></div>
+    <div class="eng">俺<span class="chs" title="我"><span></div>
     <div class="eng">組紐を作る人に前に聞いたことがあるんです<span class="chs" title="我听编结绳的人说过"><span></div>
     <div class="eng">紐は時間の流れそのものだって<span class="chs" title="绳是时间流动的体现"><span></div>
     <div class="eng">捻れたり 絡まったリ 戻ったり つながったり<span class="chs" title="时而扭曲 时而缠绕 时而恢复 时而连结"><span></div>
     <div class="eng">それが時間だって<span class="chs" title="那就是时间"><span></div>
     <div class="eng">あの場所なら<span class="chs" title="那个地方的话"><span></div>
-    <div class="eng">泷君<span class="chs" title="覚えて ない?"><span></div>
-    <div class="eng">不记得我了吗?<span class="chs" title=""><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">メール(message)<span class="chs" title="奥寺前辈、司：有个地方我无论如何都想去一下 你们就不用等我 先回东京吧 我稍后就会回去的 谢谢你们 泷"><span></div>
+<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">覚えて ない?<span class="chs" title="不记得我了吗?"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
@@ -1084,7 +947,9 @@
     <div class="eng">捻れて絡まって<span class="chs" title="扭曲 缠绕"><span></div>
     <div class="eng">時には戻って またつながって<span class="chs" title="时而还原 时而连结"><span></div>
     <div class="eng">それが「ムスビ」 それが「時間」<span class="chs" title="这就是「结」 这就是「时间」"><span></div>
-    <div class="eng">あった<span class="chs" title="找到了"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">あった<span class="chs" title="找到了"><span></div>
     <div class="eng">ホントに あった<span class="chs" title="真的找到了"><span></div>
     <div class="eng">夢じゃ なかった<span class="chs" title="那不是梦"><span></div>
 </div>
@@ -1103,16 +968,14 @@
 <div class="paragraph_part">    <div class="eng">「ムスビ」<span class="chs" title="「结」"><span></div>
     <div class="eng">ホントに 時間が戻るのなら<span class="chs" title="如果时间真的能重来"><span></div>
     <div class="eng">もう一度だけ…<span class="chs" title="只要再有一次…"><span></div>
-    <div class="eng">彗星<span class="chs" title=""><span></div>
-    <div class="eng">あなたの名前は 三葉<span class="chs" title="你的名字是三叶"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">彗星<span class="chs" title="彗星"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">あなたの名前は 三葉<span class="chs" title="你的名字是三叶"><span></div>
     <div class="eng">二人は 父さんの宝物だ<span class="chs" title="你们两个是爸爸最珍贵的宝物"><span></div>
     <div class="eng">あなた お姉ちゃんになったんやよ<span class="chs" title="你快要做姐姐了哟"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="爸爸                                            祝妈妈早日康复！          四叶"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="祝妈妈早日康复"><span></div>
     <div class="eng">ごめんね みんな<span class="chs" title="对不起 大家"><span></div>
     <div class="eng">お父さん お母さん いつ帰ってくる?<span class="chs" title="爸爸 妈妈什么时候才能回来"><span></div>
     <div class="eng">救えなかった<span class="chs" title="我没能救到她"><span></div>
@@ -1121,16 +984,12 @@
     <div class="eng">婿養子が何を言う<span class="chs" title="你这入赘的女婿有什么资格说话"><span></div>
     <div class="eng">僕が愛したのは二葉です 宮水神社じゃない<span class="chs" title="我爱的是二叶 不是宫水神社"><span></div>
     <div class="eng">出ていけ<span class="chs" title="给我滚出去"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉 四葉<span class="chs" title="三叶 四叶"><span></div>
+    <div class="eng">三葉 四葉<span class="chs" title="三叶 四叶"><span></div>
     <div class="eng">今日からずっとばあちゃんと一緒やでな<span class="chs" title="今天开始要和外婆一起生活了"><span></div>
     <div class="eng">お前は誰たって あなたこそ誰よ<span class="chs" title="说什么你是谁 我还要问你是谁呢"><span></div>
     <div class="eng">うぬぼれといてよね 彼女もおらんくせに<span class="chs" title="别在那里自恋了 明明没有女朋友"><span></div>
     <div class="eng">いいなあ 今頃二人は一緒か<span class="chs" title="真好啊 现在他们应该在一起吧"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">私<span class="chs" title="我"><span></div>
+    <div class="eng">私<span class="chs" title="我"><span></div>
     <div class="eng">ちょっと東京行ってくる<span class="chs" title="我去一下东京"><span></div>
     <div class="eng">ちょっと お姉ちゃん?<span class="chs" title="等下 姐姐?"><span></div>
     <div class="eng">おばあちゃん お願いがあるんやけど<span class="chs" title="外婆 我有件事想拜托你…"><span></div>
@@ -1139,17 +998,15 @@
     <div class="eng">三葉 そこにいちゃ駄目だ<span class="chs" title="三叶 你不能待在那里"><span></div>
     <div class="eng">三葉  彗星が落ちる前に 町から逃げるんだ<span class="chs" title="三叶 要在彗星坠落前离开小镇"><span></div>
     <div class="eng">三葉 逃げろ<span class="chs" title="三叶 快跑"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉 三葉 三葉<span class="chs" title="三叶 三叶 三叶"><span></div>
+    <div class="eng">三葉 三葉 三葉<span class="chs" title="三叶 三叶 三叶"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">三葉だ 生きてる<span class="chs" title="是三叶 还活着"><span></div>
-    <div class="eng">お姉ちゃん またおっぱい…<span class="chs" title="姐姐 又在揉胸…"><span></div>
-    <div class="eng">妹だ<span class="chs" title="是妹妹啊"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">四葉<span class="chs" title="四叶"><span></div>
+<div class="paragraph_part">    <div class="eng">お姉ちゃん またおっぱい…<span class="chs" title="姐姐 又在揉胸…"><span></div>
+    <div class="eng">妹だ<span class="chs" title="是妹妹啊"><span></div>
+    <div class="eng">四葉<span class="chs" title="四叶"><span></div>
     <div class="eng">お姉ちゃん いよいよヤバイわ<span class="chs" title="姐姐好像坏掉了"><span></div>
     <div class="eng">私今日 一人で先に行出るで<span class="chs" title="我今天一个人先走了"><span></div>
     <div class="eng">ヤバイ ヤバイ ヤバイヤバイ ヤバイよ ヤバイ<span class="chs" title="坏了 坏了 坏了坏了 坏了哟 坏了"><span></div>
@@ -1185,20 +1042,14 @@
     <div class="eng">だから 私たちで<span class="chs" title="所以 我们要行动起来"><span></div>
     <div class="eng">早耶香ちゃん 学校は?<span class="chs" title="早耶香 今天不用去学校吗"><span></div>
     <div class="eng">ちょっと 町を救わないかんくて<span class="chs" title="我可能 要去拯救一下小镇什么的"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">防災無線?<span class="chs" title="无线广播?"><span></div>
+    <div class="eng">防災無線?<span class="chs" title="无线广播?"><span></div>
     <div class="eng">ああ 町中にスビーカーがあるやろ<span class="chs" title="啊 小镇里不是有扬声器吗"><span></div>
-    <div class="eng">提示(notice)<span class="chs" title="覆盖 频率"><span></div>
     <div class="eng">そっか 使える<span class="chs" title="这样啊 可以"><span></div>
-    <div class="eng">凄いじゃん テッシー<span class="chs" title="好厉害啊 敕使"><span></div>
-    <div class="eng">お お前 あんまりくっつくなや<span class="chs" title="你 你啊 别靠那么近啊"><span></div>
-    <div class="eng">なに 照れてんの?おらおら<span class="chs" title="什么啊 你在害羞啊? 噢啦 噢啦"><span></div>
+    <div class="eng">凄いじゃん テッシー<span class="chs" title="好厉害啊敕使"><span></div>
+    <div class="eng">お お前 あんまりくっつくなや<span class="chs" title="你你啊别靠那么近啊"><span></div>
+    <div class="eng">なに 照れてんの?おらおら<span class="chs" title="什么啊 你在害羞啊?噢啦噢啦"><span></div>
     <div class="eng">ちょ やめろって<span class="chs" title="等 快住手啊"><span></div>
     <div class="eng">嫁入り前の娘が<span class="chs" title="你还是个还没出嫁的女孩子呢"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="天文部微机部无线电同好部地质研究考古部  已废部禁止入内"><span></div>
     <div class="eng">あんた いい奴だなあ<span class="chs" title="你真是个好家伙吶"><span></div>
     <div class="eng">買ってきたよ はい おつり<span class="chs" title="买回了哟 给 零钱"><span></div>
     <div class="eng">ごめんね サヤちん<span class="chs" title="麻烦你了 早耶亲"><span></div>
@@ -1226,9 +1077,6 @@
     <div class="eng">いやあ…<span class="chs" title="啊不…"><span></div>
     <div class="eng">そうとも限らんさ<span class="chs" title="这可不好说"><span></div>
     <div class="eng">糸守湖がどうやってできたか知っとるか?<span class="chs" title="你知道糸守湖怎么来的吗"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">筆記(note)<span class="chs" title="糸守湖的由来             1200年前的陨石湖               在日本极为罕见"><span></div>
     <div class="eng">隕石湖や<span class="chs" title="这可是陨石湖啊"><span></div>
     <div class="eng">千年前少なくとも一度はこの場所には隕石が落ちたんや<span class="chs" title="1000年以前 这里至少曾经坠落过一次陨石"><span></div>
     <div class="eng">そうだ だから<span class="chs" title="对了 所以"><span></div>
@@ -1246,7 +1094,9 @@
     <div class="eng">その後なら もう一度話を聞いてやる<span class="chs" title="那之后再好好听你说"><span></div>
     <div class="eng">ば…<span class="chs" title="你…"><span></div>
     <div class="eng">馬鹿にしやがって<span class="chs" title="你把我当白痴吗"><span></div>
-    <div class="eng">三葉…いや<span class="chs" title="三叶…不"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">三葉…いや<span class="chs" title="三叶…不"><span></div>
     <div class="eng">お前は…誰だ?<span class="chs" title="你是…谁?"><span></div>
 </div>
     <br>
@@ -1270,17 +1120,15 @@
     <div class="eng">ちょっとなに言っとんの<span class="chs" title="等下 你在说什么啊"><span></div>
     <div class="eng">昨日は急に東京に行ってまうし<span class="chs" title="昨天还突然跑去东京"><span></div>
     <div class="eng">なんか お姉ちゃん 変やよ<span class="chs" title="姐姐你好奇怪啊"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">東京<span class="chs" title="东京"><span></div>
+    <div class="eng">東京<span class="chs" title="东京"><span></div>
     <div class="eng">おい 三葉<span class="chs" title="喂 三叶"><span></div>
     <div class="eng">親父さんとの話 どうやった<span class="chs" title="跟你父亲谈得怎样"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">お姉ちゃんどうした?<span class="chs" title="你姐姐怎么了"><span></div>
     <div class="eng">さあ<span class="chs" title="不知道"><span></div>
-    <div class="eng">そこにいるのか<span class="chs" title="会在那里吗"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">そこにいるのか<span class="chs" title="会在那里吗"><span></div>
     <div class="eng">あっち なんかあるの?<span class="chs" title="那里有什么吗"><span></div>
     <div class="eng">テッシー 自転車貸して<span class="chs" title="敕使 自行车借我"><span></div>
     <div class="eng">ちょっと<span class="chs" title="等等"><span></div>
@@ -1293,11 +1141,16 @@
     <br>
 <div class="paragraph_part">    <div class="eng">私 瀧君になっとる<span class="chs" title="我 又入泷君身体里了"><span></div>
     <div class="eng">どうして瀧君がここに<span class="chs" title="为什么泷君会在这里"><span></div>
-    <div class="eng">町が…ない<span class="chs" title="小镇…不见了"><span></div>
-    <div class="eng">私…あの時…死んだの?<span class="chs" title="我…那个时候…死掉了吗"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">町が…ない<span class="chs" title="小镇…不见了"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">私…あの時…死んだの?<span class="chs" title="我…那个时候…死掉了吗"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
     <div class="eng">覚えて ない?<span class="chs" title="不记得我了吗"><span></div>
 </div>
     <br>
@@ -1334,9 +1187,9 @@
 <div class="paragraph_part">    <div class="eng">3年前のあの時<span class="chs" title="三年前的那个时候"><span></div>
     <div class="eng">まだ 俺はお前を知る前<span class="chs" title="我还不认识你"><span></div>
     <div class="eng">次は四ツ谷 四ツ谷 お出口は右側です<span class="chs" title="下一站是四谷 四谷 下车的乘客请从右侧车门下车"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
     <div class="eng">あの 私…<span class="chs" title="那个 我…"><span></div>
     <div class="eng">覚えて ない?<span class="chs" title="不记得我吗?"><span></div>
     <div class="eng">誰?お前<span class="chs" title="你 是谁"><span></div>
@@ -1346,9 +1199,7 @@
     <div class="eng">四ツ谷 四ツ谷 ご乗車…<span class="chs" title="四谷 四谷到了 感谢您乘…"><span></div>
     <div class="eng">あのさ<span class="chs" title="那个"><span></div>
     <div class="eng">あんたの名前<span class="chs" title="你的名字是"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">名前は三葉!<span class="chs" title="我的名字是 三叶!"><span></div>
     <div class="eng">3年前 お前はあの時<span class="chs" title="三年前的那个时候"><span></div>
     <div class="eng">俺に 会いに来たんだ!<span class="chs" title="你跑来 见我了!"><span></div>
@@ -1358,17 +1209,17 @@
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
-    <div class="eng">いるんだろ?俺の体の中に<span class="chs" title="你在的吧 在我的身体里对吧"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">いるんだろ?俺の体の中に<span class="chs" title="你在的吧 在我的身体里对吧"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
     <div class="eng">瀧君 どこ<span class="chs" title="泷君 你在哪儿"><span></div>
     <div class="eng">三葉だ<span class="chs" title="是三叶"><span></div>
     <div class="eng">声が聞こえなのに<span class="chs" title="明明听得到她的声音"><span></div>
     <div class="eng">瀧君 ねえ どこにいるの<span class="chs" title="泷君 呐 你在哪里"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">瀧君 そこに…<span class="chs" title="泷君 你…"><span></div>
@@ -1376,12 +1227,12 @@
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">カタワレ時だ<span class="chs" title="黄昏之时"><span></div>
-    <div class="eng">三叶<span class="chs" title=""><span></div>
-    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
-    <div class="eng">瀧君 瀧君がいる<span class="chs" title="泷君 泷君在这里"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君 瀧君がいる<span class="chs" title="泷君 泷君在这里"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
     <div class="eng">お前に会いに来たんだ<span class="chs" title="我来见你了"><span></div>
     <div class="eng">大変だったよ お前すげえ遠くにいるから<span class="chs" title="真不容易呢 你离我好远啊"><span></div>
     <div class="eng">でも どうやって…<span class="chs" title="但是 怎么做到的…"><span></div>
@@ -1417,9 +1268,7 @@
     <div class="eng">うん やってみる<span class="chs" title="嗯 我试试"><span></div>
     <div class="eng">カタワレ時が もう<span class="chs" title="黄昏之时"><span></div>
     <div class="eng">終わる<span class="chs" title="要结束了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">目が覚めても忘れないようにさ<span class="chs" title="为了避免醒来后忘记彼此"><span></div>
     <div class="eng">名前 書いとこうぜ<span class="chs" title="来写上名字吧"><span></div>
     <div class="eng">ほら<span class="chs" title="来"><span></div>
@@ -1428,26 +1277,28 @@
     <br>
 <div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">おい 三葉<span class="chs" title="喂 三叶"><span></div>
-    <div class="eng">言おうと思ったんだ<span class="chs" title="本来想跟你说的"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">言おうと思ったんだ<span class="chs" title="本来想跟你说的"><span></div>
     <div class="eng">お前が世界のどこにいても<span class="chs" title="不管你在世界的哪个角落"><span></div>
     <div class="eng">俺が必ず もう一度会いに行くって<span class="chs" title="我都一定会再去见你"><span></div>
     <div class="eng">君の名前は 三葉<span class="chs" title="你的名字是 三叶"><span></div>
     <div class="eng">大丈夫 覚えてる<span class="chs" title="没事 我能记得"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">名前は三葉<span class="chs" title="名字是三叶"><span></div>
     <div class="eng">君の名前は<span class="chs" title="你的名字是"><span></div>
-    <div class="eng">お前は<span class="chs" title="你是"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">お前は<span class="chs" title="你是"><span></div>
     <div class="eng">誰だ?<span class="chs" title="谁来着?"><span></div>
     <div class="eng">俺は どうしてここに来た?<span class="chs" title="我为什么来这里?"><span></div>
     <div class="eng">あいつに あいつに会うために来た<span class="chs" title="我是为了见她才来的"><span></div>
     <div class="eng">助けるために来た<span class="chs" title="我是为了来救她的"><span></div>
     <div class="eng">生きていて欲しかった<span class="chs" title="我希望她活下去"><span></div>
     <div class="eng">誰だ?<span class="chs" title="是谁?"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
+    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
     <div class="eng">誰に会いに来た<span class="chs" title="我是来见谁的"><span></div>
     <div class="eng">大事な人<span class="chs" title="重要的人"><span></div>
     <div class="eng">忘れたくない人<span class="chs" title="不想忘记的人"><span></div>
@@ -1457,47 +1308,41 @@
     <div class="eng">誰だ?<span class="chs" title="是谁?"><span></div>
     <div class="eng">誰だ?<span class="chs" title="是谁?"><span></div>
     <div class="eng">名前は?<span class="chs" title="你的名字是?"><span></div>
-    <div class="eng">まだこの世界は<span class="chs" title="这个世界依然是"><span></div>
-    <div class="eng">僕を飼いならしていたいみたいな<span class="chs" title="想要驯服我的样子呢"><span></div>
-    <div class="eng">望み通りだろう?<span class="chs" title="那就如你所愿吧？"><span></div>
-    <div class="eng">美しくもがくよ<span class="chs" title="我定会　美丽的挣扎"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
-    <div class="eng">互いの砂時計<span class="chs" title="望着彼此的沙漏"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">♪ まだこの世界は ♪<span class="chs" title="这个世界依然是"><span></div>
+    <div class="eng">♪ 僕を飼いならしていたいみたいな ♪<span class="chs" title="想要驯服我的样子呢"><span></div>
+    <div class="eng">♪ 望み通りだろう? ♪<span class="chs" title="那就如你所愿吧？"><span></div>
+    <div class="eng">♪ 美しくもがくよ ♪<span class="chs" title="我定会　美丽的挣扎"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">♪ 互いの砂時計 ♪<span class="chs" title="望着彼此的沙漏"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
     <div class="eng">大丈夫 覚えてる<span class="chs" title="没事 我能记得"><span></div>
-    <div class="eng">眺めながらキスをしようよ<span class="chs" title="来温柔的接吻吧"><span></div>
+    <div class="eng">♪ 眺めながらキスをしようよ ♪<span class="chs" title="来温柔的接吻吧"><span></div>
     <div class="eng">絕對に忘れない<span class="chs" title="绝对不会忘记的"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
-    <div class="eng">『さよなら』から一番　遠い　場所で待ち合わせよう<span class="chs" title="我们一起到那个　离“告别”最远的地方去吧"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">瀧君<span class="chs" title="泷君"><span></div>
+    <div class="eng">♪ 『さよなら』から一番　遠い　場所で待ち合わせよう ♪<span class="chs" title="我们一起到那个　离“告别”最远的地方去吧"><span></div>
     <div class="eng">君の名前は 瀧君<span class="chs" title="你的名字是 泷君"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">テッシー<span class="chs" title="敕使"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">お前今までどこに<span class="chs" title="你刚刚跑去哪了"><span></div>
     <div class="eng">自転車壊しちゃって ごめんやって<span class="chs" title="他说把你的自行车搞坏了 说声对不起"><span></div>
-    <div class="eng">辞書にある言葉で　出来上がった世界を憎んだ<span class="chs" title="这个由词典上的语言堆出来的世界　真令人憎恨呐"><span></div>
+    <div class="eng">♪ 辞書にある言葉で　出来上がった世界を憎んだ ♪<span class="chs" title="这个由词典上的语言堆出来的世界　真令人憎恨呐"><span></div>
     <div class="eng">誰が<span class="chs" title="谁啊"><span></div>
     <div class="eng">私が<span class="chs" title="我"><span></div>
     <div class="eng">後で全部説明してもらうでな<span class="chs" title="待会要全部说清楚啊"><span></div>
-    <div class="eng">万華鏡の中で<span class="chs" title="在万花筒中"><span></div>
+    <div class="eng">♪ 万華鏡の中で ♪<span class="chs" title="在万花筒中"><span></div>
     <div class="eng">八月のある朝<span class="chs" title="在八月的某个清晨"><span></div>
     <div class="eng">落ちるんか?あれが? マジで?<span class="chs" title="那个会掉下来吗?真的?"><span></div>
     <div class="eng">落ちる この眼で見たの<span class="chs" title="真的 我亲眼看到了"><span></div>
-    <div class="eng">君は僕の前で<span class="chs" title="你就在我面前"><span></div>
+    <div class="eng">♪ 君は僕の前で ♪<span class="chs" title="你就在我面前"><span></div>
     <div class="eng">見たってか<span class="chs" title="既然你亲眼看到了"><span></div>
-    <div class="eng">ハニかんでは澄ましてみせた<span class="chs" title="腼腆而又故作镇定地"><span></div>
+    <div class="eng">♪ ハニかんでは澄ましてみせた ♪<span class="chs" title="腼腆而又故作镇定地"><span></div>
     <div class="eng">じゃあ やるしかないなぁ<span class="chs" title="那就之好执行计划了"><span></div>
     <div class="eng">これで 二人仲良く犯罪者や<span class="chs" title="这样一来我们两个就是亲密的共犯了"><span></div>
-    <div class="eng">この世界の教科書の　ような笑顔で<span class="chs" title="露出这世上　最标准的笑容"><span></div>
+    <div class="eng">♪ この世界の教科書の　ような笑顔で ♪<span class="chs" title="露出这世上　最标准的笑容"><span></div>
     <div class="eng">え 私 ホントにやるん?<span class="chs" title="额 我真的非做不可吗"><span></div>
     <div class="eng">町が停電したら すぐに非常用電源に切り替わるはずやから<span class="chs" title="小镇停电之后 学校应该会马上切换成紧急电源"><span></div>
     <div class="eng">したら放送機器も使えるで<span class="chs" title="广播就能用了"><span></div>
@@ -1505,45 +1350,39 @@
     <div class="eng">できるだけ放送を繰り返して<span class="chs" title="尽可能重复广播"><span></div>
     <div class="eng">ははは やったれやぁ<span class="chs" title="哈哈哈 大干一场吧"><span></div>
     <div class="eng">もうヤケや<span class="chs" title="只能来做了"><span></div>
-    <div class="eng">ついに時はきた<span class="chs" title="终于是时候了"><span></div>
-    <div class="eng">昨日までは序章の序章で<span class="chs" title="昨天仅仅只是序章的序章"><span></div>
+    <div class="eng">♪ ついに時はきた ♪<span class="chs" title="终于是时候了"><span></div>
+    <div class="eng">♪ 昨日までは序章の序章で ♪<span class="chs" title="昨天仅仅只是序章的序章"><span></div>
     <div class="eng">そろそろかなあ<span class="chs" title="差不多了吧"><span></div>
     <div class="eng">んなもん適当や<span class="chs" title="管它呢"><span></div>
-    <div class="eng">飛ばし読みでいいから<span class="chs" title="前面的内容都可以跳过"><span></div>
-    <div class="eng">ここからが僕だよ<span class="chs" title="我从这开始要出场啦"><span></div>
-    <div class="eng">経験と知識と<span class="chs" title="带上经验与知识"><span></div>
+    <div class="eng">♪ 飛ばし読みでいいから ♪<span class="chs" title="前面的内容都可以跳过"><span></div>
+    <div class="eng">♪ ここからが僕だよ ♪<span class="chs" title="我从这开始要出场啦"><span></div>
+    <div class="eng">♪ 経験と知識と ♪<span class="chs" title="带上经验与知识"><span></div>
     <div class="eng">今のなに<span class="chs" title="刚才怎么了"><span></div>
-    <div class="eng">カビの生えかかった勇気を持って<span class="chs" title="还有那已经发霉的勇气"><span></div>
+    <div class="eng">♪ カビの生えかかった勇気を持って ♪<span class="chs" title="还有那已经发霉的勇气"><span></div>
     <div class="eng">なあ あそこ<span class="chs" title="看那里"><span></div>
-    <div class="eng">未だかつてないスピードで<span class="chs" title="以前所未有的速度"><span></div>
-    <div class="eng">君のもとへダイブを<span class="chs" title="冲向你的身边"><span></div>
-    <div class="eng">まどろみの中で　生温いコーラに<span class="chs" title="快睡着的时候　我透过微热的可乐"><span></div>
-    <div class="eng">ここでないどこかを　夢見たよ<span class="chs" title="仿佛梦到了　某个地方"><span></div>
-    <div class="eng">教室の窓の外に<span class="chs" title="那是教室的窗外"><span></div>
-    <div class="eng">電車に揺られ　運ばれる朝に<span class="chs" title="那是早晨　颠簸的电车里"><span></div>
+    <div class="eng">♪ 未だかつてないスピードで ♪<span class="chs" title="以前所未有的速度"><span></div>
+    <div class="eng">♪ 君のもとへダイブを ♪<span class="chs" title="冲向你的身边"><span></div>
+    <div class="eng">♪ まどろみの中で　生温いコーラに ♪<span class="chs" title="快睡着的时候　我透过微热的可乐"><span></div>
+    <div class="eng">♪ ここでないどこかを　夢見たよ ♪<span class="chs" title="仿佛梦到了　某个地方"><span></div>
+    <div class="eng">♪ 教室の窓の外に ♪<span class="chs" title="那是教室的窗外"><span></div>
+    <div class="eng">♪ 電車に揺られ　運ばれる朝に ♪<span class="chs" title="那是早晨　颠簸的电车里"><span></div>
     <div class="eng">なあ 見て<span class="chs" title="吶 看啊"><span></div>
-    <div class="eng">こちらは 糸守町役場です<span class="chs" title="这里是糸守镇公所"><span></div>
-    <div class="eng">変電所で 爆発事故が発生しました<span class="chs" title="糸守变电站发生了爆炸事故"><span></div>
-    <div class="eng">事故やって?<span class="chs" title="说是事故?"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">爆発?<span class="chs" title="爆炸?"><span></div>
+<div class="paragraph_part">    <div class="eng">こちらは 糸守町役場です<span class="chs" title="这里是糸守镇公所"><span></div>
+    <div class="eng">変電所で 爆発事故が発生しました<span class="chs" title="糸守变电站发生了爆炸事故"><span></div>
+    <div class="eng">事故やって?<span class="chs" title="说是事故?"><span></div>
+    <div class="eng">爆発?<span class="chs" title="爆炸?"><span></div>
     <div class="eng">さらなる爆発と 山火事の危険性があります<span class="chs" title="有可能再次爆炸 并且引发山林火灾"><span></div>
     <div class="eng">次の地域の人は 今すぐ 糸守高校まで避難してください<span class="chs" title="请以下区域的人 现在迅速到糸守高中避难"><span></div>
     <div class="eng">門上り地区 坂上地区<span class="chs" title="门入地区 坂上地区"><span></div>
     <div class="eng">避難しろやって<span class="chs" title="说是要避难"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">おい 行くぞ<span class="chs" title="喂 走吧"><span></div>
+    <div class="eng">おい 行くぞ<span class="chs" title=""><span></div>
     <div class="eng">ここからの放送じゃないだと<span class="chs" title="不是这里发出的广播？"><span></div>
     <div class="eng">誰が喋ってるだ<span class="chs" title="是谁在讲话"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">宮守地区<span class="chs" title="宫守地区"><span></div>
+    <div class="eng">宮守地区<span class="chs" title="宫守地区"><span></div>
     <div class="eng">どこまで行くの<span class="chs" title="要去哪呀"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">親沢地区<span class="chs" title="亲泽地区"><span></div>
+    <div class="eng">親沢地区<span class="chs" title="亲泽地区"><span></div>
     <div class="eng">行くぞ 三葉<span class="chs" title="要上咯 三叶"><span></div>
     <div class="eng">うん<span class="chs" title="嗯"><span></div>
     <div class="eng">とと…<span class="chs" title="靠"><span></div>
@@ -1554,9 +1393,7 @@
     <div class="eng">皆さん 危険です 逃げてください<span class="chs" title="很危险 大家快跑"><span></div>
     <div class="eng">逃げろ<span class="chs" title="快跑啊"><span></div>
     <div class="eng">こりゃとても間に合わん<span class="chs" title="这样实在是来不及了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">どうした<span class="chs" title="怎么了"><span></div>
     <div class="eng">あの人の<span class="chs" title="那个人的"><span></div>
     <div class="eng">あの人の名前が 思い出せんの<span class="chs" title="那个人的名字 我想不起来了"><span></div>
@@ -1566,9 +1403,7 @@
     <div class="eng">行って 親父さんを説得してこい<span class="chs" title="快去 去说服你老爸"><span></div>
     <div class="eng">困ったもんや<span class="chs" title="真让人困扰啊"><span></div>
     <div class="eng">また?<span class="chs" title="又来了?"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">爆発?<span class="chs" title="爆炸?"><span></div>
+    <div class="eng">爆発?<span class="chs" title="爆炸?"><span></div>
     <div class="eng">みんな逃げろ 高校まで行くんや<span class="chs" title="大家快逃啊 去高中那里"><span></div>
     <div class="eng">あら 三葉ちゃん<span class="chs" title="啊啦 三叶啊"><span></div>
     <div class="eng">こんな田舎で テロなわけあらすけ<span class="chs" title="这种穷乡下 怎么可能会有恐怖分子"><span></div>
@@ -1596,9 +1431,7 @@
     <div class="eng">結局待機か<span class="chs" title="结果还是待机啊"><span></div>
     <div class="eng">いや ちょっと皆 逃げた方がええんやって<span class="chs" title="不 怎么 大家怎么都不跑啊"><span></div>
     <div class="eng">高校が避難所になっとるで<span class="chs" title="避难地在高中啊"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">克彥!<span class="chs" title="克彦!"><span></div>
+    <div class="eng">克彥!<span class="chs" title="克彦!"><span></div>
     <div class="eng">お前 何やっとるんや<span class="chs" title="你 在做什么呢"><span></div>
     <div class="eng">すまん 三葉<span class="chs" title="抱歉 三叶"><span></div>
     <div class="eng">ここまでや<span class="chs" title="到这里为止了"><span></div>
@@ -1607,9 +1440,6 @@
     <div class="eng">見て<span class="chs" title="看啊"><span></div>
     <div class="eng">わあ<span class="chs" title="哇"><span></div>
     <div class="eng">ごらんください<span class="chs" title="各位观众请看"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="迪亚马特彗星最接近  m 0 0 l 1500 0 1500 150 0 150"><span></div>
     <div class="eng">彗星が2つに分裂し 無数の流星が発生しています<span class="chs" title="彗星分裂成两半 形成了无数的流星"><span></div>
     <div class="eng">これは事前の予報にはありませんでしたね<span class="chs" title="之前看没预料到变成这样呢"><span></div>
     <div class="eng">しかし非常に幻想的な眺めです<span class="chs" title="可是 这景色真是梦幻啊"><span></div>
@@ -1627,16 +1457,14 @@
     <div class="eng">この様な現象を まさに肉眼で目撃していることは<span class="chs" title="可以亲眼目睹如此壮观的景象"><span></div>
     <div class="eng">この時代に生きる私たちにとっての 大変な幸運と言えべきでしょう<span class="chs" title="对于生存在这个时代的我们来说 可以说是千载难逢的幸运吧"><span></div>
     <div class="eng">ねえ あなたは 誰?<span class="chs" title="你是谁?"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
+    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
+    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
     <div class="eng">あの人は誰?<span class="chs" title="那个人是谁?"><span></div>
     <div class="eng">大事な人<span class="chs" title="重要的人"><span></div>
     <div class="eng">忘れちゃ駄目な人<span class="chs" title="不能忘记的人"><span></div>
     <div class="eng">忘れたくなかった人<span class="chs" title="不想忘记的人"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
+    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
+    <div class="eng">誰?<span class="chs" title="是谁?"><span></div>
     <div class="eng">君は誰?<span class="chs" title="你是谁?"><span></div>
     <div class="eng">君の名前は?<span class="chs" title="你的名字是?"><span></div>
     <div class="eng">割れてる<span class="chs" title="分裂了"><span></div>
@@ -1644,38 +1472,33 @@
     <br>
 <div class="paragraph_part">    <div class="eng">目が覚めても忘れないようにさ<span class="chs" title="为了避免醒来后忘记彼此"><span></div>
     <div class="eng">名前 書いとこうぜ<span class="chs" title="写上名字吧"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">す き だ<span class="chs" title="喜 欢 你"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">愛し方さえも<span class="chs" title="连我示爱的方式"><span></div>
-    <div class="eng">君の匂いがした<span class="chs" title="也散发着你的味道"><span></div>
-    <div class="eng">歩き方さえも<span class="chs" title="连我走路的姿势"><span></div>
-    <div class="eng">その笑い声がした<span class="chs" title="也传出了你的笑声"><span></div>
-    <div class="eng">いつか消えてなくなる　君のすべてを<span class="chs" title="总有一天　你的一切都会消失"><span></div>
+    <div class="eng">♪ 愛し方さえも ♪<span class="chs" title="连我示爱的方式"><span></div>
+    <div class="eng">♪ 君の匂いがした ♪<span class="chs" title="也散发着你的味道"><span></div>
+    <div class="eng">♪ 歩き方さえも ♪<span class="chs" title="连我走路的姿势"><span></div>
+    <div class="eng">♪ その笑い声がした ♪<span class="chs" title="也传出了你的笑声"><span></div>
+    <div class="eng">♪ いつか消えてなくなる　君のすべてを ♪<span class="chs" title="总有一天　你的一切都会消失"><span></div>
     <div class="eng">これじゃあ 名前 分かんないよ<span class="chs" title="这样子 我怎么知道…你的名字啊"><span></div>
-    <div class="eng">この眼に焼き付けておくことは<span class="chs" title="所以将你深深的铭刻在这双眼睛上"><span></div>
-    <div class="eng">もう権利なんかじゃない<span class="chs" title="这并不是我的权利"><span></div>
-    <div class="eng">義務だと思うんだ<span class="chs" title="而是我的义务啊"><span></div>
+    <div class="eng">♪ この眼に焼き付けておくことは ♪<span class="chs" title="所以将你深深的铭刻在这双眼睛上"><span></div>
+    <div class="eng">♪ もう権利なんかじゃない ♪<span class="chs" title="这并不是我的权利"><span></div>
+    <div class="eng">♪ 義務だと思うんだ ♪<span class="chs" title="而是我的义务啊"><span></div>
     <div class="eng">お父さん<span class="chs" title="爸爸"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
+    <div class="eng">三葉<span class="chs" title="三叶"><span></div>
     <div class="eng">お姉ちゃん<span class="chs" title="姐姐"><span></div>
     <div class="eng">お前までまた…<span class="chs" title="你该不会又要…"><span></div>
     <div class="eng">それは まるで夢の景色の様に<span class="chs" title="那就好像梦一样的景色"><span></div>
     <div class="eng">ただひたすらに 美しい眺めだった<span class="chs" title="那真是无与伦比 美到极致的景色"><span></div>
-    <div class="eng">運命だとか未来とかって　言葉がどれだけ手を<span class="chs" title="命运啊未来啊　这样的词语"><span></div>
-    <div class="eng">伸ばそうと届かない　場所で僕ら恋をする<span class="chs" title="让我们到一个　它们传达不到的地方去恋爱"><span></div>
-    <div class="eng">時計の針も二人を　横目に見ながら進む<span class="chs" title="时钟的指针在我们深情对视时　缓缓流逝"><span></div>
-    <div class="eng">そんな世界を二人で<span class="chs" title="我们二人就在这样的世界里"><span></div>
-    <div class="eng">一生　いや、何章でも<span class="chs" title="一生也好、永世也罢"><span></div>
-    <div class="eng">生き抜いていこう<span class="chs" title="坚强的活下去吧"><span></div>
+    <div class="eng">♪ 運命だとか未来とかって　言葉がどれだけ手を ♪<span class="chs" title="命运啊未来啊　这样的词语"><span></div>
+    <div class="eng">♪ 伸ばそうと届かない　場所で僕ら恋をする ♪<span class="chs" title="让我们到一个　它们传达不到的地方去恋爱"><span></div>
+    <div class="eng">♪ 時計の針も二人を　横目に見ながら進む ♪<span class="chs" title="时钟的指针在我们深情对视时　缓缓流逝"><span></div>
+    <div class="eng">♪ そんな世界を二人で ♪<span class="chs" title="我们二人就在这样的世界里"><span></div>
+    <div class="eng">♪ 一生　いや、何章でも ♪<span class="chs" title="一生也好、永世也罢"><span></div>
+    <div class="eng">♪ 生き抜いていこう ♪<span class="chs" title="坚强的活下去吧"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">俺 こんな場所で 何やってんだ<span class="chs" title="我 在这种地方做什么"><span></div>
-    <div class="eng">次は 代々木 代々木<span class="chs" title="下一站是 代代木 代代木"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">    <div class="eng">次は 代々木 代々木<span class="chs" title="下一站是 代代木 代代木"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">ドアが閉まります ご注意ください<span class="chs" title="即将关门 请注意"><span></div>
@@ -1686,12 +1509,8 @@
     <div class="eng">人が生活している風景が<span class="chs" title="人们生活的风景"><span></div>
     <div class="eng">街の風景を自分の手で<span class="chs" title="这个城市的风景"><span></div>
     <div class="eng">東京だって  いつ消えてしまうかわからないと思うんです<span class="chs" title="因为东京也可能在什么时候会消失"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">所以<span class="chs" title="だから"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">記憶の中でも なんて言うか<span class="chs" title="只是留在记忆中 怎么说呢"><span></div>
+    <div class="eng">だから<span class="chs" title=""><span></div>
+    <div class="eng">記憶の中でも なんて言うか<span class="chs" title="只是留在记忆中 怎么说呢"><span></div>
     <div class="eng">人を温め続けてくれるような風景を<span class="chs" title="我希望能够设计出能给人温暖的风景"><span></div>
     <div class="eng">面接 今日で何社目?<span class="chs" title="今天 面试了几家?"><span></div>
     <div class="eng">数えてねえよ<span class="chs" title="我才没数嘞"><span></div>
@@ -1699,15 +1518,8 @@
     <div class="eng">お前が言うな<span class="chs" title="不用你说"><span></div>
     <div class="eng">スーツが似合わなすぎだからじゃね<span class="chs" title="大概是因为你不适合穿西装吧"><span></div>
     <div class="eng">似たようなモンじゃねえか<span class="chs" title="你们还不是一样"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">俺 内定2社<span class="chs" title="我收到2家录取通知"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">俺 8社<span class="chs" title="我8家"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">提示(notice)<span class="chs" title="您有一条新信息。"><span></div>
+    <div class="eng">俺 内定2社<span class="chs" title="我收到2家录取通知"><span></div>
+    <div class="eng">俺 8社<span class="chs" title="我8家"><span></div>
     <div class="eng">探しているのが 誰か なのか<span class="chs" title="我寻找的 是某人"><span></div>
     <div class="eng">どこか なのか<span class="chs" title="还是某个地方"><span></div>
     <div class="eng">それともただ単位就職先なのか<span class="chs" title="也有可能只是在找工作"><span></div>
@@ -1721,9 +1533,7 @@
     <div class="eng">久しぶりに瀧君の顔見ておこうと思って<span class="chs" title="也很久没看到泷君了"><span></div>
     <div class="eng">私たち いつか糸守まで行ったことあったよね<span class="chs" title="我们以前 去过糸守吧"><span></div>
     <div class="eng">あれで瀧君がまだ高校生だったから…<span class="chs" title="那时候泷君还是高中生所以是…"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">5年前<span class="chs" title="5年前"><span></div>
+    <div class="eng">5年前<span class="chs" title="5年前"><span></div>
     <div class="eng">そんなに<span class="chs" title="这么久了?"><span></div>
     <div class="eng">なんだか 色々と忘れちゃったな<span class="chs" title="感觉自己忘了各种各样的事情"><span></div>
     <div class="eng">あの頃のことは<span class="chs" title="那时候的事情"><span></div>
@@ -1735,35 +1545,12 @@
     <div class="eng">ただ あの彗星をめぐって起きた出来事に<span class="chs" title="只是 对于彗星引发的事故"><span></div>
     <div class="eng">一時期 俺は妙に心を引かれていた<span class="chs" title="那段时间 不知为何特别上心"><span></div>
     <div class="eng">彗星の片割れが一つ町を破壊した大災害<span class="chs" title="那是彗星的碎片毁灭了一个小镇的大灾害"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="于高中操场上避难的镇民得到确认"><span></div>
     <div class="eng">しかし町の住民のほとんどが 奇跡的に無事だった<span class="chs" title="但是奇迹般的 小镇的居民几乎都安然无恙"><span></div>
     <div class="eng">その日 偶然にも町を挙げての避難訓練があり<span class="chs" title="那天 小镇偶然地进行避难演习"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="陨石直击     小镇消失  前自所然未灾闻害的"><span></div>
     <div class="eng">ほとんどの町民が 被害範囲の外にいたというのだ<span class="chs" title="大部分的居民都跑到受灾范围外了"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="灾害早有预言？  陨石坠落之前1小时! 糸守镇长发出避难命令之谜——"><span></div>
     <div class="eng">あまりの偶然と幸運に 様々な噂がささやかれた<span class="chs" title="太多的偶然和幸运 出现了各式各样的传闻"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="糸守镇是现代的世外桃源吗?                                             反复上马下马的大坝建设计划                                  小镇的电气化居然是在昭和48年仍有大量脚踏风箱炼铁场的遗迹，在平安时代这里是制铁之都"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="强行发布避难指示之谜  宫水镇长54岁"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="奇特的经历            奇迹引领者 宫水镇长幕后的动机"><span></div>
     <div class="eng">そういう記事を随分熱心に あの頃 俺は読んでいた<span class="chs" title="当时我非常狂热地关注相关的报道"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">ニュース(news)<span class="chs" title="变电站的迷之爆炸是？在陨石落下之前  在发生糸守镇彗星灾难的10月4日晚20点42分之前，位于同镇亲泽地区的中部电力糸守变电站的场地内至少发生了两次爆炸。提交的报告称当时正是晚上，附近的宫水神社正在举办年度祭典，很多居民目击到了爆炸。因糸守镇当时进行的全体居民避难训练而幸免于难的人员中曾发出过“感觉就像是真的避难行动一样”的声音，警视厅正在慎重地开展关于避难训练与爆炸事件之间的因果关系以及爆炸事件有没有可能是恐怖袭击的调查。相关链接..."><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">一体 何がそれほど気になっていたのか<span class="chs" title="到底 是什么让自己如此在意"><span></div>
+    <div class="eng">一体 何がそれほど気になっていたのか<span class="chs" title="到底 是什么让自己如此在意"><span></div>
     <div class="eng">自分でも もう理由はよく分からない<span class="chs" title="我自己也不知道理由"><span></div>
     <div class="eng">あの町に 知り合いがいたわけでもないのに<span class="chs" title="那个小镇里 我明明没有认识的人"><span></div>
     <div class="eng">今日はありがとう ここまででいいよ<span class="chs" title="今天谢谢你了 到这里就行了"><span></div>
@@ -1787,90 +1574,86 @@
     <div class="eng">なぜこれほど心を締めつけるのだろう<span class="chs" title="为什么会如此 让我的心如此痛苦"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">もう少しだけでいい　あと少しだけでいい<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけでいいから<span class="chs" title="稍微再一会儿　就好了"><span></div>
-    <div class="eng">もう少しだけでいい　あと少しだけでいい<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけ　くっついていようか<span class="chs" title="让我们再多　相互依偎一会儿吧"><span></div>
-    <div class="eng">もう少しだけでいい　あと少しだけでいい<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけでいいから<span class="chs" title="稍微再一会儿　就好了"><span></div>
-    <div class="eng">もう少しだけでいい　あと少しだけでいい<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけくっついていようよ<span class="chs" title="再多相互依偎一会儿好吗"><span></div>
-    <div class="eng">ずっと誰がを<span class="chs" title="一直在寻找着"><span></div>
-    <div class="eng">誰がを<span class="chs" title="寻找着"><span></div>
-    <div class="eng">探していた!<span class="chs" title="某个人!"><span></div>
-    <div class="eng">僕らタイムフライヤー　時を駆け上がるクライマー<span class="chs" title="我们是时间的旅行者　攀登着时光的阶梯"><span></div>
-    <div class="eng">時のかくれんぼ　はぐれっこはもういやなんだ<span class="chs" title="我不想再与时间捉迷藏　再与你走散"><span></div>
-    <div class="eng">離したりしないよ　二度と離しはしないよ<span class="chs" title="我不会离开你　再也不会离开你"><span></div>
-    <div class="eng">やっとこの手が　君に追いついたんだよ<span class="chs" title="终于赶上了你　牵到了这双手"><span></div>
-    <div class="eng">あ<span class="chs" title="啊"><span></div>
-    <div class="eng">君は派手なクライヤー　その涙　止めてみたいな<span class="chs" title="你嚎啕大哭着　我多想拭去那泪水"><span></div>
-    <div class="eng">だけど　君は拒んだ　零れるままの涙を見てわかった<span class="chs" title="但你却阻止了我　看着你不断落下的泪滴我明白了"><span></div>
-    <div class="eng">嬉しくて泣くのは　悲しくて　笑うのは<span class="chs" title="喜极而泣也好　强颜欢笑也好"><span></div>
-    <div class="eng">君の心が　君を追い越したんだよ<span class="chs" title="是因为你的心　早已超越了你自己啊"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ もう少しだけでいい　あと少しだけでいい ♪<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけでいいから ♪<span class="chs" title="稍微再一会儿　就好了"><span></div>
+    <div class="eng">♪ もう少しだけでいい　あと少しだけでいい ♪<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけ　くっついていようか ♪<span class="chs" title="让我们再多　相互依偎一会儿吧"><span></div>
+    <div class="eng">♪ もう少しだけでいい　あと少しだけでいい ♪<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけでいいから ♪<span class="chs" title="稍微再一会儿　就好了"><span></div>
+    <div class="eng">♪ もう少しだけでいい　あと少しだけでいい ♪<span class="chs" title="再等一会儿就好　只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけくっついていようよ ♪<span class="chs" title="再多相互依偎一会儿好吗"><span></div>
+    <div class="eng">♪ ずっと誰がを ♪<span class="chs" title="一直在寻找着"><span></div>
+    <div class="eng">♪ 誰がを ♪<span class="chs" title="寻找着"><span></div>
+    <div class="eng">♪ 探していた! ♪<span class="chs" title="某个人!"><span></div>
+    <div class="eng">♪ 僕らタイムフライヤー　時を駆け上がるクライマー ♪<span class="chs" title="我们是时间的旅行者　攀登着时光的阶梯"><span></div>
+    <div class="eng">♪ 時のかくれんぼ　はぐれっこはもういやなんだ ♪<span class="chs" title="我不想再与时间捉迷藏　再与你走散"><span></div>
+    <div class="eng">♪ 離したりしないよ　二度と離しはしないよ ♪<span class="chs" title="我不会离开你　再也不会离开你"><span></div>
+    <div class="eng">♪ やっとこの手が　君に追いついたんだよ ♪<span class="chs" title="终于赶上了你　牵到了这双手"><span></div>
+    <div class="eng">♪ あ ♪<span class="chs" title="啊"><span></div>
+    <div class="eng">♪ 君は派手なクライヤー　その涙　止めてみたいな ♪<span class="chs" title="你嚎啕大哭着　我多想拭去那泪水"><span></div>
+    <div class="eng">♪ だけど　君は拒んだ　零れるままの涙を見てわかった ♪<span class="chs" title="但你却阻止了我　看着你不断落下的泪滴我明白了"><span></div>
+    <div class="eng">♪ 嬉しくて泣くのは　悲しくて　笑うのは ♪<span class="chs" title="喜极而泣也好　强颜欢笑也好"><span></div>
+    <div class="eng">♪ 君の心が　君を追い越したんだよ ♪<span class="chs" title="是因为你的心　早已超越了你自己啊"><span></div>
 </div>
     <br>
 <div class="paragraph_part">    <div class="eng">あの<span class="chs" title="那个"><span></div>
     <div class="eng">俺 君をどこかで<span class="chs" title="我在哪里见过你吗"><span></div>
-    <div class="eng">私も!<span class="chs" title="我也这么觉得!"><span></div>
-    <div class="eng">君の名前は…?<span class="chs" title="你的名字是"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">君の名は。<span class="chs" title="你 的 名 字。"><span></div>
+<div class="paragraph_part">    <div class="eng">私も!<span class="chs" title="我也这么觉得!"><span></div>
+    <div class="eng">君の名前は…?<span class="chs" title="你的名字是……？"><span></div>
+    <div class="eng">君 の 名 は。<span class="chs" title="你 的 名 字。"><span></div>
+    <div class="eng">♪ 二人の間　通り過ぎた風は ♪<span class="chs" title="掠过两人之间的风"><span></div>
+    <div class="eng">♪ どこから寂しさを運んできたの ♪<span class="chs" title="不知从何处捎来了一丝寂寞"><span></div>
+    <div class="eng">♪ 泣いたりしたそのあとの空は ♪<span class="chs" title="哭泣过后眺望的天空"><span></div>
+    <div class="eng">映画オリジナル/脚本家/監督  新海誠／しんかいまこと / Shinkai Makoto<span class="chs" title="原作/编剧/导演  新海诚"><span></div>
+    <div class="eng">♪ やけに透き通っていたりしたんだ ♪<span class="chs" title="也显得格外清澈通透"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">二人の間　通り過ぎた風は<span class="chs" title="掠过两人之间的风"><span></div>
-    <div class="eng">どこから寂しさを運んできたの<span class="chs" title="不知从何处捎来了一丝寂寞"><span></div>
-    <div class="eng">泣いたりしたそのあとの空は<span class="chs" title="哭泣过后眺望的天空"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ いつもは尖ってた父の言葉が ♪<span class="chs" title="♪ 连平日里父亲刺耳的话语 ♪"><span></div>
+    <div class="eng">♪ 今日は暖かく感じました ♪<span class="chs" title="今天也觉得有些温暖"><span></div>
+    <div class="eng">♪ 優しさも笑顔も夢の語り方も ♪<span class="chs" title="温柔也好笑容也好描述梦境的话语也好"><span></div>
+    <div class="eng">♪ 知らなくて全部君を真似たよ ♪<span class="chs" title="未知的一切全都是在模仿你哦"><span></div>
+    <div class="eng">♪ もう少しだけでいいあと少しだけでいい ♪<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけでいいから ♪<span class="chs" title="稍微再一会儿就好了"><span></div>
+    <div class="eng">♪ もう少しだけでいいあと少しだけでいい ♪<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけくっついていようか ♪<span class="chs" title="让我们再多相互依偎一会儿吧"><span></div>
+    <div class="eng">♪ 僕らタイムフライヤー ♪♪ 時を駆け上がるクライマー ♪<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
+    <div class="eng">♪ 時のかくれんぼ ♪♪ はぐれっこはもういやなんだ ♪<span class="chs" title="我不想再与时间捉迷藏  再与你走散"><span></div>
+    <div class="eng">♪ 嬉しくて泣くのは悲しくて笑うのは ♪<span class="chs" title="喜极而泣也好强颜欢笑也好"><span></div>
+    <div class="eng">♪ 君の心が君を追い越したんだよ ♪<span class="chs" title="是因为你的心早已超越了你自己啊"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">映画オリジナル/脚本家/監督  新海誠／しんかいまこと / Shinkai Makoto<span class="chs" title="原作/编剧/导演  新海诚"><span></div>
-    <div class="eng">やけに透き通っていたりしたんだ<span class="chs" title="也显得格外清澈通透"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ 星にまで願って手にいれたオモチャも ♪<span class="chs" title="连向流星许愿才得到的玩具"><span></div>
+    <div class="eng">♪ 部屋の隅っこに今転がってる ♪<span class="chs" title="如今也倒在房间的角落里"><span></div>
+    <div class="eng">♪ 叶えたい夢も今日で100個できたよ ♪<span class="chs" title="想要实现的愿望今天就满100个了哟"><span></div>
+    <div class="eng">♪ たった一つといつか交換こしよう ♪<span class="chs" title="就拿出一个来跟未来某天做交换吧"><span></div>
+    <div class="eng">♪ いつもは喋らないあの子に今日は ♪<span class="chs" title="一直没能搭上话的那个孩子"><span></div>
+    <div class="eng">♪ 放課後﹃また明日﹄と声をかけた ♪<span class="chs" title="今天也在放学后对他说了“明天见”"><span></div>
+    <div class="eng">♪ 慣れないこともたまにならいいね ♪<span class="chs" title="偶尔做点不习惯的事感觉也挺好的"><span></div>
+    <div class="eng">♪ 特にあなたが隣にいたら ♪<span class="chs" title="特别是还有你陪在身旁"><span></div>
+    <div class="eng">♪ もう少しだけでいいあと少しだけでいい ♪<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけでいいから ♪<span class="chs" title="稍微再一会儿就好了"><span></div>
+    <div class="eng">♪ もう少しだけでいいあと少しだけでいい ♪<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
+    <div class="eng">♪ もう少しだけくっついていようよ ♪<span class="chs" title="让我们再多相互依偎一会儿哟"><span></div>
+    <div class="eng">♪ 僕らタイムフライヤー君を知っていたんだ ♪<span class="chs" title="我们是时间的旅行者我早就认识你了"><span></div>
+    <div class="eng">♪ 僕が僕の名前を覚えるよりずっと前に ♪<span class="chs" title="在比我记住自己的名字还要更久更久之前"><span></div>
+    <div class="eng">♪ 君のいない世界にも ♪♪ 何かの意味はきっとあって ♪<span class="chs" title="即便是没有你的世界  也一定有某种存在的意义"><span></div>
+    <div class="eng">♪ でも君のいない世界など ♪♪ 夏休みのない八月のよう ♪<span class="chs" title="但若是没有你的世界  就会像没有暑假的八月"><span></div>
+    <div class="eng">♪ 君のいない世界など ♪♪ 笑うことないサンタのよう ♪<span class="chs" title="如果是没有你的世界  就会像没有笑容的圣诞老人"><span></div>
+    <div class="eng">♪ 君のいない世界など ♪<span class="chs" title="如果是没有你的世界啊"><span></div>
 </div>
     <br>
-<div class="paragraph_part">    <div class="eng">いつもは尖ってた父の言葉が<span class="chs" title="连平日里父亲刺耳的话语"><span></div>
-    <div class="eng">今日は暖かく感じました<span class="chs" title="今天也觉得有些温暖"><span></div>
-    <div class="eng">優しさも笑顔も夢の語り方も<span class="chs" title="温柔也好笑容也好描述梦境的话语也好"><span></div>
-    <div class="eng">知らなくて全部君を真似たよ<span class="chs" title="未知的一切全都是在模仿你哦"><span></div>
-    <div class="eng">もう少しだけでいいあと少しだけでいい<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけでいいから<span class="chs" title="稍微再一会儿就好了"><span></div>
-    <div class="eng">もう少しだけでいいあと少しだけでいい<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけくっついていようか<span class="chs" title="让我们再多相互依偎一会儿吧"><span></div>
-    <div class="eng">僕らタイムフライヤー時を駆け上がるクライマー<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
-    <div class="eng">時のかくれんぼはぐれっこはもういやなんだ<span class="chs" title="我不想再与时间捉迷藏  再与你走散"><span></div>
-    <div class="eng">嬉しくて泣くのは悲しくて笑うのは<span class="chs" title="喜极而泣也好强颜欢笑也好"><span></div>
-    <div class="eng">君の心が君を追い越したんだよ<span class="chs" title="是因为你的心早已超越了你自己啊"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">星にまで願って手にいれたオモチャも<span class="chs" title="连向流星许愿才得到的玩具"><span></div>
-    <div class="eng">部屋の隅っこに今転がってる<span class="chs" title="如今也倒在房间的角落里"><span></div>
-    <div class="eng">叶えたい夢も今日で100個できたよ<span class="chs" title="想要实现的愿望今天就满100个了哟"><span></div>
-    <div class="eng">たった一つといつか交換こしよう<span class="chs" title="就拿出一个来跟未来某天做交换吧"><span></div>
-    <div class="eng">いつもは喋らないあの子に今日は<span class="chs" title="一直没能搭上话的那个孩子"><span></div>
-    <div class="eng">放課後﹃また明日﹄と声をかけた<span class="chs" title="今天也在放学后对他说了“明天见”"><span></div>
-    <div class="eng">慣れないこともたまにならいいね<span class="chs" title="偶尔做点不习惯的事感觉也挺好的"><span></div>
-    <div class="eng">特にあなたが隣にいたら<span class="chs" title="特别是还有你陪在身旁"><span></div>
-    <div class="eng">もう少しだけでいいあと少しだけでいい<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけでいいから<span class="chs" title="稍微再一会儿就好了"><span></div>
-    <div class="eng">もう少しだけでいいあと少しだけでいい<span class="chs" title="再等一会儿就好只要一会儿就好"><span></div>
-    <div class="eng">もう少しだけくっついていようよ<span class="chs" title="让我们再多相互依偎一会儿哟"><span></div>
-    <div class="eng">僕らタイムフライヤー君を知っていたんだ<span class="chs" title="我们是时间的旅行者我早就认识你了"><span></div>
-    <div class="eng">僕が僕の名前を覚えるよりずっと前に<span class="chs" title="在比我记住自己的名字还要更久更久之前"><span></div>
-    <div class="eng">君のいない世界にも何かの意味はきっとあって<span class="chs" title="即便是没有你的世界  也一定有某种存在的意义"><span></div>
-    <div class="eng">でも君のいない世界など夏休みのない八月のよう<span class="chs" title="但若是没有你的世界  就会像没有暑假的八月"><span></div>
-    <div class="eng">君のいない世界など笑うことないサンタのよう<span class="chs" title="如果是没有你的世界  就会像没有笑容的圣诞老人"><span></div>
-    <div class="eng">君のいない世界など<span class="chs" title="如果是没有你的世界啊"><span></div>
-</div>
-    <br>
-<div class="paragraph_part">    <div class="eng">僕らタイムフライヤー時を駆け上がるクライマー<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
-    <div class="eng">時のかくれんぼはぐれっこはもういやなんだ<span class="chs" title="我不想再与时间捉迷藏  再与你走散"><span></div>
-    <div class="eng">なんでもないややっぱりなんでもないや<span class="chs" title="没什么大不了真的没什么大不了"><span></div>
-    <div class="eng">今から行くよ<span class="chs" title="我现在就过去"><span></div>
-    <div class="eng">僕らタイムフライヤー時を駆け上がるクライマー<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
-    <div class="eng">時のかくれんぼはぐれっこはもういいよ<span class="chs" title="即便与时间捉迷藏与你走散  也没有关系"><span></div>
-    <div class="eng">君は派手なクライヤーその涙止めてみたいな<span class="chs" title="你嚎啕大哭着  我多想拭去那泪水"><span></div>
-    <div class="eng">だけど君は拒んだ零れるままの涙を見てわかった<span class="chs" title="但你却阻止了我  看着你不断落下的泪滴我明白了"><span></div>
-    <div class="eng">嬉しくて泣くのは悲しくて笑うのは<span class="chs" title="喜极而泣也好强颜欢笑也好"><span></div>
-    <div class="eng">僕の心が僕を追い越したんだよ<span class="chs" title="是因为我的心早已超越了我自己啊"><span></div>
+<div class="paragraph_part">    <div class="eng">♪ 僕らタイムフライヤー ♪♪ 時を駆け上がるクライマー ♪<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
+    <div class="eng">♪ 時のかくれんぼ ♪はぐれっこはもういやなんだ<span class="chs" title="我不想再与时间捉迷藏  再与你走散"><span></div>
+    <div class="eng">♪ なんでもないややっぱりなんでもないや ♪<span class="chs" title="没什么大不了真的没什么大不了"><span></div>
+    <div class="eng">♪ 今から行くよ ♪<span class="chs" title="我现在就过去"><span></div>
+    <div class="eng">♪ 僕らタイムフライヤー ♪♪ 時を駆け上がるクライマー ♪<span class="chs" title="我们是时间的旅行者  攀登着时光的阶梯"><span></div>
+    <div class="eng">♪ 時のかくれんぼ ♪♪ はぐれっこはもういいよ ♪<span class="chs" title="即便与时间捉迷藏与你走散  也没有关系"><span></div>
+    <div class="eng">♪ 君は派手なクライヤー ♪♪ その涙止めてみたいな ♪<span class="chs" title="你嚎啕大哭着  我多想拭去那泪水"><span></div>
+    <div class="eng">♪ だけど君は拒んだ ♪♪ 零れるままの涙を見てわかった ♪<span class="chs" title="但你却阻止了我  看着你不断落下的泪滴我明白了"><span></div>
+    <div class="eng">♪ 嬉しくて泣くのは悲しくて笑うのは ♪<span class="chs" title="喜极而泣也好强颜欢笑也好"><span></div>
+    <div class="eng">♪ 僕の心が僕を追い越したんだよ ♪<span class="chs" title="是因为我的心早已超越了我自己啊"><span></div>
 </div>
     <br>
 
@@ -1887,25 +1670,22 @@ function display_chs(){
     var $cnLines = document.getElementsByClassName("chs");
     for (var i = 0; i < $cnLines.length; i++) {
         var line = $cnLines[i];
-        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title");  }
-        else if(line.innerHTML!="➤") {line.title=line.innerHTML; if (line.innerHTML!="") line.innerHTML = "➤"; }
+        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
+        else if(line.innerHTML!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
         line.style.color=font_default_color;
     }
 }
 function display_lines(){  
     var $cnLines = document.getElementsByClassName("eng");
-    if ($cnLines.length){
-    for (var i = $cnLines.length - 1; i >= 0; i--)
-        $cnLines[i].className="eng-b";
-    }
-    else{
-        $cnLines = document.getElementsByClassName("eng-b");
-        for (var i = $cnLines.length - 1; i >= 0; i--)
-            $cnLines[i].className="eng";
-        return;
+    for (var i = $cnLines.length - 1; i >= 0; i--) {
+        if ($cnLines[i].className == "eng line")
+            $cnLines[i].className = "eng para";
+        else
+            $cnLines[i].className = "eng line";
     }
 }
 var handler = function(event) {
+    line = event.target;
     switch (event.type){
         case "click":
             var txt = "";
@@ -1913,16 +1693,17 @@ var handler = function(event) {
             else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
             else if (window.document.selection) { txt = window.document.selection.createRange().text;}
             if (txt != '')    break;
-            if(event.target.title) { event.target.innerHTML = event.target.title; event.target.removeAttribute("title"); event.target.style.color=font_default_color }
-            else {event.target.title=event.target.innerHTML;
-                if (event.target.innerHTML!="") event.target.innerHTML = "➤";
-                event.target.style.color="red";}
+            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
+            else {line.title=line.innerHTML;
+                line.innerHTML = "";
+                line.className="chs on";
+                line.style.color="red";}
             break;
         case "mouseover":
-            if(event.target.title)    event.target.style.color="red";
+            if(line.title)    line.style.color="red";
             break;
         case "mouseout":
-            if(event.target.title)    event.target.style.color=font_default_color
+            if(line.title)    line.style.color=font_default_color
             break;
     }
 }
@@ -1935,7 +1716,7 @@ for (var i = 0; i < $cnLines.length; i++) {
     var line = $cnLines[i];
     line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
     if (line.title=="") {line.innerHTML =""; continue;}
-    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML = "➤"; 
+    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML ="";
     line.addEventListener("click",handler,false);
     line.addEventListener("mouseover",handler,false);
     line.addEventListener("mouseout",handler,false);

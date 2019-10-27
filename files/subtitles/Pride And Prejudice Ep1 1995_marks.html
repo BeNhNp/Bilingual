@@ -12,8 +12,6 @@
         -moz-border-radius:25px; /* Old Firefox */
     }
     .paragraph_part { margin: 0; text-indent:2em; }
-    .eng {display:inline;}
-    .eng-b {display:block;}
     .panel{ position: fixed; margin-left: 6%; top: 75%;
     }
     .panel-btn{
@@ -28,6 +26,12 @@
     }
     .word_hot{ font-weight:bold; color:#ff4500; }
     .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
+    .eng {display:inline;}
+    .eng.line {display:block;}
+    .eng.para {display:inline;}
+    .chs:before{content:"➤"; font-size:%25;}
+    .chs.on:before{content:"➤"; font-size:%25;}
+    .chs.off:before{content:"";}
 </style>
 </head>
 <body>
@@ -678,25 +682,22 @@ function display_chs(){
     var $cnLines = document.getElementsByClassName("chs");
     for (var i = 0; i < $cnLines.length; i++) {
         var line = $cnLines[i];
-        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title");  }
-        else if(line.innerHTML!="➤") {line.title=line.innerHTML; if (line.innerHTML!="") line.innerHTML = "➤"; }
+        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
+        else if(line.innerHTML!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
         line.style.color=font_default_color;
     }
 }
 function display_lines(){  
     var $cnLines = document.getElementsByClassName("eng");
-    if ($cnLines.length){
-    for (var i = $cnLines.length - 1; i >= 0; i--)
-        $cnLines[i].className="eng-b";
-    }
-    else{
-        $cnLines = document.getElementsByClassName("eng-b");
-        for (var i = $cnLines.length - 1; i >= 0; i--)
-            $cnLines[i].className="eng";
-        return;
+    for (var i = $cnLines.length - 1; i >= 0; i--) {
+        if ($cnLines[i].className == "eng line")
+            $cnLines[i].className = "eng para";
+        else
+            $cnLines[i].className = "eng line";
     }
 }
 var handler = function(event) {
+    line = event.target;
     switch (event.type){
         case "click":
             var txt = "";
@@ -704,16 +705,17 @@ var handler = function(event) {
             else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
             else if (window.document.selection) { txt = window.document.selection.createRange().text;}
             if (txt != '')    break;
-            if(event.target.title) { event.target.innerHTML = event.target.title; event.target.removeAttribute("title"); event.target.style.color=font_default_color }
-            else {event.target.title=event.target.innerHTML;
-                if (event.target.innerHTML!="") event.target.innerHTML = "➤";
-                event.target.style.color="red";}
+            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
+            else {line.title=line.innerHTML;
+                line.innerHTML = "";
+                line.className="chs on";
+                line.style.color="red";}
             break;
         case "mouseover":
-            if(event.target.title)    event.target.style.color="red";
+            if(line.title)    line.style.color="red";
             break;
         case "mouseout":
-            if(event.target.title)    event.target.style.color=font_default_color
+            if(line.title)    line.style.color=font_default_color
             break;
     }
 }
@@ -726,7 +728,7 @@ for (var i = 0; i < $cnLines.length; i++) {
     var line = $cnLines[i];
     line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
     if (line.title=="") {line.innerHTML =""; continue;}
-    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML = "➤"; 
+    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML ="";
     line.addEventListener("click",handler,false);
     line.addEventListener("mouseover",handler,false);
     line.addEventListener("mouseout",handler,false);
