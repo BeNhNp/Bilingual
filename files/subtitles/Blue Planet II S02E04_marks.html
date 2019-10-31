@@ -3,17 +3,24 @@
 <meta charset="utf-8">
 <title> Blue Planet II S02E04 </title>
 <style type="text/css">
-    body {font-family: arial,verdana,geneva,sans-serif; font-size: 18px; color: #000; background-color: #eee;}
+    body {font-family: arial,verdana,geneva,sans-serif; font-size: 112%; color: #000; background-color: #eee;}
     .chapter_part {margin: 50px auto;
-        width: 72%; background-color: #fefefe;
+        background-color: #fefefe;
         padding:10px 10px 0;
         box-shadow: 0 0 0 20px #f8f8f8;
         border-radius:25px;
         -moz-border-radius:25px; /* Old Firefox */
     }
+    .panel{ position: fixed;  top: 75%; }
+@media screen and (min-width:960px){
+    .chapter_part {width: 64%; }
+    .panel{margin-left: 6%;}
+}
+@media screen and (max-width:960px){
+    .chapter_part {width: 80%; }
+    .panel{margin-left: 0;}
+}
     .paragraph_part { margin: 0; text-indent:2em; }
-    .panel{ position: fixed; margin-left: 6%; top: 75%;
-    }
     .panel-btn{
         position:relative; margin-bottom:.75rem;
         text-align: center; font-size:1.8em;
@@ -312,13 +319,13 @@
 </body>
 
 <script type="text/javascript">
-font_default_color = "#888"
+font_default_color = "#666"
 function display_chs(){  
     var $cnLines = document.getElementsByClassName("chs");
     for (var i = 0; i < $cnLines.length; i++) {
         var line = $cnLines[i];
         if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
-        else if(line.innerHTML!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
+        else if(line.innerText!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
         line.style.color=font_default_color;
     }
 }
@@ -362,8 +369,8 @@ if ($cnLines.length==0){
 for (var i = 0; i < $cnLines.length; i++) {
     var line = $cnLines[i];
     line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
-    if (line.title=="") {line.innerHTML =""; continue;}
-    line.style.fontSize = "90%"; line.style.color=font_default_color; line.innerHTML ="";
+    if (line.title=="") {line.className="chs off"; continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color;
     line.addEventListener("click",handler,false);
     line.addEventListener("mouseover",handler,false);
     line.addEventListener("mouseout",handler,false);

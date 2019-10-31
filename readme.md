@@ -4,7 +4,7 @@
 
 ## Papers
 - [AlexNet](https://benhnp.github.io/nhnp/files/papers/cv/ImageNet%20Classification%20with%20Deep%20Convolutional%20Neural%20Networks_marks.html) Krizhevsky, Alex, Ilya Sutskever, Geoffrey E. Hinton. (2012)
-- [SSD](https://benhnp.github.io/nhnp/files/papers/cv/SSD%20-%20Single%20Shot%20MultiBox%20Detector_marks.html") Liu, Wei, et al (2016)
+- [SSD](https://benhnp.github.io/nhnp/files/papers/cv/SSD%20-%20Single%20Shot%20MultiBox%20Detector_marks.html) Liu, Wei, et al (2016)
 
 ## Subtitles
 
