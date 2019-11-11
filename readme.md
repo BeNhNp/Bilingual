@@ -7,6 +7,8 @@
 - [VGG](https://benhnp.github.io/nhnp/files/papers/cv/VGG%20-%20Very%20Deep%20Convolutional%20Networks%20for%20Large-Scale%20Image%20Recognition_marks.html) Simonyan, Karen ; Zisserman, Andrew (2015)
 - [ResNet](https://benhnp.github.io/nhnp/files/papers/cv/ResNet%20-%20Deep%20Residual%20Learning%20for%20Image%20Recognition_marks.html) He, Kaiming ; Zhang, Xiangyu; Ren, Shaoqing; Sun, Jian (2016)
 - [SSD](https://benhnp.github.io/nhnp/files/papers/cv/SSD%20-%20Single%20Shot%20MultiBox%20Detector_marks.html) Wei Liu ; Anguelov, D.; Erhan, D.; Szegedy, C.; Reed, S.; Cheng-Yang Fu; Berg, A.C. (2016)
+- [CTPN](https://benhnp.github.io/nhnp/files/papers/cv/CTPN%20-%20Detecting%20Text%20in%20Natural%20Image%20with%20Connectionist%20Text%20Proposal%20Network_marks.html) Shi, Baoguang; Bai, Xiang; Yao, Cong (2017)
+- [CRNN](https://benhnp.github.io/nhnp/files/papers/cv/CRNN%20-%20An%20End-to-End%20Trainable%20Neural%20Network_marks.html) Shi, Baoguang; Bai, Xiang; Yao, Cong (2017)
 
 ## Subtitles
 

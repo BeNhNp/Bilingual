@@ -1,0 +1,678 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title> CRNN - An End-to-End Trainable Neural Network </title>
+<style type="text/css">
+    body {font-family: arial,verdana,geneva,sans-serif; font-size: 112%; color: #000; background-color: #eee; word-wrap:break-word;}
+    .chapter_part { margin: 50px auto;
+        background-color: #fefefe; padding:10px 10px 0;
+        box-shadow: 0 0 0 20px #f8f8f8; border-radius:25px;
+    }
+    .panel{ position: fixed;  top: 75%; }
+@media screen and (min-width:1280px){
+    .chapter_part {width: 64%; }
+    .panel{margin-left: 6%;}
+}
+@media screen and (max-width:1280px){
+    .chapter_part {width: 80%; }
+    .panel{margin-left: 0;}
+}
+    .paragraph_part { margin: 0; text-indent:2em; }
+    .panel-btn{
+        position:relative; margin-bottom:.75rem;
+        text-align: center; font-size:1.8em;
+        color:#888; width:3rem; height:3rem;
+        background-color:#fff; background-repeat:no-repeat;
+        border:5px solid #ddd; border-radius:50%;
+        box-shadow:0 2px 4px 0 rgba(0,0,0,.04); cursor:pointer;
+    }
+    .word_hot{ font-weight:bold; color:#ff4500; }
+    .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
+    .eng {display:inline;}
+    .eng.line {display:block;}
+    .eng.para {display:inline;}
+    .chs:before{content:"➤"; font-size:%25;}
+    .chs.on:before{content:"➤"; font-size:%25;}
+    .chs.off:before{content:"";}
+</style>
+</head>
+<body>
+<div class="chapter_part">
+<div class="paragraph_part">
+    <div class="eng">An End-to-End <span class="word_hot" title="trainable [t'reɪnəbl]">Trainable</span> Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition<span class="chs" title="基于图像序列识别的端到端可训练神经网络及其在场景文本识别中的应用"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Authors: Shi, <span class="word_hot_rare">Baoguang</span> (School of Electronic Information and Communications, <span class="word_hot_rare">Huazhong</span> University of Science and Technology, <span class="word_hot" title="Wuhan ['wu:'hɑ:n]">Wuhan</span>; 430074, China); Bai, Xiang; Yao, Cong<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Source: <span class="word_hot" title="IEEE [,aɪii'i]">IEEE</span> Transactions on Pattern Analysis and Machine Intelligence, v 39, n 11, p 2298-2304, November 1, 2017<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">url</span>:http://noahsnail.com/2017/08/21/2017-08-21-CRNN%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%E2%80%94%E2%80%94%E4%B8%AD%E8%8B%B1%E6%96%87%E5%AF%B9%E7%85%A7/<span class="chs" title="原文链接"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Abstract<span class="chs" title="摘要"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Image-based sequence recognition has been a <span class="word_hot" title="long-standing [ˈlɔŋstædiŋ]">long-standing</span> research topic in computer vision.<span class="chs" title="基于图像的序列识别一直是计算机视觉中长期存在的研究课题。"><span></div>
+    <div class="eng">In this paper, we investigate the problem of scene text recognition, which is among the most important and challenging tasks in image-based sequence recognition.<span class="chs" title="在本文中，我们研究了场景文本识别的问题，这是基于图像的序列识别中最重要和最具挑战性的任务之一。"><span></div>
+    <div class="eng">A novel neural network architecture, which integrates feature <span class="word_hot" title="extraction [ɪkˈstrækʃn]">extraction</span>, sequence modeling and <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> into a unified framework, is proposed.<span class="chs" title="提出了一种将特征提取，序列建模和转录整合到统一框架中的新型神经网络架构。"><span></div>
+    <div class="eng">Compared with previous systems for scene text recognition, the proposed architecture possesses four distinctive properties: (1) It is end-to-end <span class="word_hot" title="trainable [t'reɪnəbl]">trainable</span>, in contrast to most of the existing algorithms whose components are separately trained and tuned.<span class="chs" title="与以前的场景文本识别系统相比，所提出的架构具有四个不同的特性：（1）与大多数现有的组件需要单独训练和协调的算法相比，它是端对端训练的。"><span></div>
+    <div class="eng">(2) It naturally handles sequences in <span class="word_hot" title="arbitrary [ˈɑ:bɪtrəri]">arbitrary</span> lengths, involving no character <span class="word_hot" title="segmentation [ˌsegmenˈteɪʃn]">segmentation</span> or horizontal scale normalization.<span class="chs" title="（2）它自然地处理任意长度的序列，不涉及字符分割或水平尺度归一化。"><span></div>
+    <div class="eng">(3) It is not confined to any <span class="word_hot" title="predefined [pri:dɪ'faɪnd]">predefined</span> <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> and achieves remarkable performances in both <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>-free and <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>-based scene text recognition tasks.<span class="chs" title="（3）它不仅限于任何预定义的词汇，并且在无词典和基于词典的场景文本识别任务中都取得了显著的表现。"><span></div>
+    <div class="eng">(4) It generates an effective yet much smaller model, which is more practical for <span class="word_hot_rare">real-world</span> application scenarios.<span class="chs" title="（4）它产生了一个有效而小得多的模型，这对于现实世界的应用场景更为实用。"><span></div>
+    <div class="eng">The experiments on standard benchmarks, including the <span class="word_hot_rare">IIIT-5K</span>, Street View Text and <span class="word_hot_rare">ICDAR</span> datasets, demonstrate the superiority of the proposed algorithm over the prior arts.<span class="chs" title="在包括IIIT-5K，Street View Text和ICDAR数据集在内的标准基准数据集上的实验证明了提出的算法比现有技术的更有优势。"><span></div>
+    <div class="eng">Moreover, the proposed algorithm performs well in the task of image-based music score recognition, which evidently verifies the <span class="word_hot" title="generality [ˌdʒenəˈræləti]">generality</span> of it.<span class="chs" title="此外，提出的算法在基于图像的音乐配乐识别任务中表现良好，这显然证实了它的泛化性。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">1. Introduction<span class="chs" title="1. 引言"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Recently, the community has seen a strong <span class="word_hot" title="revival [rɪˈvaɪvl]">revival</span> of neural networks, which is mainly stimulated by the great success of deep neural network models, <span class="word_hot" title="specifically [spəˈsɪfɪkli]">specifically</span> Deep Convolutional Neural Networks (<span class="word_hot_rare">DCNN</span>), in various vision tasks.<span class="chs" title="最近，社区已经看到神经网络的强大复兴，这主要受到深度神经网络模型，特别是深度卷积神经网络（DCNN）在各种视觉任务中的巨大成功的推动。"><span></div>
+    <div class="eng">However, majority of the recent works related to deep neural networks have devoted to detection or classification of object categories [12, 25].<span class="chs" title="然而，最近大多数与深度神经网络相关的工作主要致力于检测或分类对象类别[12,25]。"><span></div>
+    <div class="eng">In this paper, we are concerned with a classic problem in computer vision: image-based sequence recognition.<span class="chs" title="在本文中，我们关注计算机视觉中的一个经典问题：基于图像的序列识别。"><span></div>
+    <div class="eng">In real world, a stable of visual objects, such as scene text, handwriting and musical score, tend to occur in the form of sequence, not in isolation.<span class="chs" title="在现实世界中，稳定的视觉对象，如场景文字，手写字符和乐谱，往往以序列的形式出现，而不是孤立地出现。"><span></div>
+    <div class="eng">Unlike general object recognition, recognizing such sequence-like objects often requires the system to predict a series of object labels, instead of a single label.<span class="chs" title="与一般的对象识别不同，识别这样的类序列对象通常需要系统预测一系列对象标签，而不是单个标签。"><span></div>
+    <div class="eng">Therefore, recognition of such objects can be naturally cast as a sequence recognition problem.<span class="chs" title="因此，可以自然地将这样的对象的识别作为序列识别问题。"><span></div>
+    <div class="eng">Another unique property of sequence-like objects is that their lengths may vary <span class="word_hot" title="drastically ['drɑ:stɪklɪ]">drastically</span>.<span class="chs" title="类序列对象的另一个独特之处在于它们的长度可能会有很大变化。"><span></div>
+    <div class="eng">For instance, English words can either consist of 2 characters such as “OK” or 15 characters such as “<span class="word_hot" title="congratulations [kənˌgrætjʊ'leɪʃənz]">congratulations</span>”.<span class="chs" title="例如，英文单词可以由2个字符组成，如“OK”，或由15个字符组成，如“congratulations”。"><span></div>
+    <div class="eng">Consequently, the most popular deep models like <span class="word_hot_rare">DCNN</span> [25, 26] cannot be directly applied to sequence prediction, since <span class="word_hot_rare">DCNN</span> models often operate on inputs and outputs with fixed dimensions, and thus are <span class="word_hot" title="incapable [ɪnˈkeɪpəbl]">incapable</span> of producing a <span class="word_hot" title="variable-length ['veərɪəbll'eŋθ]">variable-length</span> label sequence.<span class="chs" title="因此，最流行的深度模型像DCNN[25,26]不能直接应用于序列预测，因为DCNN模型通常对具有固定维度的输入和输出进行操作，因此不能产生可变长度的标签序列。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Some attempts have been made to address this problem for a specific sequence-like object (e.g. scene text).<span class="chs" title="已经针对特定的类似序列的对象（例如场景文本）进行了一些尝试来解决该问题。"><span></div>
+    <div class="eng">For example, the algorithms in [35, 8] firstly detect individual characters and then recognize these detected characters with <span class="word_hot_rare">DCNN</span> models, which are trained using labeled character images.<span class="chs" title="例如，[35,8]中的算法首先检测单个字符，然后用DCNN模型识别这些检测到的字符，并使用标注的字符图像进行训练。"><span></div>
+    <div class="eng">Such methods often require training a strong character detector for accurately detecting and cropping each character out from the original word image.<span class="chs" title="这些方法通常需要训练强字符检测器，以便从原始单词图像中准确地检测和裁剪每个字符。"><span></div>
+    <div class="eng">Some other approaches (such as [22]) treat scene text recognition as an image classification problem, and assign a class label to each English word (90K words in total).<span class="chs" title="一些其他方法（如[22]）将场景文本识别视为图像分类问题，并为每个英文单词（总共9万个词）分配一个类标签。"><span></div>
+    <div class="eng">It turns out a large trained model with a huge number of classes, which is difficult to be <span class="word_hot" title="generalized [ˈdʒenrəlaɪzd]">generalized</span> to other types of sequence-like objects, such as Chinese texts, musical scores, etc., because the numbers of basic combinations of such kind of sequences can be greater than 1 million.<span class="chs" title="结果是一个大的训练模型中有很多类，这很难泛化到其它类型的类序列对象，如中文文本，音乐配乐等，因为这种序列的基本组合数目可能大于100万。"><span></div>
+    <div class="eng">In summary, current systems based on <span class="word_hot_rare">DCNN</span> can not be directly used for image-based sequence recognition.<span class="chs" title="总之，目前基于DCNN的系统不能直接用于基于图像的序列识别。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> neural networks (RNN) models, another important branch of the deep neural networks family, were mainly designed for handling sequences.<span class="chs" title="循环神经网络（RNN）模型是深度神经网络家族中的另一个重要分支，主要是设计来处理序列。"><span></div>
+    <div class="eng">One of the advantages of RNN is that it does not need the position of each element in a sequence object image in both training and testing.<span class="chs" title="RNN的优点之一是在训练和测试中不需要序列目标图像中每个元素的位置。"><span></div>
+    <div class="eng">However, a preprocessing step that converts an input object image into a sequence of image features, is usually essential.<span class="chs" title="然而，将输入目标图像转换成图像特征序列的预处理步骤通常是必需的。"><span></div>
+    <div class="eng">For example, Graves et al. [16] extract a set of <span class="word_hot" title="geometrical [ˌdʒi:ə'metrɪkl]">geometrical</span> or image features from <span class="word_hot" title="handwritten [ˌhændˈrɪtn]">handwritten</span> texts, while Su and Lu [33] convert word images into <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> HOG features.<span class="chs" title="例如，Graves等[16]从手写文本中提取一系列几何或图像特征，而Su和Lu[33]将字符图像转换为序列HOG特征。"><span></div>
+    <div class="eng">The preprocessing step is independent of the subsequent components in the pipeline, thus the existing systems based on RNN can not be trained and optimized in an end-to-end fashion.<span class="chs" title="预处理步骤独立于流程中的后续组件，因此基于RNN的现有系统不能以端到端的方式进行训练和优化。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Several <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> scene text recognition methods that are not based on neural networks also brought <span class="word_hot" title="insightful [ˈɪnsaɪtfʊl]">insightful</span> ideas and novel representations into this field.<span class="chs" title="一些不是基于神经网络的传统场景文本识别方法也为这一领域带来了有见地的想法和新颖的表现。"><span></div>
+    <div class="eng">For example, <span class="word_hot_rare">Almazan</span> et al. [5] and <span class="word_hot_rare">Rodriguez-Serrano</span> et al. [30] proposed to embed word images and text strings in a common <span class="word_hot" title="vectorial [vek'tɒrɪəl]">vectorial</span> <span class="word_hot" title="subspace ['sʌbspeɪs]">subspace</span>, and word recognition is converted into a <span class="word_hot" title="retrieval [rɪˈtri:vl]">retrieval</span> problem.<span class="chs" title="例如，Almazan等人[5]和Rodriguez-Serrano等人[30]提出将单词图像和文本字符串嵌入到公共向量子空间中，并将词识别转换为检索问题。"><span></div>
+    <div class="eng">Yao et al. [36] and <span class="word_hot_rare">Gordo</span> et al. [14] used mid-level features for scene text recognition.<span class="chs" title="Yao等人[36]和Gordo等人[14]使用中层特征进行场景文本识别。"><span></div>
+    <div class="eng">Though achieved promising performance on standard benchmarks, these methods are generally outperformed by previous algorithms based on neural networks [8, 22], as well as the approach proposed in this paper.<span class="chs" title="虽然在标准基准数据集上取得了有效的性能，但是前面的基于神经网络的算法[8,22]以及本文提出的方法通常都优于这些方法。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The main contribution of this paper is a novel neural network model, whose network architecture is <span class="word_hot" title="specifically [spəˈsɪfɪkli]">specifically</span> designed for recognizing sequence-like objects in images.<span class="chs" title="本文的主要贡献是一种新颖的神经网络模型，其网络架构设计专门用于识别图像中的类序列对象。"><span></div>
+    <div class="eng">The proposed neural network model is named as Convolutional <span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> Neural Network (<span class="word_hot_rare">CRNN</span>), since it is a combination of <span class="word_hot_rare">DCNN</span> and RNN.<span class="chs" title="所提出的神经网络模型被称为卷积循环神经网络（CRNN），因为它是DCNN和RNN的组合。"><span></div>
+    <div class="eng">For sequence-like objects, <span class="word_hot_rare">CRNN</span> possesses several distinctive advantages over <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> neural network models: 1) It can be directly learned from sequence labels (for instance, words), requiring no detailed annotations (for instance, characters); 2) It has the same property of <span class="word_hot_rare">DCNN</span> on learning <span class="word_hot" title="informative [ɪnˈfɔ:mətɪv]">informative</span> representations directly from image data, requiring neither <span class="word_hot" title="hand-craft ['hæn(d)krɑːft]">hand-craft</span> features nor preprocessing steps, including <span class="word_hot_rare">binarization</span>/<span class="word_hot" title="segmentation [ˌsegmenˈteɪʃn]">segmentation</span>, component <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>, etc.; 3) It has the same property of RNN, being able to produce a sequence of labels; 4) It is <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> to the lengths of sequence-like objects, requiring only height normalization in both training and testing phases; 5) It achieves better or highly competitive performance on scene texts (word recognition) than the prior arts [23, 8]; 6) It contains much less parameters than a standard <span class="word_hot_rare">DCNN</span> model, consuming less storage space.<span class="chs" title="对于类序列对象，CRNN与传统神经网络模型相比具有一些独特的优点：1）可以直接从序列标签（例如单词）学习，不需要详细的标注（例如字符）；2）直接从图像数据学习信息表示时具有与DCNN相同的性质，既不需要手工特征也不需要预处理步骤，包括二值化/分割，组件定位等；3）具有与RNN相同的性质，能够产生一系列标签；4）对类序列对象的长度无约束，只需要在训练阶段和测试阶段对高度进行归一化；5）与现有技术相比，它在场景文本（字识别）上获得更好或更具竞争力的表现[23,8]。6）它比标准DCNN模型包含的参数要少得多，占用更少的存储空间。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2. The Proposed Network Architecture<span class="chs" title="2. 提出的网络架构"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The network architecture of <span class="word_hot_rare">CRNN</span>, as shown in Fig. 1, consists of three components, including the convolutional layers, the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, and a <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> layer, from bottom to top.<span class="chs" title="如图1所示，CRNN的网络架构由三部分组成，包括卷积层，循环层和转录层，从底向上。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/fig01.png" alt="Figure 1"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 1.<span class="chs" title="图1。"><span></div>
+    <div class="eng">The network architecture.<span class="chs" title="网络架构。"><span></div>
+    <div class="eng">The architecture consists of three parts: 1) convolutional layers, which extract a feature sequence from the input image; 2) <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, which predict a label distribution for each frame; 3) <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> layer, which translates the per-frame predictions into the final label sequence.<span class="chs" title="架构包括三部分：1) 卷积层，从输入图像中提取特征序列；2) 循环层，预测每一帧的标签分布；3) 转录层，将每一帧的预测变为最终的标签序列。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">At the bottom of <span class="word_hot_rare">CRNN</span>, the convolutional layers automatically extract a feature sequence from each input image.<span class="chs" title="在CRNN的底部，卷积层自动从每个输入图像中提取特征序列。"><span></div>
+    <div class="eng">On top of the convolutional network, a <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> network is built for making prediction for each frame of the feature sequence, <span class="word_hot" title="outputted ['aʊt.pʊt]">outputted</span> by the convolutional layers.<span class="chs" title="在卷积网络之上，构建了一个循环网络，用于对卷积层输出的特征序列的每一帧进行预测。"><span></div>
+    <div class="eng">The <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> layer at the top of <span class="word_hot_rare">CRNN</span> is adopted to translate the per-frame predictions by the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers into a label sequence.<span class="chs" title="采用CRNN顶部的转录层将循环层的每帧预测转化为标签序列。"><span></div>
+    <div class="eng">Though <span class="word_hot_rare">CRNN</span> is composed of different kinds of network architectures (<span class="word_hot_rare">eg</span>. CNN and RNN), it can be <span class="word_hot" title="jointly [dʒɔɪntlɪ]">jointly</span> trained with one loss function.<span class="chs" title="虽然CRNN由不同类型的网络架构（如CNN和RNN）组成，但可以通过一个损失函数进行联合训练。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.1. Feature Sequence Extraction<span class="chs" title="2.1. 特征序列提取"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In <span class="word_hot_rare">CRNN</span> model, the component of convolutional layers is constructed by taking the convolutional and <span class="word_hot_rare">max-pooling</span> layers from a standard CNN model (fully-connected layers are removed).<span class="chs" title="在CRNN模型中，通过采用标准CNN模型（去除全连接层）中的卷积层和最大池化层来构造卷积层的组件。"><span></div>
+    <div class="eng">Such component is used to extract a <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> feature representation from an input image.<span class="chs" title="这样的组件用于从输入图像中提取序列特征表示。"><span></div>
+    <div class="eng">Before being fed into the network, all the images need to be scaled to the same height.<span class="chs" title="在进入网络之前，所有的图像需要缩放到相同的高度。"><span></div>
+    <div class="eng">Then a sequence of feature vectors is extracted from the feature maps produced by the component of convolutional layers, which is the input for the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers.<span class="chs" title="然后从卷积层组件产生的特征图中提取特征向量序列，这些特征向量序列作为循环层的输入。"><span></div>
+    <div class="eng"><span class="word_hot" title="specifically [spəˈsɪfɪkli]">Specifically</span>, each feature <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> of a feature sequence is generated from left to right on the feature maps by column.<span class="chs" title="具体地，特征序列的每一个特征向量在特征图上按列从左到右生成。"><span></div>
+    <div class="eng">This means the i-th feature <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> is the <span class="word_hot" title="concatenation [kənˌkætəˈneɪʃn]">concatenation</span> of the i-th columns of all the maps.<span class="chs" title="这意味着第i个特征向量是所有特征图第i列的连接。"><span></div>
+    <div class="eng">The width of each column in our settings is fixed to single pixel.<span class="chs" title="在我们的设置中每列的宽度固定为单个像素。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">As the layers of convolution, <span class="word_hot_rare">max-pooling</span>, and element-wise <span class="word_hot" title="activation [ˌæktɪ'veɪʃn]">activation</span> function operate on local regions, they are translation <span class="word_hot" title="invariant [ɪnˈveəriənt]">invariant</span>.<span class="chs" title="由于卷积层，最大池化层和元素激活函数在局部区域上执行，因此它们是平移不变的。"><span></div>
+    <div class="eng">Therefore, each column of the feature maps corresponds to a rectangle region of the original image (termed the <span class="word_hot" title="receptive [rɪˈseptɪv]">receptive</span> field), and such rectangle regions are in the same order to their corresponding columns on the feature maps from left to right.<span class="chs" title="因此，特征图的每列对应于原始图像的一个矩形区域（称为感受野），并且这些矩形区域与特征图上从左到右的相应列具有相同的顺序。"><span></div>
+    <div class="eng">As illustrated in Fig. 2, each <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> in the feature sequence is associated with a <span class="word_hot" title="receptive [rɪˈseptɪv]">receptive</span> field, and can be considered as the image <span class="word_hot" title="descriptor [dɪˈskrɪptə(r)]">descriptor</span> for that region.<span class="chs" title="如图2所示，特征序列中的每个向量关联一个感受野，并且可以被认为是该区域的图像描述符。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/fig02.png" alt="Figure 2"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 2.<span class="chs" title="图2。"><span></div>
+    <div class="eng">The <span class="word_hot" title="receptive [rɪˈseptɪv]">receptive</span> field.<span class="chs" title="感受野。"><span></div>
+    <div class="eng">Each <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> in the extracted feature sequence is associated with a <span class="word_hot" title="receptive [rɪˈseptɪv]">receptive</span> field on the input image, and can be considered as the feature <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> of that field.<span class="chs" title="提取的特征序列中的每一个向量关联输入图像的一个感受野，可认为是该区域的特征向量。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Being robust, rich and <span class="word_hot" title="trainable [t'reɪnəbl]">trainable</span>, deep convolutional features have been widely adopted for different kinds of visual recognition tasks [25, 12].<span class="chs" title="鲁棒的，丰富的和可训练的深度卷积特征已被广泛应用于各种视觉识别任务[25,12]。"><span></div>
+    <div class="eng">Some previous approaches have employed CNN to learn a robust representation for sequence-like objects such as scene text [22].<span class="chs" title="一些以前的方法已经使用CNN来学习诸如场景文本之类的类序列对象的鲁棒表示[22]。"><span></div>
+    <div class="eng">However, these approaches usually extract <span class="word_hot" title="holistic [həʊˈlɪstɪk]">holistic</span> representation of the whole image by CNN, then the local deep features are collected for recognizing each component of a sequence-like object.<span class="chs" title="然而，这些方法通常通过CNN提取整个图像的整体表示，然后收集局部深度特征来识别类序列对象的每个分量。"><span></div>
+    <div class="eng">Since CNN requires the input images to be scaled to a fixed size in order to satisfy with its fixed input dimension, it is not appropriate for sequence-like objects due to their large length variation.<span class="chs" title="由于CNN要求将输入图像缩放到固定尺寸，以满足其固定的输入尺寸，因为它们的长度变化很大，因此不适合类序列对象。"><span></div>
+    <div class="eng">In <span class="word_hot_rare">CRNN</span>, we convey deep features into <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> representations in order to be <span class="word_hot" title="invariant [ɪnˈveəriənt]">invariant</span> to the length variation of sequence-like objects.<span class="chs" title="在CRNN中，我们将深度特征传递到序列表示中，以便对类序列对象的长度变化保持不变。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.2. Sequence Labeling<span class="chs" title="2.2. 序列标注"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">A deep <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> <span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> Neural Network is built on the top of the convolutional layers, as the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers.<span class="chs" title="一个深度双向循环神经网络是建立在卷积层的顶部，作为循环层。"><span></div>
+    <div class="eng">The <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers predict a label distribution y_t for each frame x_t in the feature sequence x = x_1,…,x_T.<span class="chs" title="循环层预测特征序列x = x_1,…,x_T中每一帧x_t的标签分布y_t。"><span></div>
+    <div class="eng">The advantages of the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers are three-fold.<span class="chs" title="循环层的优点是三重的。"><span></div>
+    <div class="eng">Firstly, RNN has a strong <span class="word_hot" title="capability [ˌkeɪpəˈbɪləti]">capability</span> of capturing <span class="word_hot" title="contextual [kənˈtekstʃuəl]">contextual</span> information within a sequence.<span class="chs" title="首先，RNN具有很强的捕获序列内上下文信息的能力。"><span></div>
+    <div class="eng">Using <span class="word_hot" title="contextual [kənˈtekstʃuəl]">contextual</span> cues for image-based sequence recognition is more stable and helpful than treating each symbol independently.<span class="chs" title="对于基于图像的序列识别使用上下文提示比独立处理每个符号更稳定且更有帮助。"><span></div>
+    <div class="eng">Taking scene text recognition as an example, wide characters may require several successive frames to fully describe (refer to Fig. 2).<span class="chs" title="以场景文本识别为例，宽字符可能需要一些连续的帧来完全描述（参见图2）。"><span></div>
+    <div class="eng">Besides, some ambiguous characters are easier to distinguish when observing their contexts, e.g. it is easier to recognize “<span class="word_hot_rare">il</span>” by contrasting the character heights than by recognizing each of them separately.<span class="chs" title="此外，一些模糊的字符在观察其上下文时更容易区分，例如，通过对比字符高度更容易识别“il”而不是分别识别它们中的每一个。"><span></div>
+    <div class="eng"><span class="word_hot" title="Secondly [ˈsekəndli]">Secondly</span>, RNN can <span class="word_hot_rare">back-propagates</span> error differentials to its input, i.e. the convolutional layer, allowing us to <span class="word_hot" title="jointly [dʒɔɪntlɪ]">jointly</span> train the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers and the convolutional layers in a unified network.<span class="chs" title="其次，RNN可以将误差差值反向传播到其输入，即卷积层，从而允许我们在统一的网络中共同训练循环层和卷积层。"><span></div>
+    <div class="eng">Thirdly, RNN is able to operate on sequences of <span class="word_hot" title="arbitrary [ˈɑ:bɪtrəri]">arbitrary</span> lengths, traversing from starts to ends.<span class="chs" title="第三，RNN能够从头到尾对任意长度的序列进行操作。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">A traditional RNN unit has a self-connected hidden layer between its input and output layers.<span class="chs" title="传统的RNN单元在其输入和输出层之间具有自连接的隐藏层。"><span></div>
+    <div class="eng">Each time it receives a frame x_t in the sequence, it updates its internal state h_t with a non-linear function that takes both current input x_t and past state h_{t−1} as its inputs: h_t = g(x_t, h_{t−1}).<span class="chs" title="每次接收到序列中的帧x_t时，它将使用非线性函数来更新其内部状态h_t，该非线性函数同时接收当前输入x_t和过去状态h_{t−1}作为其输入：h_t = g(x_t, h_{t−1})。"><span></div>
+    <div class="eng">Then the prediction y_t is made based on h_t.<span class="chs" title="那么预测y_t是基于h_t的。"><span></div>
+    <div class="eng">In this way, past contexts \lbrace x_{t\prime} \rbrace _{t \prime &lt; t} are captured and utilized for prediction.<span class="chs" title="以这种方式，过去的上下文{\lbrace x_{t\prime} \rbrace _{t \prime &lt; t}被捕获并用于预测。"><span></div>
+    <div class="eng">Traditional RNN unit, however, suffers from the vanishing gradient problem [7], which limits the range of context it can store, and adds burden to the training process.<span class="chs" title="然而，传统的RNN单元有梯度消失的问题[7]，这限制了其可以存储的上下文范围，并给训练过程增加了负担。"><span></div>
+    <div class="eng"><span class="word_hot_rare">Long-Short</span> Term Memory 18, 11 is a type of RNN unit that is specially designed to address this problem.<span class="chs" title="长短时记忆[18,11]（LSTM）是一种专门设计用于解决这个问题的RNN单元。"><span></div>
+    <div class="eng">An LSTM (illustrated in Fig. 3) consists of a memory cell and three <span class="word_hot" title="multiplicative ['mʌltɪplɪkeɪtɪv]">multiplicative</span> gates, namely the input, output and forget gates.<span class="chs" title="LSTM（图3所示）由一个存储单元和三个多重门组成，即输入，输出和遗忘门。"><span></div>
+    <div class="eng"><span class="word_hot" title="Conceptually [kən'septʃʊəlɪ]">Conceptually</span>, the memory cell stores the past contexts, and the input and output gates allow the cell to store contexts for a long period of time.<span class="chs" title="在概念上，存储单元存储过去的上下文，并且输入和输出门允许单元长时间地存储上下文。"><span></div>
+    <div class="eng">Meanwhile, the memory in the cell can be cleared by the forget gate.<span class="chs" title="同时，单元中的存储可以被遗忘门清除。"><span></div>
+    <div class="eng">The special design of LSTM allows it to capture <span class="word_hot" title="long-range [lɒŋ reɪndʒ]">long-range</span> dependencies, which often occur in image-based sequences.<span class="chs" title="LSTM的特殊设计允许它捕获长距离依赖，这经常发生在基于图像的序列中。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/fig03.png" alt="Figure 3"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 3. (a) The structure of a basic LSTM unit.<span class="chs" title="图3。(a) 基本的LSTM单元的结构。"><span></div>
+    <div class="eng">An LSTM consists of a cell module and three gates, namely the input gate, the output gate and the forget gate.<span class="chs" title="LSTM包括单元模块和三个门，即输入门，输出门和遗忘门。"><span></div>
+    <div class="eng">(b) The structure of deep <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM we use in our paper.<span class="chs" title="（b）我们论文中使用的深度双向LSTM结构。"><span></div>
+    <div class="eng">Combining a forward (left to right) and a backward (right to left) LSTMs results in a <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM.<span class="chs" title="合并前向（从左到右）和后向（从右到左）LSTM的结果到双向LSTM中。"><span></div>
+    <div class="eng">Stacking multiple <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM results in a deep <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM.<span class="chs" title="在深度双向LSTM中堆叠多个双向LSTM结果。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">LSTM is <span class="word_hot" title="directional [dəˈrekʃənl]">directional</span>, it only uses past contexts.<span class="chs" title="LSTM是定向的，它只使用过去的上下文。"><span></div>
+    <div class="eng">However, in image-based sequences, contexts from both directions are useful and <span class="word_hot" title="complementary [ˌkɒmplɪˈmentri]">complementary</span> to each other.<span class="chs" title="然而，在基于图像的序列中，两个方向的上下文是相互有用且互补的。"><span></div>
+    <div class="eng">Therefore, we follow [17] and combine two LSTMs, one forward and one backward, into a <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM.<span class="chs" title="因此，我们遵循[17]，将两个LSTM，一个向前和一个向后组合到一个双向LSTM中。"><span></div>
+    <div class="eng">Furthermore, multiple <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTMs can be stacked, resulting in a deep <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM as illustrated in Fig. 3. b.<span class="chs" title="此外，可以堆叠多个双向LSTM，得到如图3.b所示的深双向LSTM。"><span></div>
+    <div class="eng">The deep structure allows higher level of abstractions than a shallow one, and has achieved significant performance improvements in the task of speech recognition [17].<span class="chs" title="深层结构允许比浅层抽象更高层次的抽象，并且在语音识别任务中取得了显著的性能改进[17]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, error differentials are propagated in the opposite directions of the arrows shown in Fig. 3. b, i.e. <span class="word_hot_rare">Back-Propagation</span> Through Time (<span class="word_hot_rare">BPTT</span>).<span class="chs" title="在循环层中，误差在图3.b所示箭头的相反方向传播，即反向传播时间（BPTT）。"><span></div>
+    <div class="eng">At the bottom of the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, the sequence of propagated differentials are concatenated into maps, inverting the operation of converting feature maps into feature sequences, and fed back to the convolutional layers.<span class="chs" title="在循环层的底部，传播差异的序列被连接成映射，将特征映射转换为特征序列的操作进行反转并反馈到卷积层。"><span></div>
+    <div class="eng">In practice, we create a custom network layer, called “<span class="word_hot_rare">Map-to-Sequence</span>”, as the bridge between convolutional layers and <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers.<span class="chs" title="实际上，我们创建一个称为“Map-to-Sequence”的自定义网络层，作为卷积层和循环层之间的桥梁。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.3. Transcription<span class="chs" title="2.3. 转录"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Transcription is the process of converting the per-frame predictions made by RNN into a label sequence.<span class="chs" title="转录是将RNN所做的每帧预测转换成标签序列的过程。"><span></div>
+    <div class="eng"><span class="word_hot" title="Mathematically [ˌmæθə'mætɪklɪ]">Mathematically</span>, <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> is to find the label sequence with the highest probability conditioned on the per-frame predictions.<span class="chs" title="数学上，转录是根据每帧预测找到具有最高概率的标签序列。"><span></div>
+    <div class="eng">In practice, there exists two modes of <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span>, namely the <span class="word_hot_rare">lexicon-free</span> and <span class="word_hot_rare">lexicon-based</span> transcriptions.<span class="chs" title="在实践中，存在两种转录模式，即无词典转录和基于词典的转录。"><span></div>
+    <div class="eng">A <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> is a set of label sequences that prediction is constraint to, e.g. a spell checking dictionary.<span class="chs" title="词典是一组标签序列，预测受拼写检查字典约束。"><span></div>
+    <div class="eng">In <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>-free mode, predictions are made without any <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="在无词典模式中，预测时没有任何词典。"><span></div>
+    <div class="eng">In <span class="word_hot_rare">lexicon-based</span> mode, predictions are made by choosing the label sequence that has the highest probability.<span class="chs" title="在基于词典的模式中，通过选择具有最高概率的标签序列进行预测。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.3.1 Probability of label sequence<span class="chs" title="2.3.1 标签序列的概率"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We adopt the <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> probability defined in the <span class="word_hot" title="Connectionist [kə'nekʃənɪst]">Connectionist</span> Temporal Classification (CTC) layer proposed by Graves et al. [15].<span class="chs" title="我们采用Graves等人[15]提出的联接时间分类（CTC）层中定义的条件概率。"><span></div>
+    <div class="eng">The probability is defined for label sequence l conditioned on the per-frame predictions y=y_1,…,y_T, and it ignores the position where each label in l is located.<span class="chs" title="按照每帧预测y=y_1,…,y_T对标签序列l定义概率，并忽略l中每个标签所在的位置。"><span></div>
+    <div class="eng">Consequently, when we use the negative <span class="word_hot_rare">log-likelihood</span> of this probability as the objective to train the network, we only need images and their corresponding label sequences, avoiding the labor of labeling positions of individual characters.<span class="chs" title="因此，当我们使用这种概率的负对数似然作为训练网络的目标函数时，我们只需要图像及其相应的标签序列，避免了标注单个字符位置的劳动。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The formulation of the <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> probability is briefly described as follows: The input is a sequence y = y_1,…,y_T where T is the sequence length.<span class="chs" title="条件概率的公式简要描述如下：输入是序列y = y_1,…,y_T，其中T是序列长度。"><span></div>
+    <div class="eng">Here, each y_t \in\Re^{|{\cal L}’|} is a probability distribution over the set {\cal L}’ = {\cal L} \cup, where {\cal L} contains all labels in the task (e.g. all English characters), as well as a ’blank’ label denoted by -.<span class="chs" title="这里，每个y_t \in\Re^{|{\cal L}’|}是在集合{\cal L}’ = {\cal L} \cup上的概率分布，其中{\cal L}包含了任务中的所有标签（例如，所有英文字符），以及由-表示的“空白”标签。"><span></div>
+    <div class="eng">A <span class="word_hot_rare">sequence-to-sequence</span> mapping function {\cal B} is defined on sequence \boldsymbol{\pi}\in{\cal L}’^{T}, where T is the length.<span class="chs" title="序列到序列的映射函数{\cal B}定义在序列\boldsymbol{\pi}\in{\cal L}’^{T}上，其中T是长度。"><span></div>
+    <div class="eng">{\cal B} maps \boldsymbol{\pi} onto \mathbf{l} by firstly removing the repeated labels, then removing the blanks.<span class="chs" title="{\cal B}将\boldsymbol{\pi}映射到\mathbf{l}上，首先删除重复的标签，然后删除blank。"><span></div>
+    <div class="eng">For example, B maps “–hh-e-l-ll-oo–” (’-’ represents ’blank’) onto “hello”.<span class="chs" title="例如，{\cal B}将“–hh-e-l-ll-oo–”（-表示blank）映射到“hello”。"><span></div>
+    <div class="eng">Then, the <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> probability is defined as the sum of probabilities of all \boldsymbol{\pi} that are mapped by {\cal B} onto \mathbf{l}:<span class="chs" title="然后，条件概率被定义为由{\cal B}映射到\mathbf{l}上的所有\boldsymbol{\pi}的概率之和："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">$$\begin{equation} p(\mathbf{l}|\mathbf{y})=\sum_{\boldsymbol{\pi}:{\cal B}(\boldsymbol{\pi})=\mathbf{l}}p(\boldsymbol{\pi}|\mathbf{y}),\tag{1} \end{equation} \tag{1}$$<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">where the probability of $\boldsymbol{\pi}$ is defined as $p(\boldsymbol{\pi}|\mathbf{y})=\prod{t=1}^{T}y{\pi{t}}^{t},y{\pi{t}}^{t}is the probability of having label\pi{t}at time <span class="word_hot_rare">stampt</span>$. Directly computing Eq. 1 would be <span class="word_hot_rare">computationally</span> <span class="word_hot" title="infeasible [ɪn'fi:zəbl]">infeasible</span> due to the <span class="word_hot" title="exponentially [ˌekspə'nenʃəlɪ]">exponentially</span> large number of <span class="word_hot" title="summation [sʌˈmeɪʃn]">summation</span> items.<span class="chs" title="$\boldsymbol{\pi}$的概率定义为$p(\boldsymbol{\pi}|\mathbf{y})=\prod{t=1}^{T}y{\pi{t}}^{t}，y{\pi{t}}^{t}是时刻t时有标签\pi{t}$的概率。"><span></div>
+    <div class="eng">However, Eq.<span class="chs" title="由于存在指数级数量的求和项，直接计算方程1在计算上是不可行的。"><span></div>
+    <div class="eng">1 can be efficiently computed using the <span class="word_hot_rare">forward-backward</span> algorithm described in [15].<span class="chs" title="然而，使用[15]中描述的前向算法可以有效计算方程1。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.3.2 <span class="word_hot_rare">Lexicon-free</span> <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span><span class="chs" title="2.3.2 无字典转录"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In this mode, the sequence \mathbf{l}^{*} that has the highest probability as defined in Eq.<span class="chs" title="在这种模式下，将具有方程1中定义的最高概率的序列\mathbf{l}^{*}作为预测。"><span></div>
+    <div class="eng">1 is taken as the prediction.<span class="chs" title="由于不存在用于精确找到解的可行方法，我们采用[15]中的策略。"><span></div>
+    <div class="eng">Since there exists no <span class="word_hot" title="tractable [ˈtræktəbl]">tractable</span> algorithm to precisely find the solution, we use the strategy adopted in [15]. The sequence \mathbf{l}^{*} is approximately found by $\mathbf{l}^{*}\approx{\cal B}(\arg\max{\boldsymbol{\pi}}p(\boldsymbol{\pi}|\mathbf{y})), i.e. taking the most probable label\pi{t}at each time <span class="word_hot_rare">stampt</span>, and map the resulted sequence onto\mathbf{l}^{*}$.<span class="chs" title="序列\mathbf{l}^{*}通过$\mathbf{l}^{*}\approx{\cal B}(\arg\max{\boldsymbol{\pi}}p(\boldsymbol{\pi}|\mathbf{y}))近似发现，即在每个时间戳t采用最大概率的标签\pi{t}，并将结果序列映射到\mathbf{l}^{*}$。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.3.3 <span class="word_hot_rare">Lexicon-based</span> <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span><span class="chs" title="2.3.3 基于词典的转录"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>-based mode, each test sample is associated with a <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> {\cal D}.<span class="chs" title="在基于字典的模式中，每个测试采样与词典{\cal D}相关联。"><span></div>
+    <div class="eng">Basically, the label sequence is recognized by choosing the sequence in the <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> that has highest <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> probability defined in Eq. 1, i.e. \mathbf{l}^{*}=\arg\max_{\mathbf{l}\in{\cal D}}p(\mathbf{l}|\mathbf{y}). However, for large lexicons, e.g. the 50k-words <span class="word_hot_rare">Hunspell</span> <span class="word_hot_rare">spell-checking</span> dictionary [1], it would be very <span class="word_hot" title="time-consuming [taɪm kən'sju:mɪŋ]">time-consuming</span> to perform an <span class="word_hot" title="exhaustive [ɪgˈzɔ:stɪv]">exhaustive</span> search over the <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>, i.e. to compute Equation.<span class="chs" title="基本上，通过选择词典中具有方程1中定义的最高条件概率的序列来识别标签序列，即\mathbf{l}^{*}=\arg\max_{\mathbf{l}\in{\cal D}}p(\mathbf{l}|\mathbf{y})。"><span></div>
+    <div class="eng">1 for all sequences in the <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> and choose the one with the highest probability. To solve this problem, we observe that the label sequences predicted via <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>-free <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span>, described in 2.3.2, are often close to the ground-truth under the edit distance metric.<span class="chs" title="然而，对于大型词典，例如5万个词的Hunspell拼写检查词典[1]，对词典进行详尽的搜索是非常耗时的，即对词典中的所有序列计算方程1，并选择概率最高的一个。为了解决这个问题，我们观察到，2.3.2中描述的通过无词典转录预测的标签序列通常在编辑距离度量下接近于实际结果。"><span></div>
+    <div class="eng">This indicates that we can limit our search to the <span class="word_hot" title="nearest-neighbor ['nɪərɪstn'eɪbɔ:]">nearest-neighbor</span> candidates {\cal N}_{\delta}(\mathbf{l}’), where \delta is the <span class="word_hot" title="maximal [ˈmæksɪml]">maximal</span> edit distance and \mathbf{l}’ is the sequence transcribed from \mathbf{y} in <span class="word_hot_rare">lexicon-free</span> mode:<span class="chs" title="这表示我们可以将搜索限制在最近邻候选目标{\cal N}_{\delta}(\mathbf{l}’)，其中\delta是最大编辑距离，\mathbf{l}’是在无词典模式下从\mathbf{y}转录的序列："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">$$\begin{equation} \mathbf{l}^{*}=\arg\max_{\mathbf{l}\in{\cal N}_{\delta}(\mathbf{l}’)}p(\mathbf{l}|\mathbf{y}).\tag{2} \end{equation} \tag{2}$$<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The candidates {\cal N}_{\delta}(\mathbf{l}’) can be found efficiently with the <span class="word_hot_rare">BK-tree</span> data structure[9], which is a metric tree <span class="word_hot" title="specifically [spəˈsɪfɪkli]">specifically</span> adapted to discrete metric spaces.<span class="chs" title="可以使用BK树数据结构[9]有效地找到候选目标{\cal N}_{\delta}(\mathbf{l}’)，这是一种专门适用于离散度量空间的度量树。"><span></div>
+    <div class="eng">The search time complexity of <span class="word_hot_rare">BK-tree</span> is O(\log|{\cal D}|), where |{\cal D}| is the <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> size.<span class="chs" title="BK树的搜索时间复杂度为O(\log|{\cal D}|)，其中|{\cal D}|是词典大小。"><span></div>
+    <div class="eng">Therefore this scheme readily extends to very large lexicons.<span class="chs" title="因此，这个方案很容易扩展到非常大的词典。"><span></div>
+    <div class="eng">In our approach, a <span class="word_hot_rare">BK-tree</span> is constructed offline for a <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="在我们的方法中，一个词典离线构造一个BK树。"><span></div>
+    <div class="eng">Then we perform fast online search with the tree, by finding sequences that have less or equal to \delta edit distance to the query sequence.<span class="chs" title="然后，我们使用树执行快速在线搜索，通过查找具有小于或等于\delta编辑距离来查询序列。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2.4. Network Training<span class="chs" title="2.4. 网络训练"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Denote the training dataset by ${\cal X}= \lbrace I_i,\mathbf{l}_i \rbrace _i$, where $I_{i}$ is the training image and \mathbf{l}_{i} is the ground truth label sequence.<span class="chs" title="${\cal X}= \lbrace I_i,\mathbf{l}_i \rbrace _i$表示训练集，$I_{i}$是训练图像，$\mathbf{l}_{i}$是真实的标签序列。"><span></div>
+    <div class="eng">The objective is to minimize the negative <span class="word_hot_rare">log-likelihood</span> of <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> probability of ground truth:<span class="chs" title="目标是最小化真实条件概率的负对数似然："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">$$\begin{equation} {\cal O}=-\sum_{I_{i},\mathbf{l}_{i}\in{\cal X}}\log p(\mathbf{l}_{i}|\mathbf{y}_{i}),\tag{3} \end{equation} \tag{3}$$<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">where $\mathbf{y}_{i}$ is the sequence produced by the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> and convolutional layers from $I_{i}$.<span class="chs" title="$\mathbf{y}_{i}$是循环层和卷积层从I{i}$生成的序列。"><span></div>
+    <div class="eng">This objective function calculates a cost value directly from an image and its ground truth label sequence.<span class="chs" title="目标函数直接从图像和它的真实标签序列计算代价值。"><span></div>
+    <div class="eng">Therefore, the network can be end-to-end trained on pairs of images and sequences, eliminating the procedure of manually labeling all individual components in training images.<span class="chs" title="因此，网络可以在成对的图像和序列上进行端对端训练，去除了在训练图像中手动标记所有单独组件的过程。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The network is trained with <span class="word_hot" title="stochastic [stə'kæstɪk]">stochastic</span> gradient <span class="word_hot" title="descent [dɪˈsent]">descent</span> (<span class="word_hot" title="SGD ['esdʒ'i:d'i:]">SGD</span>).<span class="chs" title="网络使用随机梯度下降（SGD）进行训练。"><span></div>
+    <div class="eng">Gradients are calculated by the <span class="word_hot_rare">back-propagation</span> algorithm.<span class="chs" title="梯度由反向传播算法计算。"><span></div>
+    <div class="eng">In particular, in the <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> layer, error differentials are <span class="word_hot_rare">back-propagated</span> with the <span class="word_hot_rare">forward-backward</span> algorithm, as described in [15].<span class="chs" title="特别地，在转录层中，如[15]所述，误差使用前向算法进行反向传播。"><span></div>
+    <div class="eng">In the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, the <span class="word_hot_rare">Back-Propagation</span> Through Time (<span class="word_hot_rare">BPTT</span>) is applied to calculate the error differentials.<span class="chs" title="在循环层中，应用随时间反向传播（BPTT）来计算误差。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">For optimization, we use the <span class="word_hot_rare">ADADELTA</span> [37] to automatically calculate per-dimension learning rates.<span class="chs" title="为了优化，我们使用ADADELTA[37]自动计算每维的学习率。"><span></div>
+    <div class="eng">Compared with the <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> <span class="word_hot" title="momentum [məˈmentəm]">momentum</span> [31] method, <span class="word_hot_rare">ADADELTA</span> requires no manual setting of a learning rate.<span class="chs" title="与传统的动量[31]方法相比，ADADELTA不需要手动设置学习率。"><span></div>
+    <div class="eng">More importantly, we find that optimization using <span class="word_hot_rare">ADADELTA</span> converges faster than the <span class="word_hot" title="momentum [məˈmentəm]">momentum</span> method.<span class="chs" title="更重要的是，我们发现使用ADADELTA的优化收敛速度比动量方法快。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3. Experiments<span class="chs" title="3. 实验"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">To evaluate the effectiveness of the proposed <span class="word_hot_rare">CRNN</span> model, we conducted experiments on standard benchmarks for scene text recognition and musical score recognition, which are both challenging vision tasks. The datasets and setting for training and testing are given in Sec.<span class="chs" title="为了评估提出的CRNN模型的有效性，我们在场景文本识别和乐谱识别的标准基准数据集上进行了实验，这些都是具有挑战性的视觉任务。"><span></div>
+    <div class="eng">3.1, the detailed settings of <span class="word_hot_rare">CRNN</span> for scene text images is provided in Sec. 3.2, and the results with the comprehensive comparisons are reported in Sec. 3.3.<span class="chs" title="数据集和训练测试的设置见3.1小节，场景文本图像中CRNN的详细设置见3.2小节，综合比较的结果在3.3小节报告。"><span></div>
+    <div class="eng">To further demonstrate the <span class="word_hot" title="generality [ˌdʒenəˈræləti]">generality</span> of <span class="word_hot_rare">CRNN</span>, we verify the proposed algorithm on a music score recognition task in Sec. 3.4.<span class="chs" title="为了进一步证明CRNN的泛化性，在3.4小节我们在乐谱识别任务上验证了提出的算法。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.1. Datasets<span class="chs" title="3.1. 数据集"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">For all the experiments for scene text recognition, we use the <span class="word_hot" title="synthetic [sɪnˈθetɪk]">synthetic</span> dataset (Synth) released by <span class="word_hot_rare">Jaderberg</span> et al. [20] as the training data.<span class="chs" title="对于场景文本识别的所有实验，我们使用Jaderberg等人[20]发布的合成数据集（Synth）作为训练数据。"><span></div>
+    <div class="eng">The dataset contains 8 millions training images and their corresponding ground truth words.<span class="chs" title="数据集包含8百万训练图像及其对应的实际单词。"><span></div>
+    <div class="eng">Such images are generated by a <span class="word_hot" title="synthetic [sɪnˈθetɪk]">synthetic</span> text engine and are highly realistic.<span class="chs" title="这样的图像由合成文本引擎生成并且是非常现实的。"><span></div>
+    <div class="eng">Our network is trained on the <span class="word_hot" title="synthetic [sɪnˈθetɪk]">synthetic</span> data once, and tested on all other <span class="word_hot_rare">real-world</span> test datasets without any fine-tuning on their training data.<span class="chs" title="我们的网络在合成数据上进行了一次训练，并在所有其它现实世界的测试数据集上进行了测试，而没有在其训练数据上进行任何微调。"><span></div>
+    <div class="eng">Even though the <span class="word_hot_rare">CRNN</span> model is purely trained with <span class="word_hot" title="synthetic [sɪnˈθetɪk]">synthetic</span> text data, it works well on real images from standard text recognition benchmarks.<span class="chs" title="即使CRNN模型是在纯合成文本数据上训练，但它在标准文本识别基准数据集的真实图像上工作良好。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Four popular benchmarks for scene text recognition are used for performance evaluation, namely <span class="word_hot_rare">ICDAR</span> 2003 (IC03), <span class="word_hot_rare">ICDAR</span> 2013 (IC13), <span class="word_hot_rare">IIIT</span> 5k-word (<span class="word_hot_rare">IIIT5k</span>), and Street View Text (<span class="word_hot_rare">SVT</span>).<span class="chs" title="有四个流行的基准数据集用于场景文本识别的性能评估，即ICDAR 2003（IC03），ICDAR 2013（IC13），IIIT 5k-word（IIIT5k）和Street View Text (SVT)。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">IC03 [27] test dataset contains 251 scene images with labeled text <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> boxes. Following Wang et al.<span class="chs" title="IC03[27]测试数据集包含251个具有标记文本边界框的场景图像。"><span></div>
+    <div class="eng">[34], we ignore images that either contain <span class="word_hot_rare">non-alphanumeric</span> characters or have less than three characters, and get a test set with 860 cropped text images.<span class="chs" title="王等人[34]，我们忽略包含非字母数字字符或少于三个字符的图像，并获得具有860个裁剪的文本图像的测试集。"><span></div>
+    <div class="eng">Each test image is associated with a 50-words <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> which is defined by Wang et al. [34].<span class="chs" title="每张测试图像与由Wang等人[34]定义的50词的词典相关联。"><span></div>
+    <div class="eng">A full <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> is built by combining all the per-image lexicons.<span class="chs" title="通过组合所有的每张图像词汇构建完整的词典。"><span></div>
+    <div class="eng">In addition, we use a 50k words <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> consisting of the words in the <span class="word_hot_rare">Hunspell</span> <span class="word_hot_rare">spell-checking</span> dictionary [1].<span class="chs" title="此外，我们使用由Hunspell拼写检查字典[1]中的单词组成的5万个词的词典。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">IC13 [24] test dataset inherits most of its data from IC03.<span class="chs" title="IC13[24]测试数据集继承了IC03中的大部分数据。"><span></div>
+    <div class="eng">It contains 1,015 ground truths cropped word images.<span class="chs" title="它包含1015个实际的裁剪单词图像。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">IIIT5k</span> [28] contains 3,000 cropped word test images collected from the Internet.<span class="chs" title="IIIT5k[28]包含从互联网收集的3000张裁剪的词测试图像。"><span></div>
+    <div class="eng">Each image has been associated to a 50-words <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> and a 1k-words <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="每张图像关联一个50词的词典和一个1000词的词典。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">SVT</span> [34] test dataset consists of 249 street view images collected from Google Street View.<span class="chs" title="SVT[34]测试数据集由从Google街景视图收集的249张街景图像组成。"><span></div>
+    <div class="eng">From them 647 word images are cropped.<span class="chs" title="从它们中裁剪出了647张词图像。"><span></div>
+    <div class="eng">Each word image has a 50 words <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> defined by Wang et al. [34].<span class="chs" title="每张单词图像都有一个由Wang等人[34]定义的50个词的词典。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.2. Implementation Details<span class="chs" title="3.2. 实现细节"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The network <span class="word_hot" title="configuration [kənˌfɪgəˈreɪʃn]">configuration</span> we use in our experiments is summarized in Table 1.<span class="chs" title="在实验中我们使用的网络配置总结在表1中。"><span></div>
+    <div class="eng">The architecture of the convolutional layers is based on the <span class="word_hot_rare">VGG-VeryDeep</span> architectures [32].<span class="chs" title="卷积层的架构是基于VGG-VeryDeep的架构[32]。"><span></div>
+    <div class="eng">A <span class="word_hot" title="tweak [twi:k]">tweak</span> is made in order to make it suitable for recognizing English texts.<span class="chs" title="为了使其适用于识别英文文本，对其进行了调整。"><span></div>
+    <div class="eng">In the 3rd and the 4th <span class="word_hot_rare">max-pooling</span> layers, we adopt 1 × 2 sized <span class="word_hot" title="rectangular [rek'tæŋɡjələ(r)]">rectangular</span> pooling windows instead of the <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> squared ones.<span class="chs" title="在第3和第4个最大池化层中，我们采用1×2大小的矩形池化窗口而不是传统的平方形。"><span></div>
+    <div class="eng">This <span class="word_hot" title="tweak [twi:k]">tweak</span> yields feature maps with larger width, hence longer feature sequence.<span class="chs" title="这种调整产生宽度较大的特征图，因此具有更长的特征序列。"><span></div>
+    <div class="eng">For example, an image containing 10 characters is typically of size 100 × 32, from which a feature sequence 25 frames can be generated.<span class="chs" title="例如，包含10个字符的图像通常为大小为100×32，可以从其生成25帧的特征序列。"><span></div>
+    <div class="eng">This length exceeds the lengths of most English words.<span class="chs" title="这个长度超过了大多数英文单词的长度。"><span></div>
+    <div class="eng">On top of that, the <span class="word_hot" title="rectangular [rek'tæŋɡjələ(r)]">rectangular</span> pooling windows yield <span class="word_hot" title="rectangular [rek'tæŋɡjələ(r)]">rectangular</span> <span class="word_hot" title="receptive [rɪˈseptɪv]">receptive</span> fields (illustrated in Fig. 2), which are beneficial for recognizing some characters that have narrow shapes, such as ’i’ and ’l’.<span class="chs" title="最重要的是，矩形池窗口产生矩形感受野（如图2所示），这有助于识别一些具有窄形状的字符，例如i和l。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 1.<span class="chs" title="表1。"><span></div>
+    <div class="eng">Network <span class="word_hot" title="configuration [kənˌfɪgəˈreɪʃn]">configuration</span> summary.<span class="chs" title="网络配置总结。"><span></div>
+    <div class="eng">The first row is the top layer.<span class="chs" title="第一行是顶层。"><span></div>
+    <div class="eng">‘k’, ‘s’ and ‘p’ stand for kernel size, stride and padding size respectively.<span class="chs" title="k，s，p分别表示核大小，步长和填充大小。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/tab01.png" alt="Table 1"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The network not only has deep convolutional layers, but also has <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers.<span class="chs" title="网络不仅有深度卷积层，而且还有循环层。"><span></div>
+    <div class="eng">Both are known to be hard to train.<span class="chs" title="众所周知两者都难以训练。"><span></div>
+    <div class="eng">We find that the batch normalization [19] technique is extremely useful for training network of such depth.<span class="chs" title="我们发现批归一化[19]技术对于训练这种深度网络非常有用。"><span></div>
+    <div class="eng">Two batch normalization layers are inserted after the 5th and 6th convolutional layers respectively.<span class="chs" title="分别在第5和第6卷积层之后插入两个批归一化层。"><span></div>
+    <div class="eng">With the batch normalization layers, the training process is greatly accelerated.<span class="chs" title="使用批归一化层训练过程大大加快。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We implement the network within the Torch7 [10] framework, with custom implementations for the LSTM units (in Torch7/<span class="word_hot_rare">CUDA</span>), the <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span> layer (in C++) and the <span class="word_hot_rare">BK-tree</span> data structure (in C++).<span class="chs" title="我们在Torch7[10]框架内实现了网络，使用定制实现的LSTM单元（Torch7/CUDA），转录层（C++）和BK树数据结构（C++）。"><span></div>
+    <div class="eng">Experiments are carried out on a workstation with a 2.50 <span class="word_hot_rare">GHz</span> Intel(R) <span class="word_hot_rare">Xeon</span>(R) E5-2609 CPU, 64GB RAM and an <span class="word_hot" title="NVIDIA [ɪn'vɪdɪə]">NVIDIA</span>(R) <span class="word_hot" title="Tesla ['teslә]">Tesla</span>(<span class="word_hot_rare">TM</span>) K40 GPU.<span class="chs" title="实验在具有2.50 GHz Intel（R）Xeon E5-2609 CPU，64GB RAM和NVIDIA（R）Tesla(TM) K40 GPU的工作站上进行。"><span></div>
+    <div class="eng">Networks are trained with <span class="word_hot_rare">ADADELTA</span>, setting the parameter ρ to 0.9.<span class="chs" title="网络用ADADELTA训练，将参数ρ设置为0.9。"><span></div>
+    <div class="eng">During training, all images are scaled to 100 × 32 in order to accelerate the training process.<span class="chs" title="在训练期间，所有图像都被缩放为100×32，以加快训练过程。"><span></div>
+    <div class="eng">The training process takes about 50 hours to reach <span class="word_hot" title="convergence [kən'vɜ:dʒəns]">convergence</span>.<span class="chs" title="训练过程大约需要50个小时才能达到收敛。"><span></div>
+    <div class="eng">Testing images are scaled to have height 32.<span class="chs" title="测试图像缩放的高度为32。"><span></div>
+    <div class="eng">Widths are <span class="word_hot" title="proportionally [prə'pɔ:ʃənlɪ]">proportionally</span> scaled with heights, but at least 100 pixels.<span class="chs" title="宽度与高度成比例地缩放，但至少为100像素。"><span></div>
+    <div class="eng">The average testing time is 0.16s/sample, as measured on IC03 without a <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="平均测试时间为0.16s/样本，在IC03上测得的，没有词典。"><span></div>
+    <div class="eng">The approximate <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> search is applied to the 50k <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> of IC03, with the parameter δ set to 3.<span class="chs" title="近似词典搜索应用于IC03的50k词典，参数δ设置为3。"><span></div>
+    <div class="eng">Testing each sample takes 0.53s on average.<span class="chs" title="测试每个样本平均花费0.53s。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.3. Comparative Evaluation<span class="chs" title="3.3. 比较评估"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">All the recognition accuracies on the above four public datasets, obtained by the proposed <span class="word_hot_rare">CRNN</span> model and the recent <span class="word_hot_rare">state-of-the-arts</span> techniques including the approaches based on deep models [23, 22, 21], are shown in Table 2.<span class="chs" title="提出的CRNN模型在上述四个公共数据集上获得的所有识别精度以及最近的最新技术，包括基于深度模型[23,22,21]的方法如表2所示。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 2.<span class="chs" title="表2。"><span></div>
+    <div class="eng">Recognition accuracies (%) on four datasets.<span class="chs" title="四个数据集上识别准确率(%)。"><span></div>
+    <div class="eng">In the second row, “50”, “1k”, “50k” and “Full” denote the <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> used, and “None” denotes recognition without a <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="在第二行，“50”，“1k”，“50k”和“Full”表示使用的字典，“None”表示识别没有字典。"><span></div>
+    <div class="eng">*[22] is not <span class="word_hot_rare">lexicon-free</span> in the strict sense, as its outputs are constrained to a 90k dictionary.<span class="chs" title="*[22]严格意义上讲不是无字典的，因为它的输出限制在90K的字典。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/tab02.png" alt="Table 2"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In the constrained <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> cases, our method <span class="word_hot" title="consistently [kən'sɪstəntlɪ]">consistently</span> outperforms most <span class="word_hot_rare">state-of-the-arts</span> approaches, and in average beats the best text reader proposed in [22].<span class="chs" title="在有约束词典的情况中，我们的方法始终优于大多数最新的方法，并且平均打败了[22]中提出的最佳文本阅读器。"><span></div>
+    <div class="eng"><span class="word_hot" title="specifically [spəˈsɪfɪkli]">Specifically</span>, we obtain superior performance on <span class="word_hot_rare">IIIT5k</span>, and <span class="word_hot_rare">SVT</span> compared to [22], only achieved lower performance on IC03 with the “Full” <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="具体来说，与[22]相比，我们在IIIT5k和SVT上获得了卓越的性能，仅在IC03上通过“Full”词典实现了较低性能。"><span></div>
+    <div class="eng">Note that the model in[22] is trained on a specific dictionary, namely that each word is associated to a class label.<span class="chs" title="请注意，[22]中的模型是在特定字典上训练的，即每个单词都与一个类标签相关联。"><span></div>
+    <div class="eng">Unlike [22], <span class="word_hot_rare">CRNN</span> is not limited to recognize a word in a known dictionary, and able to handle random strings (e.g. telephone numbers), sentences or other scripts like Chinese words.<span class="chs" title="与[22]不同，CRNN不限于识别已知字典中的单词，并且能够处理随机字符串（例如电话号码），句子或其他诸如中文单词的脚本。"><span></div>
+    <div class="eng">Therefore, the results of <span class="word_hot_rare">CRNN</span> are competitive on all the testing datasets.<span class="chs" title=" 因此，CRNN的结果在所有测试数据集上都具有竞争力。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In the <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> cases, our method achieves the best performance on <span class="word_hot_rare">SVT</span>, yet, is still behind some approaches [8, 22] on IC03 and IC13.<span class="chs" title="在无约束词典的情况下，我们的方法在SVT上仍取得了最佳性能，但在IC03和IC13上仍然落后于一些方法[8,22]。"><span></div>
+    <div class="eng">Note that the blanks in the “none” columns of Table 2 denote that such approaches are unable to be applied to recognition without <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> or did not report the recognition accuracies in the <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> cases.<span class="chs" title="注意，表2的“none”列中的空白表示这种方法不能应用于没有词典的识别，或者在无约束的情况下不能报告识别精度。"><span></div>
+    <div class="eng">Our method uses only <span class="word_hot" title="synthetic [sɪnˈθetɪk]">synthetic</span> text with word level labels as the training data, very different to <span class="word_hot_rare">PhotoOCR</span> [8] which used 7.9 millions of real word images with <span class="word_hot_rare">character-level</span> annotations for training.<span class="chs" title="我们的方法只使用具有单词级标签的合成文本作为训练数据，与PhotoOCR[8]非常不同，后者使用790万个具有字符级标注的真实单词图像进行训练。"><span></div>
+    <div class="eng">The best <span class="word_hot_rare">persformance</span> is reported by [22] in the <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> cases, benefiting from its large dictionary, however, it is not a model <span class="word_hot" title="strictly [ˈstrɪktli]">strictly</span> <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> to a <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> as mentioned before.<span class="chs" title="[22]中报告的最佳性能是在无约束词典的情况下，受益于它的大字典，然而，它不是前面提到的严格的无约束词典模型。"><span></div>
+    <div class="eng">In this sense, our results in the <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">unconstrained</span> <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> case are still promising.<span class="chs" title="在这个意义上，我们在无限制词典表中的结果仍然是有前途的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">For further understanding the advantages of the proposed algorithm over other text recognition approaches, we provide a comprehensive comparison on several properties named <span class="word_hot_rare">E2E</span> Train, Conv <span class="word_hot_rare">Ftrs</span>, <span class="word_hot_rare">CharGT-Free</span>, <span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">Unconstrained</span>, and Model Size, as summarized in Table 3.<span class="chs" title="为了进一步了解与其它文本识别方法相比，所提出算法的优点，我们提供了在一些特性上的综合比较，这些特性名称为E2E Train，Conv Ftrs，CharGT-Free，Unconstrained和Model Size，如表3所示。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 3.<span class="chs" title="表3。"><span></div>
+    <div class="eng">Comparison among various methods.<span class="chs" title="各种方法的对比。"><span></div>
+    <div class="eng">Attributes for comparison include: 1) being end-to-end <span class="word_hot" title="trainable [t'reɪnəbl]">trainable</span> (<span class="word_hot_rare">E2E</span> Train); 2) using convolutional features that are directly learned from images rather than using <span class="word_hot" title="hand-crafted [,hænd 'kra:ftid]">hand-crafted</span> ones (Conv <span class="word_hot_rare">Ftrs</span>); 3) requiring no ground truth <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> boxes for characters during training (<span class="word_hot_rare">CharGT-Free</span>); 4) not confined to a pre-defined dictionary (<span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">Unconstrained</span>); 5) the model size (if an end-to-end <span class="word_hot" title="trainable [t'reɪnəbl]">trainable</span> model is used), measured by the number of model parameters (Model Size, M stands for millions).<span class="chs" title="比较的属性包括：1)端到端训练(E2E Train)；2)从图像中直接学习卷积特征而不是使用手动设计的特征(Conv Ftrs)；3)训练期间不需要字符的实际边界框(CharGT-Free)；4)不受限于预定义字典(Unconstrained)；5)模型大小（如果使用端到端模型），通过模型参数数量来衡量(Model Size, M表示百万)。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/tab03.png" alt="Table 3"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">E2E</span> Train: This column is to show whether a certain text reading model is end-to-end <span class="word_hot" title="trainable [t'reɪnəbl]">trainable</span>, without any preprocess or through several separated steps, which indicates such approaches are elegant and clean for training.<span class="chs" title="E2E Train：这一列是为了显示某种文字阅读模型是否可以进行端到端的训练，无需任何预处理或经过几个分离的步骤，这表明这种方法对于训练是优雅且干净的。"><span></div>
+    <div class="eng">As can be observed from Table 3, only the models based on deep neural networks including [22, 21] as well as <span class="word_hot_rare">CRNN</span> have this property.<span class="chs" title="从表3可以看出，只有基于深度神经网络的模型，包括[22,21]以及CRNN具有这种性质。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Conv <span class="word_hot_rare">Ftrs</span>: This column is to indicate whether an approach uses the convolutional features learned from training images directly or <span class="word_hot" title="handcraft [ˈhændkrɑ:ft]">handcraft</span> features as the basic representations.<span class="chs" title="Conv Ftrs：这一列用来表明一个方法是否使用从训练图像直接学习到的卷积特征或手动特征作为基本的表示。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">CharGT-Free</span>: This column is to indicate whether the <span class="word_hot_rare">character-level</span> annotations are essential for training the model.<span class="chs" title="CharGT-Free：这一列用来表明字符级标注对于训练模型是否是必要的。"><span></div>
+    <div class="eng">As the input and output labels of <span class="word_hot_rare">CRNN</span> can be a sequence, <span class="word_hot_rare">character-level</span> annotations are not necessary.<span class="chs" title="由于CRNN的输入和输出标签是序列，因此字符级标注是不必要的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot" title="unconstrained [ˌʌnkən'streɪnd]">Unconstrained</span>: This column is to indicate whether the trained model is constrained to a specific dictionary, unable to handling <span class="word_hot_rare">out-of-dictionary</span> words or random sequences.<span class="chs" title="Unconstrained：这一列用来表明训练模型是否受限于一个特定的字典，是否不能处理字典之外的单词或随机序列。"><span></div>
+    <div class="eng">Notice that though the recent models learned by label embedding [5, 14] and <span class="word_hot" title="incremental [ˌɪŋkrə'mentl]">incremental</span> learning [22] achieved highly competitive performance, they are constrained to a specific dictionary.<span class="chs" title="注意尽管最近通过标签嵌入[5, 14]和增强学习[22]学习到的模型取得了非常有竞争力的性能，但它们受限于一个特定的字典。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Model Size: This column is to report the storage space of the learned model.<span class="chs" title="Model Size：这一列报告了学习模型的存储空间。"><span></div>
+    <div class="eng">In <span class="word_hot_rare">CRNN</span>, all layers have <span class="word_hot_rare">weight-sharing</span> connections, and the fully-connected layers are not needed.<span class="chs" title="在CRNN中，所有的层有权重共享连接，不需要全连接层。"><span></div>
+    <div class="eng">Consequently, the number of parameters of <span class="word_hot_rare">CRNN</span> is much less than the models learned on the variants of CNN [22, 21], resulting in a much smaller model compared with [22, 21].<span class="chs" title="因此，CRNN的参数数量远小于CNN变体[22,21]所得到的模型，导致与[22,21]相比，模型要小得多。"><span></div>
+    <div class="eng">Our model has 8.3 million parameters, taking only 33MB RAM (using 4-bytes single-precision float for each parameter), thus it can be easily ported to mobile devices.<span class="chs" title="我们的模型有830万个参数，只有33MB RAM（每个参数使用4字节单精度浮点数），因此可以轻松地移植到移动设备上。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 3 clearly shows the differences among different approaches in details, and fully demonstrates the advantages of <span class="word_hot_rare">CRNN</span> over other competing methods.<span class="chs" title="表3详细列出了不同方法之间的差异，充分展示了CRNN与其它竞争方法的优势。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In addition, to test the impact of parameter \delta, we experiment different values of \delta in Eq. 2.<span class="chs" title="另外，为了测试参数\delta的影响，我们在方程2中实验了\delta的不同值。"><span></div>
+    <div class="eng">In Fig.4 we plot the recognition accuracy as a function of \delta.<span class="chs" title="在图4中，我们将识别精度绘制为\delta的函数。"><span></div>
+    <div class="eng">Larger \delta results in more candidates, thus more accurate <span class="word_hot_rare">lexicon-based</span> <span class="word_hot" title="transcription [trænˈskrɪpʃn]">transcription</span>.<span class="chs" title="更大的\delta导致更多的候选目标，从而基于词典的转录更准确。"><span></div>
+    <div class="eng">On the other hand, the <span class="word_hot" title="computational [ˌkɒmpjuˈteɪʃənl]">computational</span> cost grows with larger \delta, due to longer <span class="word_hot_rare">BK-tree</span> search time, as well as larger number of candidate sequences for testing.<span class="chs" title="另一方面，由于更长的BK树搜索时间，以及更大数量的候选序列用于测试，计算成本随着\delta的增大而增加。"><span></div>
+    <div class="eng">In practice, we choose \delta=3 as a <span class="word_hot" title="tradeoff ['treɪdˌɔ:f]">tradeoff</span> between accuracy and speed.<span class="chs" title="实际上，我们选择\delta=3作为精度和速度之间的折衷。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/fig04.png" alt="Figure 4"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 4.<span class="chs" title="图4。"><span></div>
+    <div class="eng">Blue line graph: recognition accuracy as a function parameter \delta.<span class="chs" title="蓝线图：识别准确率作为\delta的函数。"><span></div>
+    <div class="eng">Red bars: <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span> search time per sample.<span class="chs" title="红条：每个样本的词典搜索时间。"><span></div>
+    <div class="eng">Tested on the IC03 dataset with the 50k <span class="word_hot" title="lexicon [ˈleksɪkən]">lexicon</span>.<span class="chs" title="在IC03数据集上使用50k词典进行的测试。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.4. Musical Score Recognition<span class="chs" title="3.4. 乐谱识别"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">A musical score typically consists of sequences of musical notes arranged on staff lines.<span class="chs" title="乐谱通常由排列在五线谱的音符序列组成。"><span></div>
+    <div class="eng">Recognizing musical scores in images is known as the Optical Music Recognition (<span class="word_hot_rare">OMR</span>) problem.<span class="chs" title="识别图像中的乐谱被称为光学音乐识别（OMR）问题。"><span></div>
+    <div class="eng">Previous methods often requires image preprocessing (mostly <span class="word_hot_rare">binirization</span>), staff lines detection and individual notes recognition [29].<span class="chs" title="以前的方法通常需要图像预处理（主要是二值化），五线谱检测和单个音符识别[29]。"><span></div>
+    <div class="eng">We cast the <span class="word_hot_rare">OMR</span> as a sequence recognition problem, and predict a sequence of musical notes directly from the image with <span class="word_hot_rare">CRNN</span>.<span class="chs" title="我们将OMR作为序列识别问题，直接用CRNN从图像中预测音符的序列。"><span></div>
+    <div class="eng">For simplicity, we recognize pitches only, ignore all chords and assume the same major scales (C major) for all scores.<span class="chs" title="为了简单起见，我们仅认识音调，忽略所有和弦，并假定所有乐谱具有相同的大调音阶（C大调）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">To the best of our knowledge, there exists no public datasets for evaluating algorithms on <span class="word_hot" title="pitch [pɪtʃ]">pitch</span> recognition.<span class="chs" title="据我们所知，没有用于评估音调识别算法的公共数据集。"><span></div>
+    <div class="eng">To prepare the training data needed by <span class="word_hot_rare">CRNN</span>, we collect 2650 images from [2].<span class="chs" title="为了准备CRNN所需的训练数据，我们从[2]中收集了2650张图像。"><span></div>
+    <div class="eng">Each image contains a fragment of score containing 3 to 20 notes.<span class="chs" title="每个图像中有一个包含3到20个音符的乐谱片段。"><span></div>
+    <div class="eng">We manually label the ground truth label sequences (sequences of not <span class="word_hot_rare">ezpitches</span>) for all the images.<span class="chs" title="我们手动标记所有图像的真实标签序列（不是的音调序列）。"><span></div>
+    <div class="eng">The collected images are augmented to 265k training samples by being rotated, scaled and corrupted with noise, and by replacing their backgrounds with natural images.<span class="chs" title="收集到的图像通过旋转，缩放和用噪声损坏增强到了265k个训练样本，并用自然图像替换它们的背景。"><span></div>
+    <div class="eng">For testing, we create three datasets: 1) “Clean”, which contains 260 images collected from [2]. Examples are shown in Fig. 5.<span class="chs" title="对于测试，我们创建了三个数据集：1）“纯净的”，其中包含从[2]收集的260张图像。"><span></div>
+    <div class="eng">a; 2) “Synthesized”, which is created from “Clean”, using the <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span> strategy mentioned above.<span class="chs" title="实例如图5.a所示；2）“合成的”，使用“纯净的”创建的，使用了上述的增强策略。"><span></div>
+    <div class="eng">It contains 200 samples, some of which are shown in Fig. 5. b; 3) “<span class="word_hot_rare">Real-World</span>”, which contains 200 images of score fragments taken from music books with a phone camera.<span class="chs" title="它包含200个样本，其中一些如图5.b所示；3）“现实世界”，其中包含用手机相机拍摄的音乐书籍中的200张图像。"><span></div>
+    <div class="eng">Examples are shown in Fig. 5. c.<span class="chs" title="例子如图5.c所示。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/fig05.png" alt="Figure 5"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 5. (a) Clean musical scores images collected from [2] (b) Synthesized musical score images.<span class="chs" title="图5。(a)从[2]中收集的干净的乐谱图像。(b)合成的乐谱图像。"><span></div>
+    <div class="eng">(c) <span class="word_hot_rare">Real-world</span> score images taken with a mobile phone camera.<span class="chs" title="(c)用手机相机拍摄的现实世界的乐谱图像。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Since we have limited training data, we use a simplified <span class="word_hot_rare">CRNN</span> <span class="word_hot" title="configuration [kənˌfɪgəˈreɪʃn]">configuration</span> in order to reduce model capacity.<span class="chs" title="由于我们的训练数据有限，因此我们使用简化的CRNN配置来减少模型容量。"><span></div>
+    <div class="eng">Different from the <span class="word_hot" title="configuration [kənˌfɪgəˈreɪʃn]">configuration</span> specified in Tab. 1, the 4th and 6th convolution layers are removed, and the 2-layer <span class="word_hot" title="bidirectional [ˌbaɪdəˈrekʃənl]">bidirectional</span> LSTM is replaced by a 2-layer single <span class="word_hot" title="directional [dəˈrekʃənl]">directional</span> LSTM.<span class="chs" title="与表1中指定的配置不同，我们移除了第4和第6卷积层，将2层双向LSTM替换为2层单向LSTM。"><span></div>
+    <div class="eng">The network is trained on the pairs of images and corresponding label sequences.<span class="chs" title="网络对图像对和对应的标签序列进行训练。"><span></div>
+    <div class="eng">Two measures are used for evaluating the recognition performance: 1) fragment accuracy, i.e. the percentage of score fragments correctly recognized; 2) average edit distance, i.e. the average edit distance between predicted <span class="word_hot" title="pitch [pɪtʃ]">pitch</span> sequences and the ground truths.<span class="chs" title="使用两种方法来评估识别性能：1）片段准确度，即正确识别的乐谱片段的百分比；2）平均编辑距离，即预测音调序列与真实值之间的平均编辑距离。"><span></div>
+    <div class="eng">For comparison, we evaluate two commercial <span class="word_hot_rare">OMR</span> engines, namely the <span class="word_hot" title="Capella [kəˈpelə]">Capella</span> Scan [3] and the <span class="word_hot_rare">PhotoScore</span> [4].<span class="chs" title="为了比较，我们评估了两种商用OMR引擎，即Capella Scan[3]和PhotoScore[4]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Tab.<span class="chs" title="表4总结了结果。"><span></div>
+    <div class="eng">4 summarizes the results.<span class="chs" title="CRNN大大优于两个商业系统。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">CRNN</span> outperforms the two commercial systems by a large margin. The <span class="word_hot" title="Capella [kəˈpelə]">Capella</span> Scan and <span class="word_hot_rare">PhotoScore</span> systems perform reasonably well on the Clean dataset, but their performances drop significantly on synthesized and <span class="word_hot_rare">real-world</span> data.<span class="chs" title="Capella Scan和PhotoScore系统在干净的数据集上表现相当不错，但是它们的性能在合成和现实世界数据方面显著下降。"><span></div>
+    <div class="eng">The main reason is that they rely on robust <span class="word_hot_rare">binarization</span> to detect staff lines and notes, but the <span class="word_hot_rare">binarization</span> step often fails on synthesized and <span class="word_hot_rare">real-world</span> data due to bad lighting condition, noise corruption and cluttered background.<span class="chs" title="主要原因是它们依赖于强大的二值化来检五线谱和音符，但是由于光线不良，噪音破坏和杂乱的背景，二值化步骤经常会在合成数据和现实数据上失败。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">CRNN</span>, on the other hand, uses convolutional features that are highly robust to noises and distortions.<span class="chs" title="另一方面，CRNN使用对噪声和扭曲具有鲁棒性的卷积特征。"><span></div>
+    <div class="eng">Besides, <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers in <span class="word_hot_rare">CRNN</span> can <span class="word_hot" title="utilize [ˈju:təlaɪz]">utilize</span> <span class="word_hot" title="contextual [kənˈtekstʃuəl]">contextual</span> information in the score.<span class="chs" title="此外，CRNN中的循环层可以利用乐谱中的上下文信息。"><span></div>
+    <div class="eng">Each note is recognized not only itself, but also by the nearby notes.<span class="chs" title="每个音符不仅自身被识别，而且被附近的音符识别。"><span></div>
+    <div class="eng">Consequently, some notes can be recognized by comparing them with the nearby notes, e.g. contrasting their vertical positions.<span class="chs" title="因此，通过将一些音符与附近的音符进行比较可以识别它们，例如对比他们的垂直位置。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 4.<span class="chs" title="表4。"><span></div>
+    <div class="eng">Comparison of <span class="word_hot" title="pitch [pɪtʃ]">pitch</span> recognition accuracies, among <span class="word_hot_rare">CRNN</span> and two commercial <span class="word_hot_rare">OMR</span> systems, on the three datasets we have collected.<span class="chs" title="在我们收集的数据集上，CRNN和两个商业OMR系统对音调识别准确率的对比。"><span></div>
+    <div class="eng">Performances are evaluated by fragment accuracies and average edit distance (“fragment accuracy/average edit distance”).<span class="chs" title="通过片段准确率和平均编辑距离(“片段准确率/平均编辑距离”)来评估性能。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/CRNN/tab04.png" alt="Table 4"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The results have shown the <span class="word_hot" title="generality [ˌdʒenəˈræləti]">generality</span> of <span class="word_hot_rare">CRNN</span>, in that it can be readily applied to other image-based sequence recognition problems, requiring <span class="word_hot" title="minimal [ˈmɪnɪməl]">minimal</span> domain knowledge.<span class="chs" title="结果显示了CRNN的泛化性，因为它可以很容易地应用于其它的基于图像的序列识别问题，需要极少的领域知识。"><span></div>
+    <div class="eng">Compared with <span class="word_hot" title="Capella [kəˈpelə]">Capella</span> Scan and <span class="word_hot_rare">PhotoScore</span>, our <span class="word_hot_rare">CRNN-based</span> system is still <span class="word_hot" title="preliminary [prɪˈlɪmɪnəri]">preliminary</span> and misses many functionalities.<span class="chs" title="与Capella Scan和PhotoScore相比，我们的基于CRNN的系统仍然是初步的，并且缺少许多功能。"><span></div>
+    <div class="eng">But it provides a new scheme for <span class="word_hot_rare">OMR</span>, and has shown promising capabilities in <span class="word_hot" title="pitch [pɪtʃ]">pitch</span> recognition.<span class="chs" title="但它为OMR提供了一个新的方案，并且在音高识别方面表现出有前途的能力。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">4. Conclusion<span class="chs" title="4. 总结"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In this paper, we have presented a novel neural network architecture, called Convolutional <span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> Neural Network (<span class="word_hot_rare">CRNN</span>), which integrates the advantages of both Convolutional Neural Networks (CNN) and <span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> Neural Networks (RNN).<span class="chs" title="在本文中，我们提出了一种新颖的神经网络架构，称为卷积循环神经网络（CRNN），其集成了卷积神经网络（CNN）和循环神经网络（RNN）的优点。"><span></div>
+    <div class="eng"><span class="word_hot_rare">CRNN</span> is able to take input images of varying dimensions and produces predictions with different lengths.<span class="chs" title="CRNN能够获取不同尺寸的输入图像，并产生不同长度的预测。"><span></div>
+    <div class="eng">It directly runs on coarse level labels (e.g. words), requiring no detailed annotations for each individual element (e.g. characters) in the training phase.<span class="chs" title="它直接在粗粒度的标签（例如单词）上运行，在训练阶段不需要详细标注每一个单独的元素（例如字符）。"><span></div>
+    <div class="eng">Moreover, as <span class="word_hot_rare">CRNN</span> abandons fully connected layers used in <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> neural networks, it results in a much more compact and efficient model.<span class="chs" title="此外，由于CRNN放弃了传统神经网络中使用的全连接层，因此得到了更加紧凑和高效的模型。"><span></div>
+    <div class="eng">All these properties make <span class="word_hot_rare">CRNN</span> an excellent approach for image-based sequence recognition.<span class="chs" title="所有这些属性使得CRNN成为一种基于图像序列识别的极好方法。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The experiments on the scene text recognition benchmarks demonstrate that <span class="word_hot_rare">CRNN</span> achieves superior or highly competitive performance, compared with <span class="word_hot" title="conventional [kənˈvenʃənl]">conventional</span> methods as well as other CNN and RNN based algorithms.<span class="chs" title="在场景文本识别基准数据集上的实验表明，与传统方法以及其它基于CNN和RNN的算法相比，CRNN实现了优异或极具竞争力的性能。"><span></div>
+    <div class="eng">This confirms the advantages of the proposed algorithm.<span class="chs" title="这证实了所提出的算法的优点。"><span></div>
+    <div class="eng">In addition, <span class="word_hot_rare">CRNN</span> significantly outperforms other competitors on a benchmark for Optical Music Recognition (<span class="word_hot_rare">OMR</span>), which verifies the <span class="word_hot" title="generality [ˌdʒenəˈræləti]">generality</span> of <span class="word_hot_rare">CRNN</span>.<span class="chs" title="此外，CRNN在光学音乐识别（OMR）的基准数据集上显著优于其它的竞争者，这验证了CRNN的泛化性。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Actually, <span class="word_hot_rare">CRNN</span> is a general framework, thus it can be applied to other domains and problems (such as Chinese character recognition), which involve sequence prediction in images.<span class="chs" title="实际上，CRNN是一个通用框架，因此可以应用于其它的涉及图像序列预测的领域和问题（如汉字识别）。"><span></div>
+    <div class="eng">To further speed up <span class="word_hot_rare">CRNN</span> and make it more practical in <span class="word_hot_rare">real-world</span> applications is another direction that is worthy of exploration in the future.<span class="chs" title="进一步加快CRNN，使其在现实应用中更加实用，是未来值得探索的另一个方向。"><span></div>
+</div>
+    <br>
+
+</div>
+<div class="panel">
+<div class="panel-btn" title="切换展开中文" onclick="display_chs()">➽</div>
+<div class="panel-btn" title="切换按句显示" onclick="display_lines()">✿</div>
+</div>
+</body>
+
+<script type="text/javascript">
+font_default_color = "#666"
+function display_chs(){  
+    var $cnLines = document.getElementsByClassName("chs");
+    for (var i = 0; i < $cnLines.length; i++) {
+        var line = $cnLines[i];
+        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
+        else if(line.innerText!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
+        line.style.color=font_default_color;
+    }
+}
+function display_lines(){  
+    var $cnLines = document.getElementsByClassName("eng");
+    for (var i = $cnLines.length - 1; i >= 0; i--) {
+        if ($cnLines[i].className == "eng line")
+            $cnLines[i].className = "eng para";
+        else
+            $cnLines[i].className = "eng line";
+    }
+}
+var handler = function(event) {
+    line = event.target;
+    switch (event.type){
+        case "click":
+            var txt = "";
+            if (window.getSelection) { txt = window.getSelection().toString();}
+            else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
+            else if (window.document.selection) { txt = window.document.selection.createRange().text;}
+            if (txt != '')    break;
+            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
+            else {line.title=line.innerHTML;
+                line.innerHTML = "";
+                line.className="chs on";
+                line.style.color="red";}
+            break;
+        case "mouseover":
+            if(line.title)    line.style.color="red";
+            break;
+        case "mouseout":
+            if(line.title)    line.style.color=font_default_color
+            break;
+    }
+}
+var $cnLines = document.getElementsByClassName("chs");
+if ($cnLines.length==0){
+   var btns = document.getElementsByClassName("panel")[0];
+    btns.removeChild(btns.children[0])
+} else
+for (var i = 0; i < $cnLines.length; i++) {
+    var line = $cnLines[i];
+    line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
+    if (line.title=="") {line.className="chs off"; continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color;
+    line.addEventListener("click",handler,false);
+    line.addEventListener("mouseover",handler,false);
+    line.addEventListener("mouseout",handler,false);
+}
+</script>
+</html>
