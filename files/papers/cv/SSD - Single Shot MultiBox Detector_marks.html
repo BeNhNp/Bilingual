@@ -151,7 +151,7 @@
     <div class="eng">The <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> box offset output values are measured relative to a default box position relative to each feature map location (<span class="word_hot_rare">cf</span> the architecture of <span class="word_hot_rare">YOLO</span>[5] that uses an intermediate fully connected layer instead of a convolutional filter for this step).<span class="chs" title="边界框偏移输出值是相对每个特征映射位置的相对默认框位置来度量的（查阅YOLO[5]的架构，该步骤使用中间全连接层而不是卷积滤波器）。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig02.png" alt="Figure 2"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig02.png" alt="Figure 2"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig. 2: A comparison between two single shot detection models: <span class="word_hot_rare">SSD</span> and <span class="word_hot_rare">YOLO</span> [5].<span class="chs" title="图2：两个单次检测模型的比较：SSD和YOLO[5]。"><span></div>
@@ -170,7 +170,7 @@
     <div class="eng">Allowing different default box shapes in several feature maps let us efficiently <span class="word_hot" title="discretize ['diskri:taiz]">discretize</span> the space of possible output box shapes.<span class="chs" title="在几个特征映射中允许不同的默认边界框形状让我们有效地离散可能的输出框形状的空间。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig01.png" alt="Figure 1"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig01.png" alt="Figure 1"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig.<span class="chs" title="图1：SSD框架。"><span></div>
@@ -351,7 +351,7 @@
     <div class="eng">Data: ”07”: VOC2007 <span class="word_hot_rare">trainval</span>, ”07+12”: union of VOC2007 and VOC2012 <span class="word_hot_rare">trainval</span>. ”07+12+COCO”: first train on COCO <span class="word_hot_rare">trainval35k</span> then <span class="word_hot" title="fine-tune [faɪn tju:n]">fine-tune</span> on 07+12.<span class="chs" title="“07+12+COCO”：首先在COCO trainval35k上训练然后在07+12上微调。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab01.png" alt="Table 1"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab01.png" alt="Table 1"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">To understand the performance of our two <span class="word_hot_rare">SSD</span> models in more details, we used the detection analysis tool from [21].<span class="chs" title="为了更详细地了解我们两个SSD模型的性能，我们使用了[21]中的检测分析工具。"><span></div>
@@ -368,7 +368,7 @@
     <div class="eng">And it is very robust to different object aspect ratios because we use default boxes of various aspect ratios per feature map location.<span class="chs" title="而且对于不同长宽比的目标，它是非常鲁棒的，因为我们使用每个特征映射位置的各种长宽比的默认框。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig03.png" alt="Figure 3"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig03.png" alt="Figure 3"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig. 3: Visualization of performance for SSD512 on animals, vehicles, and furniture from VOC2007 test.<span class="chs" title="图3：SSD512在VOC2007 test中的动物，车辆和家具上的性能可视化。"><span></div>
@@ -378,7 +378,7 @@
     <div class="eng">The bottom row shows the distribution of <span class="word_hot" title="top-ranked ['tɒpr'æŋkt]">top-ranked</span> <span class="word_hot" title="false [fɔ:ls]">false</span> positive types.<span class="chs" title="最下面一行显示了排名靠前的假阳性类型的分布。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig04.png" alt="Figure 4"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig04.png" alt="Figure 4"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig. 4: Sensitivity and impact of different object characteristics on VOC2007 test set using [21].<span class="chs" title="图4：使用[21]在VOC2007 test设置上不同目标特性的灵敏度和影响。"><span></div>
@@ -408,7 +408,7 @@
     <div class="eng">Table 2: Effects of various design choices and components on <span class="word_hot_rare">SSD</span> performance.<span class="chs" title="表2：各种设计选择和组件对SSD性能的影响。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab02.png" alt="Table 2"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab02.png" alt="Table 2"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">More default box shapes is better.<span class="chs" title="更多的默认边界框形状会更好。"><span></div>
@@ -447,7 +447,7 @@
     <div class="eng">Table 3: Effects of using multiple output layers.<span class="chs" title="表3：使用多个输出层的影响。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab03.png" alt="Table 3"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab03.png" alt="Table 3"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">3.3 PASCAL VOC2012<span class="chs" title="3.3 PASCAL VOC2012"><span></div>
@@ -470,7 +470,7 @@
     <div class="eng">”07++12+COCO”: first train on COCO <span class="word_hot_rare">trainval35k</span> then <span class="word_hot" title="fine-tune [faɪn tju:n]">fine-tune</span> on 07++12.<span class="chs" title="“07++12+COCO”：先在COCO trainval135k上训练然后在07++12上微调。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab04.png" alt="Table 4"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab04.png" alt="Table 4"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">3.4 COCO<span class="chs" title="3.4 COCO"><span></div>
@@ -500,9 +500,9 @@
     <div class="eng">Table 5: COCO test-dev2015 detection results.<span class="chs" title="表5：COCO test-dev2015检测结果。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab05.png" alt="Table 5"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab05.png" alt="Table 5"/></div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig05.png" alt="Figure 5"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig05.png" alt="Figure 5"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig. 5: Detection examples on COCO <span class="word_hot_rare">test-dev</span> with SSD512 model.<span class="chs" title="图5：SSD512模型在COCO test-dev上的检测实例。"><span></div>
@@ -542,9 +542,9 @@
     <div class="eng">SSD300^{*} and SSD512^{*} are the models that are trained with the new data <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span>.<span class="chs" title="SSD300^{*}和SSD512^{*}是用新的数据增强训练的模型。"><span></div>
 </div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/tab06.png" alt="Table 6"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/tab06.png" alt="Table 6"/></div>
     <br>
-<div style="text-align: center;"><img src="./images/SSD/fig06.png" alt="Figure 6"/></div>
+<div style="text-align: center;"><img src="../../images/SSD/fig06.png" alt="Figure 6"/></div>
     <br>
 <div class="paragraph_part">
     <div class="eng">Fig. 6: Sensitivity and impact of object size with new data <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span> on VOC2007 test set using [21].<span class="chs" title="图6：具有新的数据增强的目标尺寸在[21]中使用的VOC2007test数据集上灵敏度及影响。"><span></div>
