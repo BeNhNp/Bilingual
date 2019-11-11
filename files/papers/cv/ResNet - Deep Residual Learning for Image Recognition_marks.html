@@ -1,0 +1,1012 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title> ResNet - Deep Residual Learning for Image Recognition </title>
+<style type="text/css">
+    body {font-family: arial,verdana,geneva,sans-serif; font-size: 112%; color: #000; background-color: #eee; word-wrap:break-word;}
+    .chapter_part { margin: 50px auto;
+        background-color: #fefefe; padding:10px 10px 0;
+        box-shadow: 0 0 0 20px #f8f8f8; border-radius:25px;
+    }
+    .panel{ position: fixed;  top: 75%; }
+@media screen and (min-width:1280px){
+    .chapter_part {width: 64%; }
+    .panel{margin-left: 6%;}
+}
+@media screen and (max-width:1280px){
+    .chapter_part {width: 80%; }
+    .panel{margin-left: 0;}
+}
+    .paragraph_part { margin: 0; text-indent:2em; }
+    .panel-btn{
+        position:relative; margin-bottom:.75rem;
+        text-align: center; font-size:1.8em;
+        color:#888; width:3rem; height:3rem;
+        background-color:#fff; background-repeat:no-repeat;
+        border:5px solid #ddd; border-radius:50%;
+        box-shadow:0 2px 4px 0 rgba(0,0,0,.04); cursor:pointer;
+    }
+    .word_hot{ font-weight:bold; color:#ff4500; }
+    .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
+    .eng {display:inline;}
+    .eng.line {display:block;}
+    .eng.para {display:inline;}
+    .chs:before{content:"➤"; font-size:%25;}
+    .chs.on:before{content:"➤"; font-size:%25;}
+    .chs.off:before{content:"";}
+</style>
+</head>
+<body>
+<div class="chapter_part">
+<div class="paragraph_part">
+    <div class="eng">Deep Residual Learning for Image Recognition<span class="chs" title="深度残差学习在图像识别中的应用"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Authors: He, <span class="word_hot_rare">Kaiming</span> (Microsoft Research, United States); Zhang, <span class="word_hot_rare">Xiangyu</span>; Ren, <span class="word_hot_rare">Shaoqing</span>; Sun, Jian<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Source: Proceedings of the <span class="word_hot" title="IEEE [,aɪii'i]">IEEE</span> Computer Society Conference on Computer Vision and Pattern Recognition, v 2016-December, p 770-778, December 9, 2016, Proceedings - 29th <span class="word_hot" title="IEEE [,aɪii'i]">IEEE</span> Conference on Computer Vision and Pattern Recognition, <span class="word_hot_rare">CVPR</span> 2016<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot_rare">url</span>: http://noahsnail. com/2017/07/31/2017-07-31-ResNet%E8%AE%BA%E6%96%87%E7%BF%BB%E8%AF%91%E2%80%94%E2%80%94%E4%B8%AD%E8%8B%B1%E6%96%87%E5%AF%B9%E7%85%A7/<span class="chs" title="原文链接"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Abstract<span class="chs" title="摘要"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Deeper neural networks are more difficult to train.<span class="chs" title="更深的神经网络更难训练。"><span></div>
+    <div class="eng">We present a <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning framework to ease the training of networks that are <span class="word_hot" title="substantially [səbˈstænʃəli]">substantially</span> deeper than those used previously.<span class="chs" title="我们提出了一种残差学习框架来减轻网络训练，这些网络比以前使用的网络更深。"><span></div>
+    <div class="eng">We explicitly <span class="word_hot" title="reformulate [ˌri:ˈfɔ:mjuleɪt]">reformulate</span> the layers as learning <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions with reference to the layer inputs, instead of learning <span class="word_hot_rare">unreferenced</span> functions.<span class="chs" title="我们明确地将层变为学习关于层输入的残差函数，而不是学习未参考的函数。"><span></div>
+    <div class="eng">We provide comprehensive <span class="word_hot" title="empirical [ɪmˈpɪrɪkl]">empirical</span> evidence showing that these <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> networks are easier to optimize, and can gain accuracy from considerably increased depth.<span class="chs" title="我们提供了全面的经验证据说明这些残差网络很容易优化，并可以显著增加深度来提高准确性。"><span></div>
+    <div class="eng">On the ImageNet dataset we evaluate <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets with a depth of up to 152 layers——8× deeper than <span class="word_hot_rare">VGG</span> nets [40] but still having lower complexity.<span class="chs" title="在ImageNet数据集上我们评估了深度高达152层的残差网络——比VGG[40]深8倍但仍具有较低的复杂度。"><span></div>
+    <div class="eng">An <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> of these <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets achieves 3.57% error on the ImageNet test set.<span class="chs" title="这些残差网络的集合在ImageNet测试集上取得了3.57%的错误率。"><span></div>
+    <div class="eng">This result won the 1st place on the <span class="word_hot_rare">ILSVRC</span> 2015 classification task.<span class="chs" title="这个结果在ILSVRC 2015分类任务上赢得了第一名。"><span></div>
+    <div class="eng">We also present analysis on <span class="word_hot_rare">CIFAR</span>-10 with 100 and 1000 layers.<span class="chs" title="我们也在CIFAR-10上分析了100层和1000层的残差网络。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The depth of representations is of central importance for many visual recognition tasks.<span class="chs" title="对于许多视觉识别任务而言，表示的深度是至关重要的。"><span></div>
+    <div class="eng"><span class="word_hot" title="solely [ˈsəʊlli]">Solely</span> due to our extremely deep representations, we obtain a 28% relative improvement on the COCO object detection dataset.<span class="chs" title="仅由于我们非常深度的表示，我们便在COCO目标检测数据集上得到了28%的相对提高。"><span></div>
+    <div class="eng">Deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets are foundations of our submissions to <span class="word_hot_rare">ILSVRC</span> & COCO 2015 competitions, where we also won the 1st places on the tasks of ImageNet detection, ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>, COCO detection, and COCO <span class="word_hot" title="segmentation [ˌsegmenˈteɪʃn]">segmentation</span>.<span class="chs" title="深度残差网络是我们向ILSVRC和COCO 2015竞赛提交的基础，我们也赢得了ImageNet检测任务，ImageNet定位任务，COCO检测和COCO分割任务的第一名。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">1. Introduction<span class="chs" title="1. 引言"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Deep convolutional neural networks [22, 21] have led to a series of breakthroughs for image classification [21, 49, 39].<span class="chs" title="深度卷积神经网络[22, 21]导致了图像分类[21, 49, 39]的一系列突破。"><span></div>
+    <div class="eng">Deep networks naturally integrate low/mid/high-level features [49] and classifiers in an end-to-end multi-layer fashion, and the “levels” of features can be enriched by the number of stacked layers (depth).<span class="chs" title="深度网络自然地将低/中/高级特征[49]和分类器以端到端多层方式进行集成，特征的“级别”可以通过堆叠层的数量（深度）来丰富。"><span></div>
+    <div class="eng">Recent evidence [40, 43] reveals that network depth is of crucial importance, and the leading results [40, 43, 12, 16] on the challenging ImageNet dataset [35] all exploit “very deep” [40] models, with a depth of sixteen [40] to thirty [16].<span class="chs" title="最近的证据[40, 43]显示网络深度至关重要，在具有挑战性的ImageNet数据集上领先的结果都采用了“非常深”[40]的模型，深度从16 [40]到30 [16]之间。"><span></div>
+    <div class="eng">Many other non-trivial visual recognition tasks [7, 11, 6, 32, 27] have also greatly benefited from very deep models.<span class="chs" title="许多其它重要的视觉识别任务[7, 11, 6, 32, 27]也从非常深的模型中得到了极大受益。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Driven by the significance of depth, a question arises: Is learning better networks as easy as stacking more layers?<span class="chs" title="在深度重要性的推动下，出现了一个问题：学些更好的网络是否像堆叠更多的层一样容易？"><span></div>
+    <div class="eng">An obstacle to answering this question was the <span class="word_hot" title="notorious [nəʊˈtɔ:riəs]">notorious</span> problem of vanishing/exploding gradients [14, 1, 8], which <span class="word_hot" title="hamper [ˈhæmpə(r)]">hamper</span> <span class="word_hot" title="convergence [kən'vɜ:dʒəns]">convergence</span> from the beginning.<span class="chs" title="回答这个问题的一个障碍是梯度消失/爆炸[14, 1, 8]这个众所周知的问题，它从一开始就阻碍了收敛。"><span></div>
+    <div class="eng">This problem, however, has been largely addressed by normalized <span class="word_hot" title="initialization [ɪˌnɪʃəlaɪ'zeɪʃn]">initialization</span> [23, 8, 36, 12] and intermediate normalization layers [16], which enable networks with tens of layers to start converging for <span class="word_hot" title="stochastic [stə'kæstɪk]">stochastic</span> gradient <span class="word_hot" title="descent [dɪˈsent]">descent</span> (<span class="word_hot" title="SGD ['esdʒ'i:d'i:]">SGD</span>) with <span class="word_hot_rare">backpropagation</span> [22].<span class="chs" title="然而，这个问题通过标准初始化[23, 8, 36, 12]和中间标准化层[16]在很大程度上已经解决，这使得数十层的网络能通过具有反向传播的随机梯度下降（SGD）开始收敛。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">When deeper networks are able to start converging, a degradation problem has been exposed: with the network depth increasing, accuracy gets <span class="word_hot" title="saturated [ˈsætʃəreɪtɪd]">saturated</span> (which might be <span class="word_hot" title="unsurprising [ˌʌnsəˈpraɪzɪŋ]">unsurprising</span>) and then degrades rapidly.<span class="chs" title="当更深的网络能够开始收敛时，暴露了一个退化问题：随着网络深度的增加，准确率达到饱和（这可能并不奇怪）然后迅速下降。"><span></div>
+    <div class="eng">Unexpectedly, such degradation is not caused by overfitting, and adding more layers to a suitably deep model leads to higher training error, as reported in [10, 41] and <span class="word_hot" title="thoroughly [ˈθʌrəli]">thoroughly</span> verified by our experiments.<span class="chs" title="意外的是，这种下降不是由过拟合引起的，并且在适当的深度模型上添加更多的层会导致更高的训练误差，正如[10, 41]中报告的那样，并且由我们的实验完全证实。"><span></div>
+    <div class="eng">Fig. 1 shows a typical example.<span class="chs" title="图1显示了一个典型的例子。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig01.png" alt="Figure 1"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 1. Training error (left) and test error (right) on <span class="word_hot_rare">CIFAR</span>-10 with 20-layer and 56-layer “plain” networks.<span class="chs" title="图1 20层和56层的“简单”网络在CIFAR-10上的训练误差（左）和测试误差（右）。"><span></div>
+    <div class="eng">The deeper network has higher training error, and thus test error.<span class="chs" title="更深的网络有更高的训练误差和测试误差。"><span></div>
+    <div class="eng">Similar phenomena on ImageNet is presented in Fig. 4.<span class="chs" title="ImageNet上的类似现象如图4所示。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The degradation (of training accuracy) indicates that not all systems are similarly easy to optimize.<span class="chs" title="退化（训练准确率）表明不是所有的系统都很容易优化。"><span></div>
+    <div class="eng">Let us consider a shallower architecture and its deeper counterpart that adds more layers onto it.<span class="chs" title="让我们考虑一个较浅的架构及其更深层次的对象，为其添加更多的层。"><span></div>
+    <div class="eng">There exists a solution by construction to the deeper model: the added layers are identity mapping, and the other layers are copied from the learned shallower model.<span class="chs" title="存在通过构建得到更深层模型的解决方案：添加的层是恒等映射，其他层是从学习到的较浅模型的拷贝。"><span></div>
+    <div class="eng">The existence of this constructed solution indicates that a deeper model should produce no higher training error than its shallower counterpart.<span class="chs" title=" 这种构造解决方案的存在表明，较深的模型不应该产生比其对应的较浅模型更高的训练误差。"><span></div>
+    <div class="eng">But experiments show that our current solvers on hand are unable to find solutions that are <span class="word_hot" title="comparably ['kɒmpərəblɪ]">comparably</span> good or better than the constructed solution (or unable to do so in feasible time).<span class="chs" title="但是实验表明，我们目前现有的解决方案无法找到与构建的解决方案相比相对不错或更好的解决方案（或在合理的时间内无法实现）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In this paper, we address the degradation problem by introducing a deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning framework.<span class="chs" title="在本文中，我们通过引入深度残差学习框架解决了退化问题。"><span></div>
+    <div class="eng">Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> mapping.<span class="chs" title="我们明确地让这些层拟合残差映射，而不是希望每几个堆叠的层直接拟合期望的基础映射。"><span></div>
+    <div class="eng">Formally, denoting the desired underlying mapping as H(x), we let the stacked <span class="word_hot" title="nonlinear ['nɒn'lɪnɪəl]">nonlinear</span> layers fit another mapping of F(x) := H(x) − x.<span class="chs" title="形式上，将期望的基础映射表示为H(x)，我们将堆叠的非线性层拟合另一个映射F(x) := H(x) − x。"><span></div>
+    <div class="eng">The original mapping is <span class="word_hot" title="recast [ˌri:ˈkɑ:st]">recast</span> into F(x) + x.<span class="chs" title="原始的映射重写为F(x) + x。"><span></div>
+    <div class="eng">We <span class="word_hot" title="hypothesize [haɪˈpɒθəsaɪz]">hypothesize</span> that it is easier to optimize the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> mapping than to optimize the original, <span class="word_hot_rare">unreferenced</span> mapping.<span class="chs" title="我们假设残差映射比原始的、未参考的映射更容易优化。"><span></div>
+    <div class="eng">To the extreme, if an identity mapping were optimal, it would be easier to push the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> to zero than to fit an identity mapping by a stack of <span class="word_hot" title="nonlinear ['nɒn'lɪnɪəl]">nonlinear</span> layers.<span class="chs" title="在极端情况下，如果一个恒等映射是最优的，那么将残差置为零比通过一堆非线性层来拟合恒等映射更容易。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The formulation of $F (x) + x$ can be realized by <span class="word_hot" title="feedforward [fi:d'fɔ:wəd]">feedforward</span> neural networks with “shortcut connections” (Fig. 2).<span class="chs" title="公式$F (x) + x$可以通过带有“快捷连接”的前向神经网络（图2）来实现。"><span></div>
+    <div class="eng">Shortcut connections [2, 33, 48] are those skipping one or more layers.<span class="chs" title="快捷连接[2, 33, 48]是那些跳过一层或更多层的连接。"><span></div>
+    <div class="eng">In our case, the shortcut connections simply perform identity mapping, and their outputs are added to the outputs of the stacked layers (Fig. 2).<span class="chs" title="在我们的案例中，快捷连接简单地执行恒等映射，并将其输出添加到堆叠层的输出（图2）。"><span></div>
+    <div class="eng">Identity shortcut connections add neither extra parameter nor <span class="word_hot" title="computational [ˌkɒmpjuˈteɪʃənl]">computational</span> complexity.<span class="chs" title="恒等快捷连接既不增加额外的参数也不增加计算复杂度。"><span></div>
+    <div class="eng">The entire network can still be trained end-to-end by <span class="word_hot" title="SGD ['esdʒ'i:d'i:]">SGD</span> with <span class="word_hot_rare">backpropagation</span>, and can be easily implemented using common libraries (e.g., <span class="word_hot_rare">Caffe</span> [19]) without modifying the solvers.<span class="chs" title="整个网络仍然可以由带有反向传播的SGD进行端到端的训练，并且可以使用公共库（例如，Caffe [19]）轻松实现，而无需修改求解器。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig02.png" alt="Figure 2"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 2. Residual learning: a building block.<span class="chs" title="图2. 残差学习：构建块"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We present comprehensive experiments on ImageNet [35] to show the degradation problem and evaluate our method.<span class="chs" title="我们在ImageNet[35]上进行了综合实验来显示退化问题并评估我们的方法。"><span></div>
+    <div class="eng">We show that: 1) Our extremely deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets are easy to optimize, but the counterpart “plain” nets (that simply stack layers) exhibit higher training error when the depth increases; 2) Our deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets can easily enjoy accuracy gains from greatly increased depth, producing results <span class="word_hot" title="substantially [səbˈstænʃəli]">substantially</span> better than previous networks.<span class="chs" title="我们发现：1）我们极深的残差网络易于优化，但当深度增加时，对应的“简单”网络（简单堆叠层）表现出更高的训练误差；2）我们的深度残差网络可以从大大增加的深度中轻松获得准确性收益，生成的结果实质上比以前的网络更好。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Similar phenomena are also shown on the <span class="word_hot_rare">CIFAR</span>-10 set [20], suggesting that the optimization difficulties and the effects of our method are not just <span class="word_hot" title="akin [əˈkɪn]">akin</span> to a particular dataset.<span class="chs" title="CIFAR-10数据集上[20]也显示出类似的现象，这表明了优化的困难以及我们的方法的影响不仅仅是针对一个特定的数据集。"><span></div>
+    <div class="eng">We present successfully trained models on this dataset with over 100 layers, and explore models with over 1000 layers.<span class="chs" title="我们在这个数据集上展示了成功训练的超过100层的模型，并探索了超过1000层的模型。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">On the ImageNet classification dataset [35], we obtain excellent results by extremely deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets.<span class="chs" title="在ImageNet分类数据集[35]中，我们通过非常深的残差网络获得了很好的结果。"><span></div>
+    <div class="eng">Our 152-layer <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> net is the deepest network ever presented on ImageNet, while still having lower complexity than <span class="word_hot_rare">VGG</span> nets [40].<span class="chs" title="我们的152层残差网络是ImageNet上最深的网络，同时还具有比VGG网络[40]更低的复杂性。"><span></div>
+    <div class="eng">Our <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> has 3.57% top-5 error on the ImageNet test set, and won the 1st place in the <span class="word_hot_rare">ILSVRC</span> 2015 classification competition.<span class="chs" title="我们的模型集合在ImageNet测试集上有3.57% top-5的错误率，并在ILSVRC 2015分类比赛中获得了第一名。"><span></div>
+    <div class="eng">The extremely deep representations also have excellent generalization performance on other recognition tasks, and lead us to further win the 1st places on: ImageNet detection, ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>, COCO detection, and COCO <span class="word_hot" title="segmentation [ˌsegmenˈteɪʃn]">segmentation</span> in <span class="word_hot_rare">ILSVRC</span> & COCO 2015 competitions.<span class="chs" title="极深的表示在其它识别任务中也有极好的泛化性能，并带领我们在进一步赢得了第一名：包括ILSVRC & COCO 2015竞赛中的ImageNet检测，ImageNet定位，COCO检测和COCO分割。"><span></div>
+    <div class="eng">This strong evidence shows that the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning principle is <span class="word_hot" title="generic [dʒəˈnerɪk]">generic</span>, and we expect that it is <span class="word_hot" title="applicable [əˈplɪkəbl]">applicable</span> in other vision and non-vision problems.<span class="chs" title="坚实的证据表明残差学习准则是通用的，并且我们期望它适用于其它的视觉和非视觉问题。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">2. Related Work<span class="chs" title="2. 相关工作"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Residual Representations.<span class="chs" title="残差表示。"><span></div>
+    <div class="eng">In image recognition, <span class="word_hot" title="VLAD [vlæd]">VLAD</span> [18] is a representation that encodes by the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> vectors with respect to a dictionary, and Fisher Vector [30] can be formulated as a <span class="word_hot" title="probabilistic [ˌprɒbəbɪˈlɪstɪk]">probabilistic</span> version [18] of <span class="word_hot" title="VLAD [vlæd]">VLAD</span>.<span class="chs" title="在图像识别中，VLAD[18]是一种通过关于字典的残差向量进行编码的表示形式，Fisher矢量[30]可以表示为VLAD的概率版本[18]。"><span></div>
+    <div class="eng">Both of them are powerful shallow representations for image <span class="word_hot" title="retrieval [rɪˈtri:vl]">retrieval</span> and classification [4, 47].<span class="chs" title="它们都是图像检索和图像分类[4,47]中强大的浅层表示。"><span></div>
+    <div class="eng">For <span class="word_hot" title="vector [ˈvektə(r)]">vector</span> <span class="word_hot" title="quantization [ˌkwɒntɪ'zeɪʃən]">quantization</span>, encoding <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> vectors [17] is shown to be more effective than encoding original vectors.<span class="chs" title="对于矢量量化，编码残差矢量[17]被证明比编码原始矢量更有效。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In low-level vision and computer <span class="word_hot" title="graphics [ˈgræfɪks]">graphics</span>, for solving Partial Differential Equations (<span class="word_hot_rare">PDEs</span>), the widely used <span class="word_hot" title="Multigrid ['mʌltɪgrɪd]">Multigrid</span> method [3] reformulates the system as subproblems at multiple scales, where each <span class="word_hot" title="subproblem ['sʌbprɒbləm]">subproblem</span> is responsible for the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> solution between a coarser and a finer scale.<span class="chs" title="在低级视觉和计算机图形学中，为了求解偏微分方程（PDE），广泛使用的Multigrid方法[3]将系统重构为在多个尺度上的子问题，其中每个子问题负责较粗尺度和较细尺度的残差解。"><span></div>
+    <div class="eng">An alternative to <span class="word_hot" title="Multigrid ['mʌltɪgrɪd]">Multigrid</span> is hierarchical basis <span class="word_hot" title="preconditioning [pri:kən'dɪʃnɪŋ]">preconditioning</span> [44, 45], which relies on variables that represent <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> vectors between two scales.<span class="chs" title="Multigrid的替代方法是层次化基础预处理[44,45]，它依赖于表示两个尺度之间残差向量的变量。"><span></div>
+    <div class="eng">It has been shown [3, 44, 45] that these solvers converge much faster than standard solvers that are unaware of the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nature of the solutions.<span class="chs" title="已经被证明[3,44,45]这些求解器比不知道解的残差性质的标准求解器收敛得更快。"><span></div>
+    <div class="eng">These methods suggest that a good <span class="word_hot" title="reformulation [ˌri:ˌfɔ:mjʊ'leɪʃn]">reformulation</span> or <span class="word_hot" title="preconditioning [pri:kən'dɪʃnɪŋ]">preconditioning</span> can simplify the optimization.<span class="chs" title="这些方法表明，良好的重构或预处理可以简化优化。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Shortcut Connections.<span class="chs" title="快捷连接。"><span></div>
+    <div class="eng">Practices and theories that lead to shortcut connections [2, 33, 48] have been studied for a long time.<span class="chs" title="导致快捷连接[2,33,48]的实践和理论已经被研究了很长时间。"><span></div>
+    <div class="eng">An early practice of training multi-layer perceptrons (<span class="word_hot_rare">MLPs</span>) is to add a linear layer connected from the network input to the output [33, 48].<span class="chs" title="训练多层感知机（MLP）的早期实践是添加一个线性层来连接网络的输入和输出[33,48]。"><span></div>
+    <div class="eng">In [43, 24], a few intermediate layers are directly connected to <span class="word_hot" title="auxiliary [ɔ:gˈzɪliəri]">auxiliary</span> classifiers for addressing vanishing/exploding gradients.<span class="chs" title="在[43,24]中，一些中间层直接连接到辅助分类器，用于解决梯度消失/爆炸。"><span></div>
+    <div class="eng">The papers of [38, 37, 31, 46] propose methods for centering layer responses, gradients, and propagated errors, implemented by shortcut connections.<span class="chs" title="论文[38,37,31,46]提出了通过快捷连接实现层间响应，梯度和传播误差的方法。"><span></div>
+    <div class="eng">In [43], an “<span class="word_hot" title="inception [ɪnˈsepʃn]">inception</span>” layer is composed of a shortcut branch and a few deeper branches.<span class="chs" title="在[43]中，一个“inception”层由一个快捷分支和一些更深的分支组成。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Concurrent with our work, “highway networks” [41, 42] present shortcut connections with gating functions [15].<span class="chs" title="和我们同时进行的工作，“highway networks” [41, 42]提出了门功能[15]的快捷连接。"><span></div>
+    <div class="eng">These gates are <span class="word_hot" title="data-dependent ['deɪtədɪp'endənt]">data-dependent</span> and have parameters, in contrast to our identity shortcuts that are parameter-free.<span class="chs" title="这些门是数据相关且有参数的，与我们不具有参数的恒等快捷连接相反。"><span></div>
+    <div class="eng">When a gated shortcut is “closed” (approaching zero), the layers in highway networks represent <span class="word_hot_rare">non-residual</span> functions.<span class="chs" title="当门控快捷连接“关闭”（接近零）时，高速网络中的层表示非残差函数。"><span></div>
+    <div class="eng">On the contrary, our formulation always learns <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions; our identity shortcuts are never closed, and all information is always passed through, with additional <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions to be learned.<span class="chs" title="相反，我们的公式总是学习残差函数；我们的恒等快捷连接永远不会关闭，所有的信息总是通过，还有额外的残差函数要学习。"><span></div>
+    <div class="eng">In addition, highway networks have not demonstrated accuracy gains with extremely increased depth (e.g., over 100 layers).<span class="chs" title="此外，高速网络还没有证实极度增加的深度（例如，超过100个层）带来的准确性收益。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3. Deep Residual Learning<span class="chs" title="3. 深度残差学习"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.1. Residual Learning<span class="chs" title="3.1. 残差学习"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Let us consider H(x) as an underlying mapping to be fit by a few stacked layers (not necessarily the entire net), with x denoting the inputs to the first of these layers.<span class="chs" title="我们考虑H(x)作为几个堆叠层（不必是整个网络）要拟合的基础映射，x表示这些层中第一层的输入。"><span></div>
+    <div class="eng">If one hypothesizes that multiple <span class="word_hot" title="nonlinear ['nɒn'lɪnɪəl]">nonlinear</span> layers can <span class="word_hot_rare">asymptotically</span> approximate complicated functions, then it is equivalent to <span class="word_hot" title="hypothesize [haɪˈpɒθəsaɪz]">hypothesize</span> that they can <span class="word_hot_rare">asymptotically</span> approximate the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions, i.e., H(x) − x (assuming that the input and output are of the same dimensions).<span class="chs" title="假设多个非线性层可以渐近地近似复杂函数，它等价于假设它们可以渐近地近似残差函数，即H(x) − x(假设输入输出是相同维度)。"><span></div>
+    <div class="eng">So rather than expect stacked layers to approximate H(x), we explicitly let these layers approximate a <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> function F(x) := H(x) − x.<span class="chs" title="因此，我们明确让这些层近似参数函数 F(x) := H(x) − x，而不是期望堆叠层近似H(x)。"><span></div>
+    <div class="eng">The original function thus becomes F(x) + x.<span class="chs" title="因此原始函数变为F(x) + x。"><span></div>
+    <div class="eng">Although both forms should be able to <span class="word_hot_rare">asymptotically</span> approximate the desired functions (as hypothesized), the ease of learning might be different.<span class="chs" title="尽管两种形式应该都能渐近地近似要求的函数（如假设），但学习的难易程度可能是不同的。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">This <span class="word_hot" title="reformulation [ˌri:ˌfɔ:mjʊ'leɪʃn]">reformulation</span> is motivated by the <span class="word_hot" title="counterintuitive [kaʊntərɪn'tju:ɪtɪv]">counterintuitive</span> phenomena about the degradation problem (Fig. 1, left).<span class="chs" title="关于退化问题的反直觉现象激发了这种重构（图1左）。"><span></div>
+    <div class="eng">As we discussed in the introduction, if the added layers can be constructed as identity <span class="word_hot_rare">mappings</span>, a deeper model should have training error no greater than its shallower counterpart.<span class="chs" title="正如我们在引言中讨论的那样，如果添加的层可以被构建为恒等映射，更深模型的训练误差应该不大于它对应的更浅版本。"><span></div>
+    <div class="eng">The degradation problem suggests that the solvers might have difficulties in approximating identity <span class="word_hot_rare">mappings</span> by multiple <span class="word_hot" title="nonlinear ['nɒn'lɪnɪəl]">nonlinear</span> layers.<span class="chs" title="退化问题表明求解器通过多个非线性层来近似恒等映射可能有困难。"><span></div>
+    <div class="eng">With the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning <span class="word_hot" title="reformulation [ˌri:ˌfɔ:mjʊ'leɪʃn]">reformulation</span>, if identity <span class="word_hot_rare">mappings</span> are optimal, the solvers may simply drive the weights of the multiple <span class="word_hot" title="nonlinear ['nɒn'lɪnɪəl]">nonlinear</span> layers toward zero to approach identity <span class="word_hot_rare">mappings</span>.<span class="chs" title="通过残差学习的重构，如果恒等映射是最优的，求解器可能简单地将多个非线性连接的权重推向零来接近恒等映射。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In real cases, it is unlikely that identity <span class="word_hot_rare">mappings</span> are optimal, but our <span class="word_hot" title="reformulation [ˌri:ˌfɔ:mjʊ'leɪʃn]">reformulation</span> may help to <span class="word_hot" title="precondition [ˌpri:kənˈdɪʃn]">precondition</span> the problem.<span class="chs" title="在实际情况下，恒等映射不太可能是最优的，但是我们的重构可能有助于对问题进行预处理。"><span></div>
+    <div class="eng">If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the <span class="word_hot" title="solver [ˈsɒlvə(r)]">solver</span> to find the perturbations with reference to an identity mapping, than to learn the function as a new one.<span class="chs" title="如果最优函数比零映射更接近于恒等映射，则求解器应该更容易找到关于恒等映射的抖动，而不是将该函数作为新函数来学习。"><span></div>
+    <div class="eng">We show by experiments (Fig. 7) that the learned <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions in general have small responses, suggesting that identity <span class="word_hot_rare">mappings</span> provide reasonable <span class="word_hot" title="preconditioning [pri:kən'dɪʃnɪŋ]">preconditioning</span>.<span class="chs" title="我们通过实验（图7）显示学习的残差函数通常有更小的响应，表明恒等映射提供了合理的预处理。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig07.png" alt="Figure 7"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 7.<span class="chs" title="图7。"><span></div>
+    <div class="eng">Standard deviations (<span class="word_hot_rare">std</span>) of layer responses on <span class="word_hot_rare">CIFAR</span>-10.<span class="chs" title="层响应在CIFAR-10上的标准差（std）。"><span></div>
+    <div class="eng">The responses are the outputs of each 3×3 layer, after <span class="word_hot_rare">BN</span> and before <span class="word_hot" title="nonlinearity [nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span>.<span class="chs" title="这些响应是每个3×3层的输出，在BN之后非线性之前。"><span></div>
+    <div class="eng">Top: the layers are shown in their original order.<span class="chs" title="上面：以原始顺序显示层。"><span></div>
+    <div class="eng">Bottom: the responses are ranked in descending order.<span class="chs" title="下面：响应按降序排列。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.2. Identity Mapping by Shortcuts<span class="chs" title="3.2. 快捷恒等映射"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We adopt <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning to every few stacked layers.<span class="chs" title="我们每隔几个堆叠层采用残差学习。"><span></div>
+    <div class="eng">A building block is shown in Fig. 2.<span class="chs" title="构建块如图2所示。"><span></div>
+    <div class="eng">Formally, in this paper we consider a building block defined as:<span class="chs" title="在本文中我们考虑构建块正式定义为："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">$$y = F(x, {W_i}) + x \tag1$$<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Here x and y are the input and output vectors of the layers considered.<span class="chs" title="x和y是考虑的层的输入和输出向量。"><span></div>
+    <div class="eng">The function F(x, {W_i}) represents the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> mapping to be learned.<span class="chs" title="函数F(x, {W_i})表示要学习的残差映射。"><span></div>
+    <div class="eng">For the example in Fig. 2 that has two layers, F = W_2 \<span class="word_hot" title="sigma [ˈsɪgmə]">sigma</span>(W_1x) in which \<span class="word_hot" title="sigma [ˈsɪgmə]">sigma</span> denotes <span class="word_hot_rare">ReLU</span> [29] and the biases are omitted for simplifying notations.<span class="chs" title="图2中的例子有两层，F = W_2 \sigma(W_1x)中\sigma表示ReLU[29]，为了简化写法忽略偏置项。"><span></div>
+    <div class="eng">The operation F + x is performed by a shortcut connection and element-wise addition.<span class="chs" title="F + x操作通过快捷连接和各个元素相加来执行。"><span></div>
+    <div class="eng">We adopt the second <span class="word_hot" title="nonlinearity [nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> after the addition (i.e., \<span class="word_hot" title="sigma [ˈsɪgmə]">sigma</span>(y), see Fig. 2).<span class="chs" title="在相加之后我们采纳了第二种非线性（即\sigma(y)，看图2）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The shortcut connections in Eqn. (1) introduce neither extra parameter nor computation complexity.<span class="chs" title="方程(1)中的快捷连接既没有引入外部参数又没有增加计算复杂度。"><span></div>
+    <div class="eng">This is not only attractive in practice but also important in our comparisons between plain and <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> networks.<span class="chs" title="这不仅在实践中有吸引力，而且在简单网络和残差网络的比较中也很重要。"><span></div>
+    <div class="eng">We can fairly compare plain/<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> networks that simultaneously have the same number of parameters, depth, width, and <span class="word_hot" title="computational [ˌkɒmpjuˈteɪʃənl]">computational</span> cost (except for the negligible element-wise addition).<span class="chs" title="我们可以公平地比较同时具有相同数量的参数，相同深度，宽度和计算成本的简单/残差网络（除了不可忽略的元素加法之外）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The dimensions of x and F must be equal in Eqn.<span class="chs" title="方程(1)中x和F的维度必须是相等的。"><span></div>
+    <div class="eng">(1). If this is not the case (e.g., when changing the input/output channels), we can perform a linear projection W_s by the shortcut connections to match the dimensions:<span class="chs" title="如果不是这种情况（例如，当更改输入/输出通道时），我们可以通过快捷连接执行线性投影W_s来匹配维度："><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">$$ y = F(x, {W_i }) + W_sx.\tag2 $$<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We can also use a square matrix W_s in Eqn. (1).<span class="chs" title="我们也可以使用方程(1)中的方阵W_s。"><span></div>
+    <div class="eng">But we will show by experiments that the identity mapping is sufficient for addressing the degradation problem and is economical, and thus W_s is only used when matching dimensions.<span class="chs" title="但是我们将通过实验表明，恒等映射足以解决退化问题，并且是合算的，因此W_s仅在匹配维度时使用。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The form of the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> function F is flexible.<span class="chs" title="残差函数F的形式是可变的。"><span></div>
+    <div class="eng">Experiments in this paper involve a function F that has two or three layers (Fig. 5), while more layers are possible. But if F has only a single layer, Eqn.<span class="chs" title="本文中的实验包括有两层或三层（图5）的函数F，同时可能有更多的层。"><span></div>
+    <div class="eng">(1) is similar to a linear layer: y = W_1x + x, for which we have not observed advantages.<span class="chs" title="但如果F只有一层，方程(1)类似于线性层：y = W_1x + x，我们没有看到优势。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig05.png" alt="Figure 5"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 5.<span class="chs" title="图5。"><span></div>
+    <div class="eng">A deeper <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> function F for ImageNet.<span class="chs" title="ImageNet的深度残差函数F。"><span></div>
+    <div class="eng">Left: a building block (on 56×56 feature maps) as in Fig. 3 for <span class="word_hot_rare">ResNet</span>-34.<span class="chs" title="左：ResNet-34的构建块（在56×56的特征图上），如图3。"><span></div>
+    <div class="eng">Right: a “bottleneck” building block for <span class="word_hot_rare">ResNet</span>-50/101/152.<span class="chs" title="右：ResNet-50/101/152的“bottleneck”构建块。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We also note that although the above notations are about fully-connected layers for simplicity, they are <span class="word_hot" title="applicable [əˈplɪkəbl]">applicable</span> to convolutional layers.<span class="chs" title="我们还注意到，为了简单起见，尽管上述符号是关于全连接层的，但它们同样适用于卷积层。"><span></div>
+    <div class="eng">The function F(x,{W_i}) can represent multiple convolutional layers.<span class="chs" title="函数F(x，{W_i})可以表示多个卷积层。"><span></div>
+    <div class="eng">The element-wise addition is performed on two feature maps, channel by channel.<span class="chs" title="元素加法在两个特征图上逐通道进行。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.3. Network Architectures<span class="chs" title="3.3. 网络架构"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We have tested various plain/<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets, and have observed consistent phenomena.<span class="chs" title="我们测试了各种简单/残差网络，并观察到了一致的现象。"><span></div>
+    <div class="eng">To provide instances for discussion, we describe two models for ImageNet as follows.<span class="chs" title="为了提供讨论的实例，我们描述了ImageNet的两个模型如下。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Plain Network.<span class="chs" title="简单网络。"><span></div>
+    <div class="eng">Our plain baselines (Fig. 3, middle) are mainly inspired by the philosophy of <span class="word_hot_rare">VGG</span> nets 40.<span class="chs" title=" 我们简单网络的基准（图3，中间）主要受到VGG网络[40]（图3，左图）的哲学启发。"><span></div>
+    <div class="eng">The convolutional layers mostly have 3×3 filters and follow two simple design rules: (i) for the same output feature map size, the layers have the same number of filters; and (<span class="word_hot" title="ii [ɪ]">ii</span>) if the feature map size is halved, the number of filters is doubled so as to preserve the time complexity per layer.<span class="chs" title="卷积层主要有3×3的滤波器，并遵循两个简单的设计规则：（i）对于相同的输出特征图尺寸，层具有相同数量的滤波器；（ii）如果特征图尺寸减半，则滤波器数量加倍，以便保持每层的时间复杂度。"><span></div>
+    <div class="eng">We perform downsampling directly by convolutional layers that have a stride of 2.<span class="chs" title="我们通过步长为2的卷积层直接执行下采样。"><span></div>
+    <div class="eng">The network ends with a global average pooling layer and a 1000-way fully-connected layer with softmax.<span class="chs" title="网络以全局平均池化层和具有softmax的1000维全连接层结束。"><span></div>
+    <div class="eng">The total number of weighted layers is 34 in Fig. 3 (middle).<span class="chs" title="图3（中间）的加权层总数为34。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig03.png" alt="Figure 3"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 3.<span class="chs" title="图3。"><span></div>
+    <div class="eng">Example network architectures for ImageNet.<span class="chs" title="ImageNet的网络架构例子。"><span></div>
+    <div class="eng">Left: the <span class="word_hot_rare">VGG</span>-19 model [40] (19.6 billion FLOPs) as a reference.<span class="chs" title="左：作为参考的VGG-19模型40。"><span></div>
+    <div class="eng">Middle: a plain network with 34 parameter layers (3.6 billion FLOPs).<span class="chs" title="中：具有34个参数层的简单网络（36亿FLOPs）。"><span></div>
+    <div class="eng">Right: a <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> network with 34 parameter layers (3.6 billion FLOPs).<span class="chs" title="右：具有34个参数层的残差网络（36亿FLOPs）。"><span></div>
+    <div class="eng">The dotted shortcuts increase dimensions.<span class="chs" title="带点的快捷连接增加了维度。"><span></div>
+    <div class="eng">Table 1 shows more details and other variants.<span class="chs" title="表1显示了更多细节和其它变种。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 1.<span class="chs" title="表1。"><span></div>
+    <div class="eng">Architectures for ImageNet.<span class="chs" title="ImageNet架构。"><span></div>
+    <div class="eng">Building blocks are shown in brackets (see also Fig. 5), with the numbers of blocks stacked.<span class="chs" title="构建块显示在括号中（也可看图5），以及构建块的堆叠数量。"><span></div>
+    <div class="eng">Down-sampling is performed by conv3_1, conv4_1, and conv5_1 with a stride of 2.<span class="chs" title="下采样通过步长为2的conv3_1, conv4_1和conv5_1执行。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab01.png" alt="Table 1"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">It is worth noticing that our model has fewer filters and lower complexity than <span class="word_hot_rare">VGG</span> nets 40.<span class="chs" title="值得注意的是我们的模型与VGG网络（图3左）相比，有更少的滤波器和更低的复杂度。"><span></div>
+    <div class="eng">Our 34-layer baseline has 3.6 billion FLOPs (<span class="word_hot_rare">multiply-adds</span>), which is only 18% of <span class="word_hot_rare">VGG</span>-19 (19.6 billion FLOPs).<span class="chs" title="我们的34层基准有36亿FLOP(乘加)，仅是VGG-19（196亿FLOP）的18%。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Residual Network.<span class="chs" title="残差网络。"><span></div>
+    <div class="eng">Based on the above plain network, we insert shortcut connections (Fig. 3, right) which turn the network into its counterpart <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> version.<span class="chs" title=" 基于上述的简单网络，我们插入快捷连接（图3，右），将网络转换为其对应的残差版本。"><span></div>
+    <div class="eng">The identity shortcuts (Eqn. (1)) can be directly used when the input and output are of the same dimensions (solid line shortcuts in Fig. 3).<span class="chs" title="当输入和输出具有相同的维度时（图3中的实线快捷连接）时，可以直接使用恒等快捷连接（方程（1））。"><span></div>
+    <div class="eng">When the dimensions increase (dotted line shortcuts in Fig. 3), we consider two options: (A) The shortcut still performs identity mapping, with extra zero entries padded for increasing dimensions.<span class="chs" title="当维度增加（图3中的虚线快捷连接）时，我们考虑两个选项：（A）快捷连接仍然执行恒等映射，额外填充零输入以增加维度。"><span></div>
+    <div class="eng">This option introduces no extra parameter; (B) The projection shortcut in Eqn. (2) is used to match dimensions (done by 1×1 convolutions).<span class="chs" title="此选项不会引入额外的参数；（B）方程（2）中的投影快捷连接用于匹配维度（由1×1卷积完成）。"><span></div>
+    <div class="eng">For both options, when the shortcuts go across feature maps of two sizes, they are performed with a stride of 2.<span class="chs" title="对于这两个选项，当快捷连接跨越两种尺寸的特征图时，它们执行时步长为2。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">3.4. Implementation<span class="chs" title="3.4. 实现"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Our implementation for ImageNet follows the practice in [21, 40].<span class="chs" title="ImageNet中我们的实现遵循[21，40]的实践。"><span></div>
+    <div class="eng">The image is resized with its shorter side randomly sampled in [256, 480] for scale <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span> [40].<span class="chs" title="调整图像大小，其较短的边在[256,480]之间进行随机采样，用于尺度增强[40]。"><span></div>
+    <div class="eng">A 224×224 crop is randomly sampled from an image or its horizontal <span class="word_hot" title="flip [flɪp]">flip</span>, with the per-pixel mean subtracted [21].<span class="chs" title="224×224裁剪是从图像或其水平翻转中随机采样，并逐像素减去均值[21]。"><span></div>
+    <div class="eng">The standard color <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span> in [21] is used.<span class="chs" title="使用了[21]中的标准颜色增强。"><span></div>
+    <div class="eng">We adopt batch normalization (<span class="word_hot_rare">BN</span>) [16] right after each convolution and before <span class="word_hot" title="activation [ˌæktɪ'veɪʃn]">activation</span>, following [16].<span class="chs" title="在每个卷积之后和激活之前，我们采用批量归一化（BN）[16]。"><span></div>
+    <div class="eng">We <span class="word_hot" title="initialize [ɪˈnɪʃəlaɪz]">initialize</span> the weights as in [12] and train all plain/<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets from scratch.<span class="chs" title="我们按照[12]的方法初始化权重，从零开始训练所有的简单/残差网络。"><span></div>
+    <div class="eng">We use <span class="word_hot" title="SGD ['esdʒ'i:d'i:]">SGD</span> with a mini-batch size of 256.<span class="chs" title="我们使用批大小为256的SGD方法。"><span></div>
+    <div class="eng">The learning rate starts from 0.1 and is divided by 10 when the error plateaus, and the models are trained for up to 60 × 10^4 iterations.<span class="chs" title="学习速度从0.1开始，当误差稳定时学习率除以10，并且模型训练高达60 × 10^4次迭代。"><span></div>
+    <div class="eng">We use a weight decay of 0.0001 and a <span class="word_hot" title="momentum [məˈmentəm]">momentum</span> of 0.9.<span class="chs" title="我们使用的权重衰减为0.0001，动量为0.9。"><span></div>
+    <div class="eng">We do not use dropout [13], following the practice in [16].<span class="chs" title="根据[16]的实践，我们不使用丢弃[13]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In testing, for comparison studies we adopt the standard 10-crop testing [21].<span class="chs" title="在测试阶段，为了比较学习我们采用标准的10-crop测试[21]。"><span></div>
+    <div class="eng">For best results, we adopt the fully-convolutional form as in [40, 12], and average the scores at multiple scales (images are resized such that the shorter side is in {224, 256, 384, 480, 640}).<span class="chs" title="对于最好的结果，我们采用如[40, 12]中的全卷积形式，并在多尺度上对分数进行平均（图像归一化，短边位于{224, 256, 384, 480, 640}中）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">4. Experiments<span class="chs" title="4. 实验"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">4.1. ImageNet Classification<span class="chs" title="4.1. ImageNet分类"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We evaluate our method on the ImageNet 2012 classification dataset [35] that consists of 1000 classes.<span class="chs" title="我们在ImageNet 2012分类数据集[35]对我们的方法进行了评估，该数据集由1000个类别组成。"><span></div>
+    <div class="eng">The models are trained on the 1.28 million training images, and evaluated on the 50k validation images.<span class="chs" title="这些模型在128万张训练图像上进行训练，并在5万张验证图像上进行评估。"><span></div>
+    <div class="eng">We also obtain a final result on the 100k test images, reported by the test server.<span class="chs" title="我们也获得了测试服务器报告的在10万张测试图像上的最终结果。"><span></div>
+    <div class="eng">We evaluate both top-1 and top-5 error rates.<span class="chs" title="我们评估了top-1和top-5错误率。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Plain Networks.<span class="chs" title="简单网络。"><span></div>
+    <div class="eng">We first evaluate 18-layer and 34-layer plain nets.<span class="chs" title="我们首先评估18层和34层的简单网络。"><span></div>
+    <div class="eng">The 34-layer plain net is in Fig. 3 (middle).<span class="chs" title="34层简单网络在图3（中间）。"><span></div>
+    <div class="eng">The 18-layer plain net is of a similar form.<span class="chs" title="18层简单网络是一种类似的形式。"><span></div>
+    <div class="eng">See Table 1 for detailed architectures.<span class="chs" title="有关详细的体系结构，请参见表1。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The results in Table 2 show that the deeper 34-layer plain net has higher validation error than the shallower 18-layer plain net.<span class="chs" title="表2中的结果表明，较深的34层简单网络比较浅的18层简单网络有更高的验证误差。"><span></div>
+    <div class="eng">To reveal the reasons, in Fig. 4 (left) we compare their training/validation errors during the training procedure.<span class="chs" title="为了揭示原因，在图4（左图）中，我们比较训练过程中的训练/验证误差。"><span></div>
+    <div class="eng">We have observed the degradation problem —— the 34-layer plain net has higher training error throughout the whole training procedure, even though the solution space of the 18-layer plain network is a <span class="word_hot" title="subspace ['sʌbspeɪs]">subspace</span> of that of the 34-layer one.<span class="chs" title="我们观察到退化问题——虽然18层简单网络的解空间是34层简单网络解空间的子空间，但34层简单网络在整个训练过程中具有较高的训练误差。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 2.<span class="chs" title="表2。"><span></div>
+    <div class="eng">Top-1 error (%, 10-crop testing) on ImageNet validation.<span class="chs" title="ImageNet验证集上的Top-1错误率(%，10个裁剪图像测试)。"><span></div>
+    <div class="eng">Here the <span class="word_hot_rare">ResNets</span> have no extra parameter compared to their plain counterparts.<span class="chs" title="相比于对应的简单网络，ResNet没有额外的参数。"><span></div>
+    <div class="eng">Fig. 4 shows the training procedures.<span class="chs" title="图4显示了训练过程。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab02.png" alt="Table 2"/></div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig04.png" alt="Figure 4"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 4.<span class="chs" title="图4。"><span></div>
+    <div class="eng">Training on ImageNet.<span class="chs" title="在ImageNet上训练。"><span></div>
+    <div class="eng">Thin curves denote training error, and <span class="word_hot" title="bold [bəʊld]">bold</span> curves denote validation error of the center crops.<span class="chs" title="细曲线表示训练误差，粗曲线表示中心裁剪图像的验证误差。"><span></div>
+    <div class="eng">Left: plain networks of 18 and 34 layers.<span class="chs" title="左：18层和34层的简单网络。"><span></div>
+    <div class="eng">Right: <span class="word_hot_rare">ResNets</span> of 18 and 34 layers.<span class="chs" title="右：18层和34层的ResNet。"><span></div>
+    <div class="eng">In this plot, the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> networks have no extra parameter compared to their plain counterparts.<span class="chs" title="在本图中，残差网络与对应的简单网络相比没有额外的参数。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We argue that this optimization difficulty is unlikely to be caused by vanishing gradients.<span class="chs" title="我们认为这种优化难度不可能是由于梯度消失引起的。"><span></div>
+    <div class="eng">These plain networks are trained with <span class="word_hot_rare">BN</span> [16], which ensures forward propagated signals to have non-zero variances.<span class="chs" title="这些简单网络使用BN[16]训练，这保证了前向传播信号有非零方差。"><span></div>
+    <div class="eng">We also verify that the backward propagated gradients exhibit healthy norms with <span class="word_hot_rare">BN</span>.<span class="chs" title="我们还验证了反向传播的梯度，结果显示其符合BN的正常标准。"><span></div>
+    <div class="eng">So neither forward nor backward signals vanish.<span class="chs" title="因此既不是前向信号消失也不是反向信号消失。"><span></div>
+    <div class="eng">In fact, the 34-layer plain net is still able to achieve competitive accuracy (Table 3), suggesting that the <span class="word_hot" title="solver [ˈsɒlvə(r)]">solver</span> works to some extent.<span class="chs" title="实际上，34层简单网络仍能取得有竞争力的准确率（表3），这表明在某种程度上来说求解器仍工作。"><span></div>
+    <div class="eng">We <span class="word_hot" title="conjecture [kənˈdʒektʃə(r)]">conjecture</span> that the deep plain nets may have <span class="word_hot" title="exponentially [ˌekspə'nenʃəlɪ]">exponentially</span> low <span class="word_hot" title="convergence [kən'vɜ:dʒəns]">convergence</span> rates, which impact the reducing of the training error.<span class="chs" title="我们推测深度简单网络可能有指数级低收敛特性，这影响了训练误差的降低。"><span></div>
+    <div class="eng">The reason for such optimization difficulties will be studied in the future.<span class="chs" title="这种优化困难的原因将来会研究。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 3.<span class="chs" title="表3。"><span></div>
+    <div class="eng">Error rates (%, 10-crop testing) on ImageNet validation.<span class="chs" title="ImageNet验证集错误率（%，10个裁剪图像测试）。"><span></div>
+    <div class="eng"><span class="word_hot_rare">VGG</span>-16 is based on our test.<span class="chs" title="VGG16是基于我们的测试结果的。"><span></div>
+    <div class="eng"><span class="word_hot_rare">ResNet</span>-50/101/152 are of option B that only uses projections for increasing dimensions.<span class="chs" title="ResNet-50/101/152的选择B仅使用投影增加维度。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab03.png" alt="Table 3"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Residual Networks.<span class="chs" title="残差网络。"><span></div>
+    <div class="eng">Next we evaluate 18-layer and 34-layer <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets (<span class="word_hot_rare">ResNets</span>).<span class="chs" title="接下来我们评估18层和34层残差网络（ResNets）。"><span></div>
+    <div class="eng">The baseline architectures are the same as the above plain nets, expect that a shortcut connection is added to each pair of 3×3 filters as in Fig. 3 (right).<span class="chs" title="基准架构与上述的简单网络相同，如图3（右）所示，预计每对3×3滤波器都会添加快捷连接。"><span></div>
+    <div class="eng">In the first comparison (Table 2 and Fig. 4 right), we use identity mapping for all shortcuts and zero-padding for increasing dimensions (option A).<span class="chs" title="在第一次比较（表2和图4右侧）中，我们对所有快捷连接都使用恒等映射和零填充以增加维度（选项A）。"><span></div>
+    <div class="eng">So they have no extra parameter compared to the plain counterparts.<span class="chs" title="所以与对应的简单网络相比，它们没有额外的参数。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We have three major observations from Table 2 and Fig. 4.<span class="chs" title="我们从表2和图4中可以看到三个主要的观察结果。"><span></div>
+    <div class="eng">First, the situation is reversed with <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning —— the 34-layer <span class="word_hot_rare">ResNet</span> is better than the 18-layer <span class="word_hot_rare">ResNet</span> (by 2.8%).<span class="chs" title="首先，残留学习的情况变了——34层ResNet比18层ResNet更好（2.8％）。"><span></div>
+    <div class="eng">More importantly, the 34-layer <span class="word_hot_rare">ResNet</span> exhibits considerably lower training error and is <span class="word_hot" title="generalizable ['dʒenərəlaɪzəbl]">generalizable</span> to the validation data.<span class="chs" title="更重要的是，34层ResNet显示出较低的训练误差，并且可以泛化到验证数据。"><span></div>
+    <div class="eng">This indicates that the degradation problem is well addressed in this setting and we manage to obtain accuracy gains from increased depth.<span class="chs" title="这表明在这种情况下，退化问题得到了很好的解决，我们从增加的深度中设法获得了准确性收益。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Second, compared to its plain counterpart, the 34-layer <span class="word_hot_rare">ResNet</span> reduces the top-1 error by 3.5% (Table 2), resulting from the successfully reduced training error (Fig. 4 right <span class="word_hot_rare">vs</span>. left).<span class="chs" title="第二，与对应的简单网络相比，由于成功的减少了训练误差，34层ResNet降低了3.5%的top-1错误率。"><span></div>
+    <div class="eng">This comparison verifies the effectiveness of <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning on extremely deep systems.<span class="chs" title="这种比较证实了在极深系统中残差学习的有效性。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Last, we also note that the 18-layer plain/<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets are <span class="word_hot" title="comparably ['kɒmpərəblɪ]">comparably</span> accurate (Table 2), but the 18-layer <span class="word_hot_rare">ResNet</span> converges faster (Fig. 4 right <span class="word_hot_rare">vs</span>. left).<span class="chs" title="最后，我们还注意到18层的简单/残差网络同样地准确（表2），但18层ResNet收敛更快（图4右和左）。"><span></div>
+    <div class="eng">When the net is “not <span class="word_hot" title="overly [ˈəʊvəli]">overly</span> deep” (18 layers here), the current <span class="word_hot" title="SGD ['esdʒ'i:d'i:]">SGD</span> <span class="word_hot" title="solver [ˈsɒlvə(r)]">solver</span> is still able to find good solutions to the plain net.<span class="chs" title="当网络“不过度深”时（18层），目前的SGD求解器仍能在简单网络中找到好的解。"><span></div>
+    <div class="eng">In this case, the <span class="word_hot_rare">ResNet</span> eases the optimization by providing faster <span class="word_hot" title="convergence [kən'vɜ:dʒəns]">convergence</span> at the early stage.<span class="chs" title="在这种情况下，ResNet通过在早期提供更快的收敛简便了优化。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Identity <span class="word_hot_rare">vs</span>. Projection Shortcuts.<span class="chs" title="恒等和投影快捷连接我们已经表明没有参数，恒等快捷连接有助于训练。"><span></div>
+    <div class="eng">We have shown that parameter-free, identity shortcuts help with training.<span class="chs" title="接下来我们调查投影快捷连接（方程2）。"><span></div>
+    <div class="eng">Next we investigate projection shortcuts (Eqn. (2)). In Table 3 we compare three options: (A) zero-padding shortcuts are used for increasing dimensions, and all shortcuts are parameter-free (the same as Table 2 and Fig. 4 right); (B) projection shortcuts are used for increasing dimensions, and other shortcuts are identity; and (C) all shortcuts are projections.<span class="chs" title="在表3中我们比较了三个选项：(A) 零填充快捷连接用来增加维度，所有的快捷连接是没有参数的（与表2和图4右相同）；(B)投影快捷连接用来增加维度，其它的快捷连接是恒等的；（C）所有的快捷连接都是投影。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 3 shows that all three options are considerably better than the plain counterpart.<span class="chs" title="表3显示，所有三个选项都比对应的简单网络好很多。"><span></div>
+    <div class="eng">B is slightly better than A.<span class="chs" title="选项B比A略好。"><span></div>
+    <div class="eng">We argue that this is because the zero-padded dimensions in A indeed have no <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning.<span class="chs" title="我们认为这是因为A中的零填充确实没有残差学习。"><span></div>
+    <div class="eng">C is <span class="word_hot" title="marginally [ˈmɑ:dʒɪnəli]">marginally</span> better than B, and we attribute this to the extra parameters introduced by many (thirteen) projection shortcuts.<span class="chs" title="选项C比B稍好，我们把这归因于许多（十三）投影快捷连接引入了额外参数。"><span></div>
+    <div class="eng">But the small differences among A/B/C indicate that projection shortcuts are not essential for addressing the degradation problem.<span class="chs" title="但A/B/C之间的细微差异表明，投影快捷连接对于解决退化问题不是至关重要的。"><span></div>
+    <div class="eng">So we do not use option C in the rest of this paper, to reduce memory/time complexity and model sizes.<span class="chs" title="因为我们在本文的剩余部分不再使用选项C，以减少内存/时间复杂性和模型大小。"><span></div>
+    <div class="eng">Identity shortcuts are particularly important for not increasing the complexity of the bottleneck architectures that are introduced below.<span class="chs" title="恒等快捷连接对于不增加下面介绍的瓶颈结构的复杂性尤为重要。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Deeper Bottleneck Architectures.<span class="chs" title="更深的瓶颈结构。"><span></div>
+    <div class="eng">Next we describe our deeper nets for ImageNet.<span class="chs" title="接下来我们描述ImageNet中我们使用的更深的网络网络。"><span></div>
+    <div class="eng">Because of concerns on the training time that we can afford, we modify the building block as a bottleneck design.<span class="chs" title="由于关注我们能承受的训练时间，我们将构建块修改为瓶颈设计。"><span></div>
+    <div class="eng">For each <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> function F , we use a stack of 3 layers instead of 2 (Fig. 5).<span class="chs" title="对于每个残差函数F，我们使用3层堆叠而不是2层（图5）。"><span></div>
+    <div class="eng">The three layers are 1×1, 3×3, and 1×1 convolutions, where the 1×1 layers are responsible for reducing and then increasing (restoring) dimensions, leaving the 3×3 layer a bottleneck with smaller input/output dimensions.<span class="chs" title="三层是1×1，3×3和1×1卷积，其中1×1层负责减小然后增加（恢复）维度，使3×3层成为具有较小输入/输出维度的瓶颈。"><span></div>
+    <div class="eng">Fig. 5 shows an example, where both designs have similar time complexity.<span class="chs" title="图5展示了一个示例，两个设计具有相似的时间复杂度。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The parameter-free identity shortcuts are particularly important for the bottleneck architectures.<span class="chs" title="无参数恒等快捷连接对于瓶颈架构尤为重要。"><span></div>
+    <div class="eng">If the identity shortcut in Fig. 5 (right) is replaced with projection, one can show that the time complexity and model size are doubled, as the shortcut is connected to the two high-dimensional ends.<span class="chs" title="如果图5（右）中的恒等快捷连接被投影替换，则可以显示出时间复杂度和模型大小加倍，因为快捷连接是连接到两个高维端。"><span></div>
+    <div class="eng">So identity shortcuts lead to more efficient models for the bottleneck designs.<span class="chs" title="因此，恒等快捷连接可以为瓶颈设计得到更有效的模型。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">50-layer <span class="word_hot_rare">ResNet</span>: We replace each 2-layer block in the 34-layer net with this 3-layer bottleneck block, resulting in a 50-layer <span class="word_hot_rare">ResNet</span> (Table 1).<span class="chs" title="50层ResNet：我们用3层瓶颈块替换34层网络中的每一个2层块，得到了一个50层ResNet（表1）。"><span></div>
+    <div class="eng">We use option B for increasing dimensions.<span class="chs" title="我们使用选项B来增加维度。"><span></div>
+    <div class="eng">This model has 3.8 billion FLOPs.<span class="chs" title="该模型有38亿FLOP。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">101-layer and 152-layer <span class="word_hot_rare">ResNet</span>: We construct 101-layer and 152-layer <span class="word_hot_rare">ResNets</span> by using more 3-layer blocks (Table 1).<span class="chs" title="101层和152层ResNet：我们通过使用更多的3层瓶颈块来构建101层和152层ResNets（表1）。"><span></div>
+    <div class="eng"><span class="word_hot" title="remarkably [rɪ'mɑ:kəblɪ]">Remarkably</span>, although the depth is significantly increased, the 152-layer <span class="word_hot_rare">ResNet</span> (11.3 billion FLOPs) still has lower complexity than <span class="word_hot_rare">VGG</span>-16/19 nets (15.3/19.6 billion FLOPs).<span class="chs" title="值得注意的是，尽管深度显著增加，但152层ResNet（113亿FLOP）仍然比VGG-16/19网络（153/196亿FLOP）具有更低的复杂度。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The 50/101/152-layer <span class="word_hot_rare">ResNets</span> are more accurate than the 34-layer ones by considerable margins (Table 3 and 4).<span class="chs" title="50/101/152层ResNet比34层ResNet的准确性要高得多（表3和4）。"><span></div>
+    <div class="eng">We do not observe the degradation problem and thus enjoy significant accuracy gains from considerably increased depth.<span class="chs" title="我们没有观察到退化问题，因此可以从显著增加的深度中获得显著的准确性收益。"><span></div>
+    <div class="eng">The benefits of depth are witnessed for all evaluation metrics (Table 3 and 4).<span class="chs" title="所有评估指标都能证明深度的收益（表3和表4）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Comparisons with State-of-the-art Methods.<span class="chs" title="与最先进的方法比较。"><span></div>
+    <div class="eng">In Table 4 we compare with the previous best single-model results.<span class="chs" title="在表4中，我们与以前最好的单一模型结果进行比较。"><span></div>
+    <div class="eng">Our baseline 34-layer <span class="word_hot_rare">ResNets</span> have achieved very competitive accuracy.<span class="chs" title="我们基准的34层ResNet已经取得了非常有竞争力的准确性。"><span></div>
+    <div class="eng">Our 152-layer <span class="word_hot_rare">ResNet</span> has a single-model top-5 validation error of 4.49%.<span class="chs" title="我们的152层ResNet具有单模型4.49％的top-5错误率。"><span></div>
+    <div class="eng">This single-model result outperforms all previous <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> results (Table 5).<span class="chs" title="这种单一模型的结果胜过以前的所有综合结果（表5）。"><span></div>
+    <div class="eng">We combine six models of different depth to form an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> (only with two 152-layer ones at the time of submitting).<span class="chs" title="我们结合了六种不同深度的模型，形成一个集合（在提交时仅有两个152层）。"><span></div>
+    <div class="eng">This leads to 3.57% top-5 error on the test set (Table 5).<span class="chs" title="这在测试集上得到了3.5％的top-5错误率（表5）。"><span></div>
+    <div class="eng">This entry won the 1st place in <span class="word_hot_rare">ILSVRC</span> 2015.<span class="chs" title="这次提交在2015年ILSVRC中荣获了第一名。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 4.<span class="chs" title="表4。"><span></div>
+    <div class="eng">Error rates (%) of single-model results on the ImageNet validation set (except reported on the test set).<span class="chs" title="单一模型在ImageNet验证集上的错误率（%）(除了†是测试集上报告的错误率)。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab04.png" alt="Table 4"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 5.<span class="chs" title="表5。"><span></div>
+    <div class="eng">Error rates (%) of ensembles.<span class="chs" title="模型综合的错误率(%)。"><span></div>
+    <div class="eng">The top-5 error is on the test set of ImageNet and reported by the test server.<span class="chs" title="top-5错误率是ImageNet测试集上的并由测试服务器报告的。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab05.png" alt="Table 5"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">4.2. <span class="word_hot_rare">CIFAR</span>-10 and Analysis<span class="chs" title="4.2. CIFAR-10和分析"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We conducted more studies on the <span class="word_hot_rare">CIFAR</span>-10 dataset [20], which consists of 50k training images and 10k testing images in 10 classes.<span class="chs" title="我们对CIFAR-10数据集[20]进行了更多的研究，其中包括10个类别中的5万张训练图像和1万张测试图像。"><span></div>
+    <div class="eng">We present experiments trained on the training set and evaluated on the test set.<span class="chs" title="我们介绍了在训练集上进行训练和在测试集上进行评估的实验。"><span></div>
+    <div class="eng">Our focus is on the behaviors of extremely deep networks, but not on pushing the state-of-the-art results, so we <span class="word_hot" title="intentionally [ɪn'tenʃənəlɪ]">intentionally</span> use simple architectures as follows.<span class="chs" title="我们的焦点在于极深网络的行为，但不是推动最先进的结果，所以我们有意使用如下的简单架构。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The plain/<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> architectures follow the form in Fig. 3 (middle/right).<span class="chs" title="简单/残差架构遵循图3（中/右）的形式。"><span></div>
+    <div class="eng">The network inputs are 32×32 images, with the per-pixel mean subtracted.<span class="chs" title="网络输入是32×32的图像，每个像素减去均值。"><span></div>
+    <div class="eng">The first layer is 3×3 convolutions.<span class="chs" title="第一层是3×3卷积。"><span></div>
+    <div class="eng">Then we use a stack of 6n layers with 3×3 convolutions on the feature maps of sizes {32, 16, 8} respectively, with 2n layers for each feature map size.<span class="chs" title="然后我们在大小为{32,16,8}的特征图上分别使用了带有3×3卷积的6n个堆叠层，每个特征图大小使用2n层。"><span></div>
+    <div class="eng">The numbers of filters are {16, 32, 64} respectively.<span class="chs" title="滤波器数量分别为{16,32,64}。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">subsampling</span> is performed by convolutions with a stride of 2.<span class="chs" title="下采样由步长为2的卷积进行。"><span></div>
+    <div class="eng">The network ends with a global average pooling, a 10-way fully-connected layer, and softmax.<span class="chs" title="网络以全局平均池化，一个10维全连接层和softmax作为结束。"><span></div>
+    <div class="eng">There are totally 6n+2 stacked weighted layers.<span class="chs" title="共有6n+2个堆叠的加权层。"><span></div>
+    <div class="eng">The following table summarizes the architecture:<span class="chs" title="下表总结了这个架构："><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab0x.png" alt="Table x"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">When shortcut connections are used, they are connected to the pairs of 3×3 layers (totally 3n shortcuts).<span class="chs" title="当使用快捷连接时，它们连接到成对的3×3卷积层上（共3n个快捷连接）。"><span></div>
+    <div class="eng">On this dataset we use identity shortcuts in all cases (i.e., option A), so our <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> models have exactly the same depth, width, and number of parameters as the plain counterparts.<span class="chs" title="在这个数据集上，我们在所有案例中都使用恒等快捷连接（即选项A），因此我们的残差模型与对应的简单模型具有完全相同的深度，宽度和参数数量。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We use a weight decay of 0.0001 and <span class="word_hot" title="momentum [məˈmentəm]">momentum</span> of 0.9, and adopt the weight <span class="word_hot" title="initialization [ɪˌnɪʃəlaɪ'zeɪʃn]">initialization</span> in [12] and <span class="word_hot_rare">BN</span> [16] but with no dropout.<span class="chs" title="我们使用的权重衰减为0.0001和动量为0.9，并采用[12]和BN[16]中的权重初始化，但没有使用丢弃。"><span></div>
+    <div class="eng">These models are trained with a mini-batch size of 128 on two GPUs.<span class="chs" title="这些模型在两个GPU上进行训练，批处理大小为128。"><span></div>
+    <div class="eng">We start with a learning rate of 0.1, divide it by 10 at 32k and 48k iterations, and terminate training at 64k iterations, which is determined on a 45k/5k train/<span class="word_hot" title="val [væl]">val</span> split.<span class="chs" title="我们开始使用的学习率为0.1，在32k次和48k次迭代后学习率除以10，并在64k次迭代后终止训练，这是由45k/5k的训练/验证集分割决定的。"><span></div>
+    <div class="eng">We follow the simple data <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span> in [24] for training: 4 pixels are padded on each side, and a 32×32 crop is randomly sampled from the padded image or its horizontal <span class="word_hot" title="flip [flɪp]">flip</span>.<span class="chs" title="我们按照[24]中的简单数据增强进行训练：每边填充4个像素，并从填充图像或其水平翻转图像中随机采样32×32的裁剪图像。"><span></div>
+    <div class="eng">For testing, we only evaluate the single view of the original 32×32 image.<span class="chs" title="对于测试，我们只评估原始32×32图像的单一视图。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We compare $n = {3, 5, 7, 9}$, leading to 20, 32, 44, and 56-layer networks.<span class="chs" title="我们比较了$n = {3, 5, 7, 9}$，得到了20层，32层，44层和56层的网络。"><span></div>
+    <div class="eng">Fig. 6 (left) shows the behaviors of the plain nets.<span class="chs" title="图6（左）显示了简单网络的行为。"><span></div>
+    <div class="eng">The deep plain nets suffer from increased depth, and exhibit higher training error when going deeper.<span class="chs" title="深度简单网络经历了深度增加，随着深度增加表现出了更高的训练误差。"><span></div>
+    <div class="eng">This phenomenon is similar to that on ImageNet (Fig. 4, left) and on <span class="word_hot_rare">MNIST</span> (see [41]), suggesting that such an optimization difficulty is a fundamental problem.<span class="chs" title="这种现象类似于ImageNet中（图4，左）和MNIST中（请看[41]）的现象，表明这种优化困难是一个基本的问题。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/fig06.png" alt="Figure 6"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Figure 6.<span class="chs" title="图6。"><span></div>
+    <div class="eng">Training on <span class="word_hot_rare">CIFAR</span>-10.<span class="chs" title="在CIFAR-10上训练。"><span></div>
+    <div class="eng">Dashed lines denote training error, and <span class="word_hot" title="bold [bəʊld]">bold</span> lines denote testing error.<span class="chs" title="虚线表示训练误差，粗线表示测试误差。"><span></div>
+    <div class="eng">Left: plain networks.<span class="chs" title="左：简单网络。"><span></div>
+    <div class="eng">The error of plain-110 is higher than 60% and not displayed.<span class="chs" title="简单的110层网络错误率超过60%没有展示。"><span></div>
+    <div class="eng">Middle: <span class="word_hot_rare">ResNets</span>.<span class="chs" title="中间：ResNet。"><span></div>
+    <div class="eng">Right: <span class="word_hot_rare">ResNets</span> with 110 and 1202 layers.<span class="chs" title="右：110层ResNet和1202层ResNet。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Fig. 6 (middle) shows the behaviors of <span class="word_hot_rare">ResNets</span>.<span class="chs" title="图6（中）显示了ResNet的行为。"><span></div>
+    <div class="eng">Also similar to the ImageNet cases (Fig. 4, right), our <span class="word_hot_rare">ResNets</span> manage to overcome the optimization difficulty and demonstrate accuracy gains when the depth increases.<span class="chs" title="与ImageNet的情况类似（图4，右），我们的ResNet设法克服优化困难并随着深度的增加展示了准确性收益。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We further explore n = 18 that leads to a 110-layer <span class="word_hot_rare">ResNet</span>.<span class="chs" title="我们进一步探索了n = 18得到了110层的ResNet。"><span></div>
+    <div class="eng">In this case, we find that the initial learning rate of 0.1 is slightly too large to start converging.<span class="chs" title="在这种情况下，我们发现0.1的初始学习率对于收敛来说太大了。"><span></div>
+    <div class="eng">So we use 0.01 to warm up the training until the training error is below 80% (about 400 iterations), and then go back to 0.1 and continue training.<span class="chs" title="因此我们使用0.01的学习率开始训练，直到训练误差低于80%（大约400次迭代），然后学习率变回到0.1并继续训练。"><span></div>
+    <div class="eng">The rest of the learning schedule is as done previously.<span class="chs" title="学习过程的剩余部分与前面做的一样。"><span></div>
+    <div class="eng">This 110-layer network converges well (Fig. 6, middle).<span class="chs" title="这个110层网络收敛的很好（图6，中）。"><span></div>
+    <div class="eng">It has fewer parameters than other deep and thin networks such as <span class="word_hot_rare">FitNet</span> [34] and Highway [41] (Table 6), yet is among the state-of-the-art results (6.43%, Table 6).<span class="chs" title="它与其它的深且窄的网络例如FitNet[34]和Highway41相比有更少的参数，但结果仍在目前最好的结果之间（6.43%，表6）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 6.<span class="chs" title="表6。"><span></div>
+    <div class="eng">Classification error on the <span class="word_hot_rare">CIFAR</span>-10 test set.<span class="chs" title="在CIFAR-10测试集上的分类误差。"><span></div>
+    <div class="eng">All methods are with data <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span>.<span class="chs" title="所有的方法都使用了数据增强。"><span></div>
+    <div class="eng">For <span class="word_hot_rare">ResNet</span>-110, we run it 5 times and show “best (mean±std)” as in [42].<span class="chs" title="对于ResNet-110，像论文[42]中那样，我们运行了5次并展示了“最好的(mean±std)”。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab06.png" alt="Table 6"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Analysis of Layer Responses.<span class="chs" title="层响应分析。"><span></div>
+    <div class="eng">Fig. 7 shows the standard deviations (<span class="word_hot_rare">std</span>) of the layer responses.<span class="chs" title="图7显示了层响应的标准偏差（std）。"><span></div>
+    <div class="eng">The responses are the outputs of each 3×3 layer, after <span class="word_hot_rare">BN</span> and before other <span class="word_hot" title="nonlinearity [nɒnlɪnɪ'ærɪtɪ]">nonlinearity</span> (<span class="word_hot_rare">ReLU</span>/addition).<span class="chs" title="这些响应每个3×3层的输出，在BN之后和其他非线性（ReLU/加法）之前。"><span></div>
+    <div class="eng">For <span class="word_hot_rare">ResNets</span>, this analysis reveals the response strength of the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions.<span class="chs" title="对于ResNets，该分析揭示了残差函数的响应强度。"><span></div>
+    <div class="eng">Fig. 7 shows that <span class="word_hot_rare">ResNets</span> have generally smaller responses than their plain counterparts.<span class="chs" title="图7显示ResNet的响应比其对应的简单网络的响应更小。"><span></div>
+    <div class="eng">These results support our basic motivation (Sec. 3.1) that the <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions might be generally closer to zero than the non-<span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> functions.<span class="chs" title="这些结果支持了我们的基本动机（第3.1节），残差函数通常具有比非残差函数更接近零。"><span></div>
+    <div class="eng">We also notice that the deeper <span class="word_hot_rare">ResNet</span> has smaller magnitudes of responses, as evidenced by the comparisons among <span class="word_hot_rare">ResNet</span>-20, 56, and 110 in Fig. 7.<span class="chs" title="我们还注意到，更深的ResNet具有较小的响应幅度，如图7中ResNet-20，56和110之间的比较所证明的。"><span></div>
+    <div class="eng">When there are more layers, an individual layer of <span class="word_hot_rare">ResNets</span> tends to modify the signal less.<span class="chs" title="当层数更多时，单层ResNet趋向于更少地修改信号。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Exploring Over 1000 layers.<span class="chs" title="探索超过1000层。"><span></div>
+    <div class="eng">We explore an aggressively deep model of over 1000 layers.<span class="chs" title="我们探索超过1000层的过深的模型。"><span></div>
+    <div class="eng">We set n = 200 that leads to a 1202-layer network, which is trained as described above.<span class="chs" title="我们设置n = 200，得到了1202层的网络，其训练如上所述。"><span></div>
+    <div class="eng">Our method shows no optimization difficulty, and this 10^3-layer network is able to achieve training error &lt;0.1% (Fig. 6, right).<span class="chs" title="我们的方法显示没有优化困难，这个10^3层网络能够实现训练误差&lt;0.1％（图6，右图）。"><span></div>
+    <div class="eng">Its test error is still fairly good (7.93%, Table 6).<span class="chs" title="其测试误差仍然很好（7.93％，表6）。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">But there are still open problems on such aggressively deep models.<span class="chs" title="但是，这种极深的模型仍然存在着开放的问题。"><span></div>
+    <div class="eng">The testing result of this 1202-layer network is worse than that of our 110-layer network, although both have similar training error.<span class="chs" title="这个1202层网络的测试结果比我们的110层网络的测试结果更差，虽然两者都具有类似的训练误差。"><span></div>
+    <div class="eng">We argue that this is because of overfitting.<span class="chs" title="我们认为这是因为过拟合。"><span></div>
+    <div class="eng">The 1202-layer network may be unnecessarily large (19.4M) for this small dataset.<span class="chs" title="对于这种小型数据集，1202层网络可能是不必要的大（19.4M）。"><span></div>
+    <div class="eng">Strong regularization such as <span class="word_hot_rare">maxout</span> [9] or dropout [13] is applied to obtain the best results ([9, 25, 24, 34]) on this dataset.<span class="chs" title="在这个数据集应用强大的正则化，如maxout[9]或者dropout[13]来获得最佳结果（[9,25,24,34]）。"><span></div>
+    <div class="eng">In this paper, we use no <span class="word_hot_rare">maxout</span>/dropout and just simply impose regularization via deep and thin architectures by design, without distracting from the focus on the difficulties of optimization.<span class="chs" title="在本文中，我们不使用maxout/dropout，只是简单地通过设计深且窄的架构简单地进行正则化，而不会分散集中在优化难点上的注意力。"><span></div>
+    <div class="eng">But combining with stronger regularization may improve results, which we will study in the future.<span class="chs" title="但结合更强的正规化可能会改善结果，我们将来会研究。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">4.3. Object Detection on PASCAL and <span class="word_hot" title="MS [ˌem'es]">MS</span> COCO<span class="chs" title="4.3. 在PASCAL和MS COCO上的目标检测"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Our method has good generalization performance on other recognition tasks.<span class="chs" title="我们的方法对其他识别任务有很好的泛化性能。"><span></div>
+    <div class="eng">Table 7 and 8 show the object detection baseline results on PASCAL VOC 2007 and 2012 [5] and COCO [26].<span class="chs" title="表7和表8显示了PASCAL VOC 2007和2012[5]以及COCO[26]的目标检测基准结果。"><span></div>
+    <div class="eng">We adopt Faster <span class="word_hot_rare">R-CNN</span> [32] as the detection method.<span class="chs" title="我们采用更快的R-CNN[32]作为检测方法。"><span></div>
+    <div class="eng">Here we are interested in the improvements of replacing <span class="word_hot_rare">VGG</span>-16 [40] with <span class="word_hot_rare">ResNet</span>-101.<span class="chs" title="在这里，我们感兴趣的是用ResNet-101替换VGG-16[40]。"><span></div>
+    <div class="eng">The detection implementation (see appendix) of using both models is the same, so the gains can only be attributed to better networks.<span class="chs" title="使用这两种模式的检测实现（见附录）是一样的，所以收益只能归因于更好的网络。"><span></div>
+    <div class="eng">Most <span class="word_hot" title="remarkably [rɪ'mɑ:kəblɪ]">remarkably</span>, on the challenging COCO dataset we obtain a 6.0% increase in <span class="word_hot_rare">COCO’s</span> standard metric (mAP@[. 5, . 95]), which is a 28% relative improvement.<span class="chs" title="最显著的是，在有挑战性的COCO数据集中，COCO的标准度量指标（mAP@[.5，.95]）增长了6.0％，相对改善了28％。"><span></div>
+    <div class="eng">This gain is <span class="word_hot" title="solely [ˈsəʊlli]">solely</span> due to the learned representations.<span class="chs" title="这种收益完全是由于学习表示。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 7.<span class="chs" title="表7。"><span></div>
+    <div class="eng">Object detection mAP (%) on the PASCAL VOC 2007/2012 test sets using baseline Faster <span class="word_hot_rare">R-CNN</span>.<span class="chs" title="在PASCAL VOC 2007/2012测试集上使用基准Faster R-CNN的目标检测mAP(%)。"><span></div>
+    <div class="eng">See also appendix for better results.<span class="chs" title="更好的结果请看附录。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab07.png" alt="Table 7"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 8.<span class="chs" title="表8。"><span></div>
+    <div class="eng">Object detection mAP (%) on the COCO validation set using baseline Faster <span class="word_hot_rare">R-CNN</span>.<span class="chs" title="在COCO验证集上使用基准Faster R-CNN的目标检测mAP(%)。"><span></div>
+    <div class="eng">See also appendix for better results.<span class="chs" title="更好的结果请看附录。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab08.png" alt="Table 8"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Based on deep <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> nets, we won the 1st places in several tracks in <span class="word_hot_rare">ILSVRC</span> & COCO 2015 competitions: ImageNet detection, ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>, COCO detection, and COCO <span class="word_hot" title="segmentation [ˌsegmenˈteɪʃn]">segmentation</span>.<span class="chs" title="基于深度残差网络，我们在ILSVRC & COCO 2015竞赛的几个任务中获得了第一名，分别是：ImageNet检测，ImageNet定位，COCO检测，COCO分割。"><span></div>
+    <div class="eng">The details are in the appendix.<span class="chs" title="跟多细节请看附录。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">APPENDIX<span class="chs" title="附录 （以下为机器翻译，仅供参考）"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">A. Object Detection Baselines<span class="chs" title="A. 对象检测基线"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">In this section we introduce our detection method based on the baseline Faster <span class="word_hot_rare">R-CNN</span> [32] system.<span class="chs" title="在本节中，我们将介绍我们基于基线更快的R-CNN[32]系统的检测方法。"><span></div>
+    <div class="eng">The models are initialized by the ImageNet classification models, and then fine-tuned on the object detection data.<span class="chs" title="模型由ImageNet分类模型初始化，然后根据对象检测数据进行微调。"><span></div>
+    <div class="eng">We have experimented with <span class="word_hot_rare">ResNet</span>-50/101 at the time of the <span class="word_hot_rare">ILSVRC</span> & COCO 2015 detection competitions.<span class="chs" title="在ILSVRC和COCO 2015检测比赛期间，我们已经用ResNet-50/101进行了实验。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Unlike <span class="word_hot_rare">VGG</span>-16 used in [32], our <span class="word_hot_rare">ResNet</span> has no hidden <span class="word_hot_rare">fc</span> layers.<span class="chs" title="与[32]中使用的VGG-16不同，我们的ResNet没有隐藏的FC层。"><span></div>
+    <div class="eng">We adopt the idea of “Networks on Conv feature maps” (<span class="word_hot_rare">NoC</span>) [33] to address this issue.<span class="chs" title="我们采用“Conv功能图上的网络”(NOC)[33]的思想来解决这个问题。"><span></div>
+    <div class="eng">We compute the <span class="word_hot_rare">full-image</span> shared conv feature maps using those layers whose strides on the image are no greater than 16 pixels (i.e., conv1, conv2_x, conv3_x, and conv4_x, totally 91 conv layers in <span class="word_hot_rare">ResNet</span>-101; Table 1).<span class="chs" title="我们使用图像上步长不大于16像素的那些层来计算全图像共享conv特征映射(即，conv1，conv2_x，conv3_x和conv_4x，在ResNet-101中总共91个conv层；表1)。"><span></div>
+    <div class="eng">We consider these layers as <span class="word_hot" title="analogous [əˈnæləgəs]">analogous</span> to the 13 conv layers in <span class="word_hot_rare">VGG</span>-16, and by doing so, both <span class="word_hot_rare">ResNet</span> and <span class="word_hot_rare">VGG</span>-16 have conv feature maps of the same total stride (16 pixels).<span class="chs" title="我们认为这些层类似于VGG-16中的13个conv层，通过这样做，ResNet和VGG-16都具有相同总跨度(16像素)的conv特征地图。"><span></div>
+    <div class="eng">These layers are shared by a region proposal network (<span class="word_hot_rare">RPN</span>, generating 300 proposals) [32] and a Fast <span class="word_hot_rare">R-CNN</span> detection network [7].<span class="chs" title="这些层由区域建议网络(RPN，生成300个建议)[32]和快速R-CNN检测网络[7]共享。"><span></div>
+    <div class="eng">RoI pooling [7] is performed before conv5 1.<span class="chs" title="ROI池化[7]在Conv5 1之前执行。"><span></div>
+    <div class="eng">On this <span class="word_hot_rare">RoI-pooled</span> feature, all layers of conv5 x and up are adopted for each region, playing the roles of VGG-16’s <span class="word_hot_rare">fc</span> layers.<span class="chs" title="在此ROI池化特征上，每个区域都采用Cont5 x和UP的所有层，扮演VGG-16的FC层的角色。"><span></div>
+    <div class="eng">The final classification layer is replaced by two sibling layers (classification and box regression [7]).<span class="chs" title="最终的分类层被两个兄弟层取代(分类和框回归[7])。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">For the usage of <span class="word_hot_rare">BN</span> layers, after pre-training, we compute the <span class="word_hot_rare">BN</span> statistics (means and variances) for each layer on the ImageNet training set.<span class="chs" title="对于BN层的使用，在预培训之后，我们计算ImageNet训练集上每一层的BN统计(均值和方差)。"><span></div>
+    <div class="eng">Then the <span class="word_hot_rare">BN</span> layers are fixed during fine-tuning for object detection.<span class="chs" title="然后在对象检测的微调期间固定BN层。"><span></div>
+    <div class="eng">As such, the <span class="word_hot_rare">BN</span> layers become linear <span class="word_hot" title="activations [,æktɪ'veɪʃən]">activations</span> with constant offsets and scales, and <span class="word_hot_rare">BN</span> statistics are not updated by fine-tuning.<span class="chs" title="因此，BN层成为具有恒定偏移量和比例的线性激活，并且BN数据不通过微调来更新。"><span></div>
+    <div class="eng">We fix the <span class="word_hot_rare">BN</span> layers mainly for reducing memory consumption in Faster <span class="word_hot_rare">R-CNN</span> training.<span class="chs" title="我们固定BN层主要是为了在更快的R-CNN训练中减少内存消耗。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">PASCAL VOC<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Following [7, 32], for the PASCAL VOC 2007 test set, we use the 5k <span class="word_hot_rare">trainval</span> images in VOC 2007 and 16k <span class="word_hot_rare">trainval</span> images in VOC 2012 for training (“07+12”).<span class="chs" title="在[7，32]之后，对于Pascal VOC 2007测试集，我们使用VOC 2007中的5k Trainval图像和VOC 2012中的16k Trainval图像进行培训(“07+12”)。"><span></div>
+    <div class="eng">For the PASCAL VOC 2012 test set, we use the 10k <span class="word_hot_rare">trainval</span>+test images in VOC 2007 and 16k <span class="word_hot_rare">trainval</span> images in VOC 2012 for training (“07++12”).<span class="chs" title="对于Pascal VOC 2012测试集，我们使用VOC 2007中的10k trainval+测试图像和VOC 2012中的16k trainval图像进行培训(“07++12”)。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">hyper-parameters</span> for training Faster <span class="word_hot_rare">R-CNN</span> are the same as in [32].<span class="chs" title="训练速度更快的R-CNN的超参数与[32]中相同。"><span></div>
+    <div class="eng">Table 7 shows the results.<span class="chs" title="表7显示了结果。"><span></div>
+    <div class="eng"><span class="word_hot_rare">ResNet</span>-101 improves the mAP by &gt;3% over <span class="word_hot_rare">VGG</span>-16.<span class="chs" title="RESNET-101比VGG-16提高了3%以上的地图。"><span></div>
+    <div class="eng">This gain is <span class="word_hot" title="solely [ˈsəʊlli]">solely</span> because of the improved features learned by <span class="word_hot_rare">ResNet</span>.<span class="chs" title="这一收益完全是因为ResNet学习到的改进的功能。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot" title="MS [ˌem'es]">MS</span> COCO<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The <span class="word_hot" title="MS [ˌem'es]">MS</span> COCO dataset [26] involves 80 object categories.<span class="chs" title="MS COCO数据集[26]涉及80个对象类别。"><span></div>
+    <div class="eng">We evaluate the PASCAL VOC metric (mAP @ IoU = 0.5) and the standard COCO metric (mAP @ IoU = .5: .05: .95).<span class="chs" title="我们评估Pascal VOC度量(MAP@IOU=0.5)和标准COCO度量(MAP@IOU=.5：.05：.95)。"><span></div>
+    <div class="eng">We use the 80k images on the train set for training and the 40k images on the <span class="word_hot" title="val [væl]">val</span> set for evaluation.<span class="chs" title="我们使用训练集上的80k图像进行训练，并使用val集上的40k图像进行评估。"><span></div>
+    <div class="eng">Our detection system for COCO is similar to that for PASCAL VOC.<span class="chs" title="我们针对COCO的检测系统与针对Pascal VOC的检测系统类似。"><span></div>
+    <div class="eng">We train the COCO models with an 8-GPU implementation, and thus the <span class="word_hot_rare">RPN</span> step has a mini-batch size of 8 images (i.e., 1 per GPU) and the Fast <span class="word_hot_rare">R-CNN</span> step has a mini-batch size of 16 images.<span class="chs" title="我们用8-GPU实现训练COCO模型，因此RPN步骤具有8个图像的小批量大小(即，每个GPU 1个)，而Fast R-CNN步骤具有16个图像的小批量大小。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">RPN</span> step and Fast <span class="word_hot_rare">RCNN</span> step are both trained for 240k iterations with a learning rate of 0.001 and then for 80k iterations with 0.0001.<span class="chs" title="RPN步骤和快速RCNN步骤都以0.001的学习率为240k迭代进行训练，然后以0.0001的学习率为80k迭代进行训练。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 8 shows the results on the <span class="word_hot" title="MS [ˌem'es]">MS</span> COCO validation set.<span class="chs" title="表8显示了MS COCO验证集的结果。"><span></div>
+    <div class="eng"><span class="word_hot_rare">ResNet</span>-101 has a 6% increase of mAP@[.5, . 95] over <span class="word_hot_rare">VGG</span>-16, which is a 28% relative improvement, <span class="word_hot" title="solely [ˈsəʊlli]">solely</span> contributed by the features learned by the better network.<span class="chs" title="RESNET-101的MAP@[.5，.95]比VGG-16增加了6%，相对提高了28%，这完全归功于更好的网络所学到的功能。"><span></div>
+    <div class="eng"><span class="word_hot" title="remarkably [rɪ'mɑ:kəblɪ]">Remarkably</span>, the mAP@[.5, . 95]’s absolute increase (6.0%) is nearly as big as mAP@. 5’s (6.9%).<span class="chs" title="值得注意的是，MAP@[.5，.95]的绝对增长(6.0%)几乎与MAP@.5的(6.9%)一样大。"><span></div>
+    <div class="eng">This suggests that a deeper network can improve both recognition and <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>.<span class="chs" title="这表明，更深的网络可以提高识别和定位的精度。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">B. Object Detection Improvements<span class="chs" title="B. 对象检测改进"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">For <span class="word_hot" title="completeness [kəm'pli:tnəs]">completeness</span>, we report the improvements made for the competitions.<span class="chs" title="为了完整起见，我们报告了为竞赛所做的改进。"><span></div>
+    <div class="eng">These improvements are based on deep features and thus should benefit from <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> learning.<span class="chs" title="这些改进基于深度特征，因此应受益于剩余学习。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng"><span class="word_hot" title="MS [ˌem'es]">MS</span> COCO<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span>.<span class="chs" title="边框细调。"><span></div>
+    <div class="eng">Our box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span> partially follows the <span class="word_hot" title="iterative ['ɪtərətɪv]">iterative</span> <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> in [6].<span class="chs" title="我们的边框细调部分遵循[6]中的迭代定位。"><span></div>
+    <div class="eng">In Faster <span class="word_hot_rare">R-CNN</span>, the final output is a regressed box that is different from its proposal box.<span class="chs" title="在Faster R-CNN中，最终输出是一个与其建议边框不同的回归边框。"><span></div>
+    <div class="eng">So for inference, we pool a new feature from the regressed box and obtain a new classification score and a new regressed box.<span class="chs" title="因此，为了进行推理，我们从回归边框中汇集了一个新的特征，并获得了一个新的分类分数和一个新的回归边框。"><span></div>
+    <div class="eng">We combine these 300 new predictions with the original 300 predictions.<span class="chs" title="我们将这300个新预测与原来的300个预测结合起来。"><span></div>
+    <div class="eng">Non-maximum <span class="word_hot" title="suppression [səˈpreʃn]">suppression</span> (<span class="word_hot_rare">NMS</span>) is applied on the union set of predicted boxes using an IoU threshold of 0.3 [8], followed by box voting [6].<span class="chs" title="使用IOU阈值0.3[8]，将非最大抑制(NMS)应用于预测边框的并集[8]，然后进行边框投票[6]。"><span></div>
+    <div class="eng">Box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span> improves mAP by about 2 points (Table 9).<span class="chs" title="边框细化将mAP提高约2个百分点(表9)。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Global context.<span class="chs" title="全局上下文。"><span></div>
+    <div class="eng">We combine global context in the Fast <span class="word_hot_rare">R-CNN</span> step.<span class="chs" title="我们在Fast R-CNN步骤中结合了全局上下文。"><span></div>
+    <div class="eng">Given the <span class="word_hot_rare">full-image</span> conv feature map, we pool a feature by global Spatial Pyramid Pooling [12] (with a “single-level” pyramid) which can be implemented as “RoI” pooling using the entire <span class="word_hot_rare">image’s</span> <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> box as the RoI.<span class="chs" title="给定全图像conv特征图，我们通过全局空间金字塔池化[12](使用“单层”金字塔)汇聚一个特征，这可以实现为使用整个图像的边界框作为ROI的“ROI”池化。"><span></div>
+    <div class="eng">This pooled feature is fed into the <span class="word_hot_rare">post-RoI</span> layers to obtain a global context feature.<span class="chs" title="该池化特征被馈送到ROI后层中以获得全局上下文特征。"><span></div>
+    <div class="eng">This global feature is concatenated with the original per-region feature, followed by the sibling classification and box regression layers.<span class="chs" title="此全局特征与原始每个区域特征相连接，然后是同级分类和边框回归层。"><span></div>
+    <div class="eng">This new structure is trained end-to-end.<span class="chs" title="这种新结构是端到端训练的。"><span></div>
+    <div class="eng">Global context improves mAP@. 5 by about 1 point (Table 9).<span class="chs" title="全局上下文将mAP@.5提高了约1个百分点(表9)。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Multi-scale testing.<span class="chs" title="多尺度测试。"><span></div>
+    <div class="eng">In the above, all results are obtained by single-scale training/testing as in [32], where the <span class="word_hot_rare">image’s</span> shorter side is $s = 600$ pixels.<span class="chs" title="在上面，所有结果都是通过如[32]中的单尺度训练/测试获得的，其中图像的短边是$s = 600$像素。"><span></div>
+    <div class="eng">Multi-scale training/testing has been developed in [12, 7] by selecting a scale from a feature pyramid, and in [33] by using <span class="word_hot_rare">maxout</span> layers.<span class="chs" title="在[12，7]中，通过从特征金字塔中选择尺度，以及在[33]中，通过使用maxout层，已经开发了多尺度训练/测试。"><span></div>
+    <div class="eng">In our current implementation, we have performed multi-scale testing following [33]; we have not performed multi-scale training because of limited time.<span class="chs" title="在我们目前的实施中，我们按照[33]进行了多尺度测试；由于时间有限，我们没有进行多尺度训练。"><span></div>
+    <div class="eng">In addition, we have performed multi-scale testing only for the Fast <span class="word_hot_rare">R-CNN</span> step (but not yet for the <span class="word_hot_rare">RPN</span> step).<span class="chs" title="此外，我们仅针对Fast R-CNN步骤(但尚未针对RPN步骤)执行了多尺度测试。"><span></div>
+    <div class="eng">With a trained model, we compute conv feature maps on an image pyramid, where the <span class="word_hot_rare">image’s</span> shorter sides are $s \in \{200; 400; 600; 800; 1000}$.<span class="chs" title="使用训练过的模型，我们在图像金字塔上计算conv特征映射，其中图像的短边是$s \in \{200; 400; 600; 800; 1000}$。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 9. Object detection improvements on <span class="word_hot" title="MS [ˌem'es]">MS</span> COCO using Faster <span class="word_hot_rare">R-CNN</span> and <span class="word_hot_rare">ResNet</span>-101.<span class="chs" title="表9. 使用Faster R-CNN和ResNet-101对MS Coco进行对象检测的改进。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab09.png" alt="Table 9"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 10. Detection results on the PASCAL VOC 2007 test set.<span class="chs" title="表10.Pascal VOC 2007测试集上的检测结果。"><span></div>
+    <div class="eng">The baseline is the Faster <span class="word_hot_rare">R-CNN</span> system.<span class="chs" title="基线是Faster R-CNN系统。"><span></div>
+    <div class="eng">The system “baseline+++” include box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span>, context, and multi-scale testing in Table 9.<span class="chs" title="系统“Baseline+++”包括表9中的边框细化、上下文和多尺度测试。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab10.png" alt="Table 10"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 11. Detection results on the PASCAL VOC 2012 test set (http://host.robots.ox.ac.uk:8080/leaderboard/displaylb.php?challengeid=11&compid=4).<span class="chs" title="表11.PASCAL VOC 2012测试集(http://host.robots.ox.ac.uk:8080/leaderboard/displaylb.php?challengeid=11&compid=4)的检测结果。"><span></div>
+    <div class="eng">The baseline is the Faster <span class="word_hot_rare">R-CNN</span> system.<span class="chs" title="基线是Faster R-CNN系统。"><span></div>
+    <div class="eng">The system “baseline+++” include box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span>, context, and multi-scale testing in Table 9.<span class="chs" title="系统“Baseline+++”包括表9中的边框细化、上下文和多尺度测试。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab11.png" alt="Table 11"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We select two adjacent scales from the pyramid following [33].<span class="chs" title="我们按照[33]从金字塔中选择两个相邻的比例。"><span></div>
+    <div class="eng">RoI pooling and subsequent layers are performed on the feature maps of these two scales [33], which are merged by <span class="word_hot_rare">maxout</span> as in [33].<span class="chs" title="RoI池化和随后的层在这两个比例的特征映射上执行[33]，这两个比例由maxout合并，如[33]中所示。"><span></div>
+    <div class="eng">Multi-scale testing improves the mAP by over 2 points (Table 9).<span class="chs" title="多尺度测试将mAP提高了2个百分点以上(表9)。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Using validation data. Next we use the 80k+40k <span class="word_hot_rare">trainval</span> set for training and the 20k <span class="word_hot_rare">test-dev</span> set for evaluation.<span class="chs" title="使用验证数据。接下来，我们使用80k+40k trainval集合进行训练，使用20k test-dev集合进行评估。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">testdev</span> set has no publicly available ground truth and the result is reported by the evaluation server.<span class="chs" title="testdev集合没有公开可用的真实值，结果由评估服务器报告。"><span></div>
+    <div class="eng">Under this setting, the results are an mAP@. 5 of 55.7% and an mAP@[. 5, .<span class="chs" title="在此设置下，结果是55.7%的MAP@.5和34.9%的mAP@[.5，.95](表9)。"><span></div>
+    <div class="eng">95] of 34.9% (Table 9). This is our single-model result.<span class="chs" title="这是我们的单模型结果。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Ensemble.<span class="chs" title="集成。"><span></div>
+    <div class="eng">In Faster <span class="word_hot_rare">R-CNN</span>, the system is designed to learn region proposals and also object classifiers, so an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> can be used to boost both tasks.<span class="chs" title="在Faster R-CNN中，该系统被设计来进行区域建议和对象分类器学习，因此可以使用集成来增强这两个任务。"><span></div>
+    <div class="eng">We use an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> for proposing regions, and the union set of proposals are processed by an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> of per-region classifiers.<span class="chs" title="我们使用集成来给出区域建议，并且建议的联合集由每个区域分类器的集成来处理。"><span></div>
+    <div class="eng">Table 9 shows our result based on an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> of 3 networks.<span class="chs" title="表9显示了基于3个网络的集成的结果。"><span></div>
+    <div class="eng">The mAP is 59.0% and 37.4% on the <span class="word_hot_rare">test-dev</span> set.<span class="chs" title="测试开发集上的mAP为59.0%和37.4%。"><span></div>
+    <div class="eng">This result won the 1st place in the detection task in COCO 2015.<span class="chs" title="这一结果在COCO 2015的检测任务中获得了第一名。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">PASCAL VOC<span class="chs" title=""><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">We revisit the PASCAL VOC dataset based on the above model.<span class="chs" title="我们基于上述模型重新访问PASCAL VOC数据集。"><span></div>
+    <div class="eng">With the single model on the COCO dataset (55.7% mAP@. 5 in Table 9), we <span class="word_hot" title="fine-tune [faɪn tju:n]">fine-tune</span> this model on the PASCAL VOC sets.<span class="chs" title="使用COCO数据集上的单个模型(表9中的55.7%map@.5)，我们在PASCAL VOC集上微调此模型。"><span></div>
+    <div class="eng">The improvements of box <span class="word_hot" title="refinement [rɪˈfaɪnmənt]">refinement</span>, context, and multi-scale testing are also adopted.<span class="chs" title="还采用了边框细化、上下文和多尺度测试的改进。"><span></div>
+    <div class="eng">By doing so, we achieve 85.6% mAP on PASCAL VOC 2007 (Table 10) and 83.8% on PASCAL VOC 2012 (Table 11). The result on PASCAL VOC 2012 is 10 points higher than the previous state-of-the-art result [6].<span class="chs" title="通过这样做，我们在PASCAL VOC 2007(表10)和Pascal VOC 2012(表11)上实现了85.6%的MAP和83.8%的MAP。在PASCAL VOC 2012上的结果比之前最先进的结果高出10个百分点[6]。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 12. Our results (mAP, %) on the ImageNet detection dataset.<span class="chs" title="表12. ImageNet检测数据集上的结果(mAP，%)。"><span></div>
+    <div class="eng">Our detection system is Faster <span class="word_hot_rare">R-CNN</span> [32] with the improvements in Table 9, using <span class="word_hot_rare">ResNet</span>-101.<span class="chs" title="我们的检测系统Faster R-CNN[32]，使用表9中的改进，使用ResNet-101。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab11.png" alt="Table 11"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">ImageNet Detection<span class="chs" title="ImageNet检测"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The ImageNet Detection (<span class="word_hot_rare">DET</span>) task involves 200 object categories.<span class="chs" title="ImageNet检测(DET)任务涉及200个对象类别。"><span></div>
+    <div class="eng">The accuracy is evaluated by mAP@.<span class="chs" title="精确度由mAP@.5来评估。"><span></div>
+    <div class="eng">5. Our object detection algorithm for ImageNet <span class="word_hot_rare">DET</span> is the same as that for <span class="word_hot" title="MS [ˌem'es]">MS</span> COCO in Table 9.<span class="chs" title="我们针对ImageNet Det的对象检测算法与表9中针对MS Coco的对象检测算法相同。"><span></div>
+    <div class="eng">The networks are <span class="word_hot_rare">pretrained</span> on the 1000-class ImageNet classification set, and are fine-tuned on the <span class="word_hot_rare">DET</span> data.<span class="chs" title="网络在1000类ImageNet分类集上进行了预训练，并在DET数据上进行了微调。"><span></div>
+    <div class="eng">We split the validation set into two parts (val1/val2) following [8].<span class="chs" title="我们在[8]之后将验证集分成两部分(val1/val2)。"><span></div>
+    <div class="eng">We <span class="word_hot" title="fine-tune [faɪn tju:n]">fine-tune</span> the detection models using the <span class="word_hot_rare">DET</span> training set and the val1 set.<span class="chs" title="我们使用DET训练集和val1集来微调检测模型。"><span></div>
+    <div class="eng">The val2 set is used for validation.<span class="chs" title="val2数据集用于验证。"><span></div>
+    <div class="eng">We do not use other <span class="word_hot_rare">ILSVRC</span> 2015 data.<span class="chs" title="我们不使用其他ILSVRC 2015数据。"><span></div>
+    <div class="eng">Our single model with <span class="word_hot_rare">ResNet</span>-101 has 58.8% mAP and our <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> of 3 models has 62.1% mAP on the <span class="word_hot_rare">DET</span> test set (Table 12).<span class="chs" title="我们使用ResNet-101的单个模型具有58.8%的mAP，而我们的3个模型的集合在DET测试集上具有62.1%的mAP(表12)。"><span></div>
+    <div class="eng">This result won the 1st place in the ImageNet detection task in <span class="word_hot_rare">ILSVRC</span> 2015, surpassing the second place by 8.5 points (absolute).<span class="chs" title="这一结果在ILSVRC 2015的ImageNet检测任务中获得第一名，超过第二名8.5个百分点(绝对)。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 13. <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">Localization</span> error (%) on the ImageNet validation.<span class="chs" title="表13.ImageNet验证的本地化错误(%)。"><span></div>
+    <div class="eng">In the column of “<span class="word_hot_rare">LOC</span> error on <span class="word_hot" title="GT [dʒi:'ti:]">GT</span> class” ([41]), the ground truth class is used.<span class="chs" title="在“GT类上的LOC错误”([41])列中，使用Ground True类。"><span></div>
+    <div class="eng">In the “testing” column, “1-crop” denotes testing on a center crop of $224\times224$ pixels, “dense” denotes dense (fully convolutional) and multi-scale testing.<span class="chs" title="在“测试”列中，“1-裁剪”表示对$224\x 224$像素的中心裁剪进行测试，“密集”表示密集(完全卷积)和多尺度测试。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab13.png" alt="Table 13"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 14. Comparisons of <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> error (%) on the ImageNet dataset with state-of-the-art methods.<span class="chs" title="表14. ImageNet数据集上的定位误差(%)与最先进方法的比较。"><span></div>
+</div>
+    <br>
+<div style="text-align: center;"><img src="../../images/ResNet/tab14.png" alt="Table 14"/></div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">C. ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">Localization</span><span class="chs" title="C.ImageNet定位"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">Localization</span> (<span class="word_hot_rare">LOC</span>) task [36] requires to classify and <span class="word_hot" title="localize [ˈləʊkəlaɪz]">localize</span> the objects.<span class="chs" title="ImageNet定位(LOC)任务[36]需要对对象进行分类和定位。"><span></div>
+    <div class="eng">Following [40, 41], we assume that the <span class="word_hot_rare">image-level</span> classifiers are first adopted for predicting the class labels of an image, and the <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> algorithm only accounts for predicting <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> boxes based on the predicted classes.<span class="chs" title="在[40，41]之后，我们假设首先采用图像级分类器来预测图像的类别标签，并且定位算法仅考虑基于预测的类别预测边界框。"><span></div>
+    <div class="eng">We adopt the “per-class regression” (<span class="word_hot_rare">PCR</span>) strategy [40, 41], learning a <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> box <span class="word_hot" title="regressor [rɪ'gresə(r)]">regressor</span> for each class.<span class="chs" title="我们采用“逐类回归”(PCR)策略[40，41]，学习每个类的边界框回归器。"><span></div>
+    <div class="eng">We pre-train the networks for ImageNet classification and then <span class="word_hot" title="fine-tune [faɪn tju:n]">fine-tune</span> them for <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>.<span class="chs" title="我们为ImageNet分类预先训练网络，然后为定位对它们进行微调。"><span></div>
+    <div class="eng">We train networks on the provided 1000-class ImageNet training set.<span class="chs" title="我们在提供的1000个类别的ImageNet训练集上训练网络。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Our <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> algorithm is based on the <span class="word_hot_rare">RPN</span> framework of [32] with a few modifications.<span class="chs" title="我们的定位算法是基于[32]的RPN框架，并做了一些修改。"><span></div>
+    <div class="eng">Unlike the way in [32] that is <span class="word_hot_rare">category-agnostic</span>, our <span class="word_hot_rare">RPN</span> for <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> is designed in a per-class form.<span class="chs" title="与[32]中与类别无关的方式不同，我们的定位RPN是以每个类的形式设计的。"><span></div>
+    <div class="eng">This <span class="word_hot_rare">RPN</span> ends with two sibling $1\times1$ convolutional layers for binary classification (<span class="word_hot_rare">cls</span>) and box regression (<span class="word_hot" title="reg [redʒ]">reg</span>), as in [32].<span class="chs" title="此RPN以两个兄弟$1\×1$卷积层结束，用于二元分类(cls)和边框回归(reg)，如[32]中所示。"><span></div>
+    <div class="eng">The <span class="word_hot_rare">cls</span> and <span class="word_hot" title="reg [redʒ]">reg</span> layers are both in a per-class from, in contrast to [32].<span class="chs" title="与[32]不同，cls和reg层都位于中的每个类中。"><span></div>
+    <div class="eng"><span class="word_hot" title="Specifically [spəˈsɪfɪkli]">Specifically</span>, the <span class="word_hot_rare">cls</span> layer has a 1000-d output, and each dimension is binary logistic regression for predicting being or not being an object class; the <span class="word_hot" title="reg [redʒ]">reg</span> layer has a $1000\times4$-d output consisting of box regressors for 1000 classes.<span class="chs" title="具体地说，cls层有一个1000-d的输出，并且每个维度都是用于预测是否是对象类的二元逻辑回归；reg层有一个$1000\x 4$-d的输出，由1000个类的边框回归组成。"><span></div>
+    <div class="eng">As in [32], our <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> box regression is with reference to multiple <span class="word_hot_rare">translation-invariant</span> “anchor” boxes at each position.<span class="chs" title="与[32]中一样，我们的边界框回归是参考每个位置的多个平移不变的“锚点”框。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">As in our ImageNet classification training (Sec. 3.4), we randomly sample $224\times224$ crops for data <span class="word_hot" title="augmentation [ˌɔ:ɡmen'teɪʃn]">augmentation</span>.<span class="chs" title="与我们的ImageNet分类训练(参见3.4节)，我们随机抽取$224\×224$剪裁区域进行数据增强。"><span></div>
+    <div class="eng">We use a mini-batch size of 256 images for fine-tuning.<span class="chs" title="我们使用256个图像来批量地进行微调。"><span></div>
+    <div class="eng">To avoid negative samples being dominate, 8 anchors are randomly sampled for each image, where the sampled positive and negative anchors have a ratio of 1:1 [32].<span class="chs" title="为了避免负样本占主导地位，对每个图像随机采样8个锚点，其中采样的正负锚点的比率为1：1[32]。"><span></div>
+    <div class="eng">For testing, the network is applied on the image <span class="word_hot_rare">fully-convolutionally</span>.<span class="chs" title="为了测试，将网络完全卷积地应用于图像。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Table 13 compares the <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> results.<span class="chs" title="表13比较了定位结果。"><span></div>
+    <div class="eng">Following [41], we first perform “<span class="word_hot" title="oracle [ˈɒrəkl]">oracle</span>” testing using the ground truth class as the classification prediction.<span class="chs" title="在[41]之后，我们首先使用真实分类作为分类预测来执行“oracle”测试。"><span></div>
+    <div class="eng"><span class="word_hot_rare">VGG’s</span> paper [41] reports a <span class="word_hot_rare">center-crop</span> error of 33.1% (Table 13) using ground truth classes.<span class="chs" title="VGG的论文[41]报告了使用真实类别的中心裁剪误差为33.1%(表13)。"><span></div>
+    <div class="eng">Under the same setting, our <span class="word_hot_rare">RPN</span> method using <span class="word_hot_rare">ResNet</span>-101 net significantly reduces the <span class="word_hot_rare">center-crop</span> error to 13.3%.<span class="chs" title="在相同的设置下，我们使用ResNet-101网络的RPN方法显著地将中心裁剪误差降低到13.3%。"><span></div>
+    <div class="eng">This comparison demonstrates the excellent performance of our framework.<span class="chs" title="这种比较显示了我们的框架的出色性能。"><span></div>
+    <div class="eng">With dense (fully convolutional) and multi-scale testing, our <span class="word_hot_rare">ResNet</span>-101 has an error of 11.7% using ground truth classes.<span class="chs" title="通过密集(完全卷积)和多尺度测试，我们的ResNet-101使用真实分类有11.7%的误差。"><span></div>
+    <div class="eng">Using <span class="word_hot_rare">ResNet</span>-101 for predicting classes (4.6% top-5 classification error, Table 4), the top-5 <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> error is 14.4%.<span class="chs" title="使用ResNet-101预测类(4.6%top-5分类错误，表4)，top-5定位误差为14.4%。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">The above results are only based on the proposal network (<span class="word_hot_rare">RPN</span>) in Faster <span class="word_hot_rare">R-CNN</span> [32].<span class="chs" title="上述结果仅基于Faster R-CNN中的提议网络(RPN)[32]。"><span></div>
+    <div class="eng">One may use the detection network (Fast <span class="word_hot_rare">R-CNN</span> [7]) in Faster <span class="word_hot_rare">R-CNN</span> to improve the results.<span class="chs" title="可以在Faster R-CNN中使用检测网络(Fast R-CNN[7])来改进结果。"><span></div>
+    <div class="eng">But we notice that on this dataset, one image usually contains a single dominate object, and the proposal regions highly overlap with each other and thus have very similar <span class="word_hot_rare">RoI-pooled</span> features.<span class="chs" title="但我们注意到，在这个数据集上，一个图像通常包含单个主导对象，建议区域彼此高度重叠，因此具有非常相似的RoI池化特征。"><span></div>
+    <div class="eng">As a result, the <span class="word_hot_rare">image-centric</span> training of Fast <span class="word_hot_rare">R-CNN</span> [7] generates samples of small variations, which may not be desired for <span class="word_hot" title="stochastic [stə'kæstɪk]">stochastic</span> training.<span class="chs" title="结果，Fast R-CNN[7]的以图像为中心的训练产生小变化的样本，这可能不是随机训练所需要的。"><span></div>
+    <div class="eng">Motivated by this, in our current experiment we use the original <span class="word_hot_rare">RCNN</span> [8] that is <span class="word_hot_rare">RoI-centric</span>, in place of Fast <span class="word_hot_rare">R-CNN</span>.<span class="chs" title="受此启发，在我们当前的实验中，我们使用以投资回报为中心的原始RCNN[8]，而不是Fast R-CNN。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">Our <span class="word_hot_rare">R-CNN</span> implementation is as follows.<span class="chs" title="我们的R-CNN实现如下。"><span></div>
+    <div class="eng">We apply the per-class <span class="word_hot_rare">RPN</span> trained as above on the training images to predict <span class="word_hot" title="bounding [baundɪŋ]">bounding</span> boxes for the ground truth class.<span class="chs" title="我们在训练图像上应用如上所述训练的每类RPN来预测真实类别的边界框。"><span></div>
+    <div class="eng">These predicted boxes play a role of <span class="word_hot_rare">class-dependent</span> proposals.<span class="chs" title="这些预测框起到了和类别相关建议的作用。"><span></div>
+    <div class="eng">For each training image, the highest scored 200 proposals are extracted as training samples to train an <span class="word_hot_rare">R-CNN</span> classifier.<span class="chs" title="对于每个训练图像，提取得分最高的200个建议作为训练样本，以训练R-CNN分类器。"><span></div>
+    <div class="eng">The image region is cropped from a proposal, warped to $224\times224$ pixels, and fed into the classification network as in <span class="word_hot_rare">R-CNN</span> [8].<span class="chs" title="图像区域从提案中裁剪，扭曲到$224\x 224$像素，并像R-CNN[8]那样馈送到分类网络中。"><span></div>
+    <div class="eng">The outputs of this network consist of two sibling <span class="word_hot_rare">fc</span> layers for <span class="word_hot_rare">cls</span> and <span class="word_hot" title="reg [redʒ]">reg</span>, also in a per-class form.<span class="chs" title="此网络的输出由cls和reg的两个同级fc层组成，也是按类形式。"><span></div>
+    <div class="eng">This <span class="word_hot_rare">R-CNN</span> network is fine-tuned on the training set using a mini-batch size of 256 in the <span class="word_hot_rare">RoI-centric</span> fashion.<span class="chs" title="这个R-CNN网络在训练集上使用以RoI为中心的大小为256的批量进行微调。"><span></div>
+    <div class="eng">For testing, the <span class="word_hot_rare">RPN</span> generates the highest scored 200 proposals for each predicted class, and the <span class="word_hot_rare">R-CNN</span> network is used to update these proposals’ scores and box positions.<span class="chs" title="对于测试，RPN为每个预测类生成得分最高的200个建议，并且R-CNN网络用于更新这些建议的分数和边框位置。"><span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="eng">This method reduces the top-5 <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> error to 10.6% (Table 13).<span class="chs" title="这种方法将前5位的定位误差减少到10.6%(表13)。"><span></div>
+    <div class="eng">This is our single-model result on the validation set.<span class="chs" title="这是我们对验证集的单一模型结果。"><span></div>
+    <div class="eng">Using an <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensemble</span> of networks for both classification and <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span>, we achieve a top-5 <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> error of 9.0% on the test set.<span class="chs" title="使用网络集成进行分类和定位，我们在测试集上实现了9.0%的前5位定位误差。"><span></div>
+    <div class="eng">This number significantly outperforms the <span class="word_hot_rare">ILSVRC</span> 14 results (Table 14), showing a 64% relative reduction of error.<span class="chs" title="这个数字明显优于ILSVRC 14的结果(表14)，显示了64%的相对误差减少。"><span></div>
+    <div class="eng">This result won the 1st place in the ImageNet <span class="word_hot" title="localization [ˌləʊkəlaɪ'zeɪʃn]">localization</span> task in <span class="word_hot_rare">ILSVRC</span> 2015.<span class="chs" title="此结果在ILSVRC 2015的ImageNet定位任务中获得第一名。"><span></div>
+</div>
+    <br>
+
+</div>
+<div class="panel">
+<div class="panel-btn" title="切换展开中文" onclick="display_chs()">➽</div>
+<div class="panel-btn" title="切换按句显示" onclick="display_lines()">✿</div>
+</div>
+</body>
+
+<script type="text/javascript">
+font_default_color = "#666"
+function display_chs(){  
+    var $cnLines = document.getElementsByClassName("chs");
+    for (var i = 0; i < $cnLines.length; i++) {
+        var line = $cnLines[i];
+        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
+        else if(line.innerText!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
+        line.style.color=font_default_color;
+    }
+}
+function display_lines(){  
+    var $cnLines = document.getElementsByClassName("eng");
+    for (var i = $cnLines.length - 1; i >= 0; i--) {
+        if ($cnLines[i].className == "eng line")
+            $cnLines[i].className = "eng para";
+        else
+            $cnLines[i].className = "eng line";
+    }
+}
+var handler = function(event) {
+    line = event.target;
+    switch (event.type){
+        case "click":
+            var txt = "";
+            if (window.getSelection) { txt = window.getSelection().toString();}
+            else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
+            else if (window.document.selection) { txt = window.document.selection.createRange().text;}
+            if (txt != '')    break;
+            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
+            else {line.title=line.innerHTML;
+                line.innerHTML = "";
+                line.className="chs on";
+                line.style.color="red";}
+            break;
+        case "mouseover":
+            if(line.title)    line.style.color="red";
+            break;
+        case "mouseout":
+            if(line.title)    line.style.color=font_default_color
+            break;
+    }
+}
+var $cnLines = document.getElementsByClassName("chs");
+if ($cnLines.length==0){
+   var btns = document.getElementsByClassName("panel")[0];
+    btns.removeChild(btns.children[0])
+} else
+for (var i = 0; i < $cnLines.length; i++) {
+    var line = $cnLines[i];
+    line.style.marginLeft="0.5em";line.style.marginRight="0.5em";
+    if (line.title=="") {line.className="chs off"; continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color;
+    line.addEventListener("click",handler,false);
+    line.addEventListener("mouseover",handler,false);
+    line.addEventListener("mouseout",handler,false);
+}
+</script>
+</html>
