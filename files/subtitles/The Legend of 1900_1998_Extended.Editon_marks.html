@@ -2,38 +2,8 @@
 <head>
 <meta charset="utf-8">
 <title> The Legend of 1900_1998_Extended.Editon </title>
-<style type="text/css">
-    body {font-family: arial,verdana,geneva,sans-serif; font-size: 112%; color: #000; background-color: #eee; word-wrap:break-word;}
-    .chapter_part { margin: 50px auto;
-        background-color: #fefefe; padding:10px 10px 0;
-        box-shadow: 0 0 0 20px #f8f8f8; border-radius:25px;
-    }
-    .panel{ position: fixed;  top: 75%; }
-@media screen and (min-width:1280px){
-    .chapter_part {width: 64%; }
-    .panel{margin-left: 6%;}
-}
-@media screen and (max-width:1280px){
-    .chapter_part {width: 80%; }
-    .panel{margin-left: 0;}
-}
-    .paragraph_part { margin: 0; text-indent:2em; }
-    .panel-btn{ position:relative; margin-bottom:.75rem;
-        text-align: center; font-size:1.8em; color:#888;
-        width:3rem; height:3rem; background-color:#fff;
-        background-repeat:no-repeat; border:5px solid #ddd; border-radius:50%;
-        box-shadow:0 2px 4px 0 rgba(0,0,0,.04); cursor:pointer;
-    }
-    img { max-width: 100%; max-height: 100%; }
-    .word_hot{ font-weight:bold; color:#ff4500; }
-    .word_hot_rare{ font-weight:bold; color:#8fbc8f; }
-    .eng {display:inline;}
-    .eng.line {display:block;}
-    .eng.para {display:inline;}
-    .chs:before{content:"➤"; font-size:%25;}
-    .chs.on:before{content:"➤"; font-size:%25;}
-    .chs.off:before{content:"";}
-</style>
+<link href="../../configs/common.css" rel="stylesheet" type="text/css"/>
+<script src="../../configs/common.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="chapter_part">
@@ -1451,47 +1421,6 @@
 
 <script type="text/javascript">
 font_default_color = "#666"
-function display_chs(){  
-    var $cnLines = document.getElementsByClassName("chs");
-    for (var i = 0; i < $cnLines.length; i++) {
-        var line = $cnLines[i];
-        if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; }
-        else if(line.innerText!="") {line.title=line.innerHTML; line.innerHTML = ""; line.className="chs on"; }
-        line.style.color=font_default_color;
-    }
-}
-function display_lines(){  
-    var $cnLines = document.getElementsByClassName("eng");
-    for (var i = $cnLines.length - 1; i >= 0; i--) {
-        if ($cnLines[i].className == "eng line")
-            $cnLines[i].className = "eng para";
-        else
-            $cnLines[i].className = "eng line";
-    }
-}
-var handler = function(event) {
-    line = event.target;
-    switch (event.type){
-        case "click":
-            var txt = "";
-            if (window.getSelection) { txt = window.getSelection().toString();}
-            else if (window.document.getSelection) { txt = window.document.getSelection().toString();}
-            else if (window.document.selection) { txt = window.document.selection.createRange().text;}
-            if (txt != '')    break;
-            if(line.title) { line.innerHTML = line.title; line.removeAttribute("title"); line.className="chs off"; line.style.color=font_default_color }
-            else {line.title=line.innerHTML;
-                line.innerHTML = "";
-                line.className="chs on";
-                line.style.color="red";}
-            break;
-        case "mouseover":
-            if(line.title)    line.style.color="red";
-            break;
-        case "mouseout":
-            if(line.title)    line.style.color=font_default_color
-            break;
-    }
-}
 var $cnLines = document.getElementsByClassName("chs");
 if ($cnLines.length==0){
    var btns = document.getElementsByClassName("panel")[0];
