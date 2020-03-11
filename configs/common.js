@@ -1,7 +1,7 @@
 function display_words(){
     var iframe = document.getElementById("wordPage");
-    if(iframe.style.display == 'none') iframe.style.display = 'block';
-    else iframe.style.display = "none";
+    if(iframe.style.visibility == 'hidden') iframe.style.visibility = 'visible';
+    else iframe.style.visibility = "hidden";
 }
 function display_des(){  
     var $cnLines = document.getElementsByClassName("des");
