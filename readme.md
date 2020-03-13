@@ -1,7 +1,7 @@
 # Bilingual Readings
 
 [Home Page](https://benhnp.github.io/nhnp/)  
-[Tool Intro](https://benhnp.github.io/nhnp/files/screenshots/tool.md)
+[Tool Intro](./files/screenshots/tool.md)
 
 ## Papers
 - [AlexNet](https://benhnp.github.io/nhnp/files/papers/cv/AlexNet%20-%20ImageNet%20Classification%20with%20Deep%20Convolutional%20Neural%20Networks_marks.html) Krizhevsky, Alex ; Sutskever, Ilya; Hinton, Geoffrey E. (2012)
