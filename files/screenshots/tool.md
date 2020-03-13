@@ -2,7 +2,7 @@
 
 Currently I'm using PyQt5 to build the GUI of my `AlignTool`, There are many tools(`ABBYY Aligner`, `WinAlign`, `Tmxmall`, etc.) available, why do I waste the energy to `reinventing the wheel`?
 
-Well, I try some of them, and they're not convient. Most of the users have to accustom themself and endure the unconvience, but I, as a programer, have enough experience to build a toy demo and the refine the toy until finally meeting the pratical needs.
+Well, the reason is simple, I try some of them, and they're not convient. Most of the users have to accustom themself and endure the unconvience, but I, as a programer, have enough experience to build a toy demo and the refine the toy until finally meeting the pratical needs.
 
 ## Introduction
 
@@ -16,7 +16,7 @@ A progress bar shows when loading, re-loading, busy processing.
 
 ![paragraph](02.png)
 
-Sometimes the text may contain errors, so I use some simple rules to check and hilight the wrong(suspicious) part.
+Sometimes the text may contain errors, so I use some simple rules to check and hilight the wrong(suspicious) parts.
 
 ![paragraph](03.png)
 
@@ -26,6 +26,7 @@ Edit the paragraph. Sometimes the order of the paragraphs is not right, just sel
 
 The sentences processing is very similar to paragraph level. The processing unit is smaller, so I use a bar to separate each paragraph.
 
+We can also load ass/srt files and reparagraph to make sentence-aligned articles. 
 ![sentence](05.png)
 
 I can generate a friendly html file to read the article and recite the new words.
@@ -40,6 +41,8 @@ By the way, these screenshots are also taken by `capaste` written by myself, I f
 
 ## TODO
 
-1. reimplement it with C++, use the virtual-list or lazy-loading or the adapter to handle large data.
+1. reimplement it with C++, use the virtual-list or lazy-loading or the adapter to handle large amount of data.
 
 2. add a word management tab to store and read data from database such as sqlite.
+
+3. add batch processing and ctrl+z/redo functions.
