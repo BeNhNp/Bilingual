@@ -32,6 +32,12 @@ I can generate a friendly html file to read the article and recite the new words
 
 ![sentence](06.png)
 
+Now comes what I uploaded to this repo.
+
+![html](07.png)
+
+By the way, these screenshots are also taken by `capaste` written by myself, I found a bug when I try to capture the drag window, the drag-move seems to above all the window, even above the topmost one, I'll figure it out later.
+
 ## TODO
 
 1. reimplement it with C++, use the virtual-list or lazy-loading or the adapter to handle large data.
