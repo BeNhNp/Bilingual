@@ -1,6 +1,6 @@
 # Introlduction To My AlignTool
 
-Currently I'm using PyQt5 to build the GUI of my `AlignTool`, There are many tools(`ABBYY Aligner`, `WinAlign`, `Tmxmall`, etc.) available, why do I waste the energy to `reinventing the wheel`?
+Currently I'm using PyQt5 to build the GUI of my `AlignTool`, There are many tools(`ABBYY Aligner`, `WinAlign`, `Tmxmall`, etc.) available, why do I waste the energy to `reinvent the wheel`?
 
 Well, the reason is simple, I try some of them, and they're not convient. Most of the users have to accustom themself and endure the unconvience, but I, as a programer, have enough experience to build a toy demo and the refine the toy until finally meeting the pratical needs.
 
@@ -20,7 +20,7 @@ Sometimes the text may contain errors, so I use some simple rules to check and h
 
 ![paragraph](03.png)
 
-Edit the paragraph. Sometimes the order of the paragraphs is not right, just selet some cells and drag-and-drop to change the order. 
+Edit the paragraph. Sometimes the order of the paragraphs is not right, just selet some cells and drag-and-drop to change the order. Split a paragraph into two parts, Insert an empty cell, combine selected cells, ...
 
 ![paragraph](04.png)
 
