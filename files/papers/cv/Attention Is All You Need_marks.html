@@ -1,0 +1,585 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title> Attention Is All You Need </title>
+<link href="../../../configs/common.css" rel="stylesheet" type="text/css"/>
+<script src="../../../configs/common.js" type="text/javascript"></script>
+<script type="text/javascript"
+ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none", CommonHTML: { scale: 50 }
+    });
+</script>
+</head>
+<body>
+<div class="chapter_part">
+<div class="paragraph_part">
+    <div class="src">Attention Is All You Need</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, Łukasz and Polosukhin, Illia</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Advances in neural information processing systems, 2017<span class="des" title="https://yiyibooks.cn/yiyibooks/Attention_Is_All_You_Need/index.html"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">31st Conference on Neural Information Processing Systems (<span class="word_hot" title="nip [nɪp]">NIPS</span> 2017), Long Beach, <span class="word_hot_synth" title="CA [!≈ si: eɪ]">CA</span>, <span class="word_hot" title="USA [ju: es 'ei]">USA</span>.<span class="des" title="第31届神经网络信息处理系统会议（NIPS 2017），美国加州长滩市。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">*Equal contribution.<span class="des" title="*同等贡献。"></span></div>
+    <div class="src">Listing order is random.<span class="des" title=" 名单顺序随机。"></span></div>
+    <div class="src"><span class="word_hot_rare">Jakob</span> proposed replacing RNNs with self-attention and started the effort to evaluate this idea.<span class="des" title=" Jakob提出用self-attention替换RNN并开始努力验证这个想法。"></span></div>
+    <div class="src"><span class="word_hot_rare">Ashish</span>, with <span class="word_hot_rare">Illia</span>, designed and implemented the first <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> models and has been <span class="word_hot" title="crucially [ˈkru:ʃɪəlɪ]">crucially</span> involved in every aspect of this work.<span class="des" title=" Ashish和Illia设计并实现第一个Transformer模型，并在这项工作中的各个方面起着至关重要的作用。"></span></div>
+    <div class="src"><span class="word_hot" title="Noam [ˈnəuəm]">Noam</span> proposed scaled <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">dot-product</span> attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.<span class="des" title=" Noam提出缩放版的点积attention、multi-head attention和与参数无关的位置表示，并成为在几乎每个细节中都涉及的另外一个人。"></span></div>
+    <div class="src"><span class="word_hot_rare">Niki</span> designed, implemented, tuned and evaluated countless model <span class="word_hot" title="variant [ˈveəriənt]">variants</span> in our original <span class="word_hot_rare">codebase</span> and <span class="word_hot_rare">tensor2tensor</span>.<span class="des" title=" Niki在我们最初的代码库和tensor2tensor中设计、实现、调优和评估了无数的模型变体。"></span></div>
+    <div class="src"><span class="word_hot_rare">Llion</span> also experimented with novel model <span class="word_hot" title="variant [ˈveəriənt]">variants</span>, was responsible for our initial <span class="word_hot_rare">codebase</span>, and efficient inference and <span class="word_hot" title="visualization [ˌvɪʒʊəlaɪ'zeɪʃn]">visualizations</span>.<span class="des" title=" Llion还尝试了新的模型变体，负责我们的初始代码库，以及高效的推断和可视化。"></span></div>
+    <div class="src"><span class="word_hot_rare">Lukasz</span> and <span class="word_hot_rare">Aidan</span> spent countless long days designing various parts of and implementing <span class="word_hot_rare">tensor2tensor</span>, replacing our earlier <span class="word_hot_rare">codebase</span>, greatly improving results and <span class="word_hot" title="massively ['mæsɪvlɪ]">massively</span> accelerating our research.<span class="des" title=" Lukasz和Aidan花费了无数的时间来设计tensor2tensor的各个部分，取代了我们之前的代码库，极大地改进了结果并大大加快了我们的研究。 "></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Abstract<span class="des" title="摘要"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The dominant sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> models are based on complex <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> or convolutional neural networks that include an encoder and a decoder.<span class="des" title="主流序列转导模型基于复杂的循环神经网络或卷积神经网络，这些神经网络包含一个编码器和一个解码器。"></span></div>
+    <div class="src">The best performing models also connect the encoder and decoder through an attention mechanism.<span class="des" title=" 性能最好的模型还通过attention机制将编码器和解码器连接起来。"></span></div>
+    <div class="src">We propose a new simple network architecture, the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span>, based solely on attention mechanisms, <span class="word_hot" title="dispense [dɪˈspens]">dispensing</span> with recurrence and convolutions entirely.<span class="des" title=" 我们提出一种新的简单的网络架构Transformer，仅基于attention机制并完全避免循环和卷积。"></span></div>
+    <div class="src">Experiments on two machine translation tasks show these models to be superior in quality while being more <span class="word_hot_rare">parallelizable</span> and requiring significantly less time to train.<span class="des" title=" 对两个机器翻译任务的实验表明，这些模型在质量上更加优越、并行性更好并且需要的训练时间显著减少。"></span></div>
+    <div class="src">Our model achieves 28.4 <span class="word_hot" title="BLEU [blju:]">BLEU</span> on the <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-German translation task, improving over the existing best results, including <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensembles</span>, by over 2 <span class="word_hot" title="BLEU [blju:]">BLEU</span>.<span class="des" title=" 我们的模型在WMT 2014英语-德语翻译任务上达到28.4 BLEU，超过现有最佳结果（包括整合模型）2个BLEU。"></span></div>
+    <div class="src">On the <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art <span class="word_hot" title="BLEU [blju:]">BLEU</span> score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.<span class="des" title=" 在WMT 2014英语-法语翻译任务中，我们的模型建立了单模型新的最先进的BLEU分数41.8，它在8个GPU上训练了3.5天，这个时间只是目前文献中记载的最好的模型训练成本的一小部分。"></span></div>
+    <div class="src">We show that the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> generalizes well to other tasks by applying it successfully to English <span class="word_hot" title="constituency [kənˈstɪtjuənsi]">constituency</span> <span class="word_hot" title="parse [pɑ:z]">parsing</span> both with large and limited training data.<span class="des" title=" 通过在解析大量训练数据和有限训练数据的两种情况下将其应用到English constituency，我们表明Transformer可以很好地推广到其他任务。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">1 Introduction<span class="des" title="1 简介"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src"><span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> neural networks, long short-term memory [13] and gated <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> [7] neural networks in particular, have been firmly established as state of the art approaches in sequence modeling and <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> problems such as language modeling and machine translation [35, 2, 5].<span class="des" title="在序列建模和转换问题中，如语言建模和机器翻译[35, 2, 5]，循环神经网络特别是长短期记忆[13]和门控循环[7]神经网络，已经被确立为最先进的方法。"></span></div>
+    <div class="src">Numerous efforts have since continued to push the boundaries of <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> language models and <span class="word_hot_synth" title="encoder-decoder [!≈ ɪn'kəʊdə ˌdi:ˈkəʊdə(r)]">encoder-decoder</span> architectures [38, 24, 15].<span class="des" title=" 自那以后，许多努力一直在推动循环语言模型和编码器-解码器架构的界限[38, 24, 15]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src"><span class="word_hot" title="recurrent [rɪˈkʌrənt]">Recurrent</span> models typically factor computation along the symbol positions of the input and output sequences.<span class="des" title="循环模型通常是对输入和输出序列的符号位置进行因子计算。"></span></div>
+    <div class="src"><span class="word_hot" title="align [əˈlaɪn]">Aligning</span> the positions to steps in computation time, they generate a sequence of hidden states <span class="word_hot_rare">ht</span>, as a function of the previous hidden state <span class="word_hot_rare">ht</span>-1 and the input for position t.<span class="des" title=" 通过在计算期间将位置与步骤对齐，它们根据前一步的隐藏状态ht-1和输入产生位置t的隐藏状态序列ht。"></span></div>
+    <div class="src">This <span class="word_hot" title="inherently [ɪnˈhɪərəntlɪ]">inherently</span> <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> nature precludes <span class="word_hot" title="parallelization [pærəlɪlaɪ'zeɪʃn]">parallelization</span> within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.<span class="des" title="这种固有的顺序特性阻碍样本训练的并行化，这在更长的序列长度上变得至关重要，因为有限的内存限制样本的批次大小。"></span></div>
+    <div class="src">Recent work has achieved significant improvements in computational efficiency through <span class="word_hot" title="factorization [ˌfæktəraiˈzeiʃən]">factorization</span> tricks [21] and <span class="word_hot" title="conditional [kənˈdɪʃənl]">conditional</span> computation [32], while also improving model performance in case of the latter.<span class="des" title=" 最近的工作通过巧妙的因子分解[21]和条件计算[32]在计算效率方面取得重大进展，后者还同时提高了模型性能。"></span></div>
+    <div class="src">The fundamental constraint of <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> computation, however, remains.<span class="des" title=" 然而，顺序计算的基本约束依然存在。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Attention mechanisms have become an <span class="word_hot" title="integral [ˈɪntɪgrəl]">integral</span> part of compelling sequence modeling and <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 19].<span class="des" title="在各种任务中，attention机制已经成为序列建模和转导模型不可或缺的一部分，它可以建模依赖关系而不考虑其在输入或输出序列中的距离[2, 19]。"></span></div>
+    <div class="src">In all but a few cases [27], however, such attention mechanisms are used in <span class="word_hot" title="conjunction [kənˈdʒʌŋkʃn]">conjunction</span> with a <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> network.<span class="des" title=" 除少数情况外[27]，这种attention机制都与循环网络一起使用。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In this work we propose the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span>, a model architecture <span class="word_hot" title="eschew [ɪsˈtʃu:]">eschewing</span> recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.<span class="des" title="在这项工作中我们提出Transformer，这种模型架构避免循环并完全依赖于attention机制来绘制输入和输出之间的全局依赖关系。"></span></div>
+    <div class="src">The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> allows for significantly more <span class="word_hot" title="parallelization [pærəlɪlaɪ'zeɪʃn]">parallelization</span> and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight <span class="word_hot_rare">P100</span> GPUs.<span class="des" title=" Transformer允许进行更多的并行化，并且可以在八个P100 GPU上接受少至十二小时的训练后达到翻译质量的新的最佳结果。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">2 Background<span class="des" title="2 背景"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The goal of reducing <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> computation also forms the foundation of the Extended Neural GPU [16], <span class="word_hot_rare">ByteNet</span> [18] and <span class="word_hot_rare">ConvS2S</span> [9], all of which use convolutional neural networks as basic building block, computing hidden representations in parallel for all input and output positions.<span class="des" title="减少顺序计算的目标也构成扩展的神经网络GPU [16]、ByteNet [18]和ConvS2S [9]的基础，它们都使用卷积神经网络作为基本构建模块、并行计算所有输入和输出位置的隐藏表示。"></span></div>
+    <div class="src">In these models, the number of operations required to relate signals from two <span class="word_hot" title="arbitrary [ˈɑ:bɪtrəri]">arbitrary</span> input or output positions grows in the distance between positions, <span class="word_hot" title="linearly [ˈliniəli]">linearly</span> for <span class="word_hot_rare">ConvS2S</span> and <span class="word_hot" title="logarithmically ['lɒɡərɪðmɪklɪ]">logarithmically</span> for <span class="word_hot_rare">ByteNet</span>.<span class="des" title=" 在这些模型中，关联任意两个输入和输出位置的信号所需的操作次数会随着位置之间的距离而增加，ConvS2S是线性增加，而ByteNet是对数增加。"></span></div>
+    <div class="src">This makes it more difficult to learn dependencies between distant positions [12].<span class="des" title=" 这使得学习远程位置[12]之间的依赖性变得更加困难。"></span></div>
+    <div class="src">In the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> this is reduced to a constant number of operations, <span class="word_hot" title="albeit [ˌɔ:lˈbi:ɪt]">albeit</span> at the cost of reduced effective resolution due to averaging <span class="word_hot_synth" title="attention-weighted [!≈ əˈtenʃn ˈweɪtɪd]">attention-weighted</span> positions, an effect we <span class="word_hot" title="counteract [ˌkaʊntərˈækt]">counteract</span> with Multi-Head Attention as described in section 3.2.<span class="des" title=" 在Transformer中，这种操作减少到固定的次数，尽管由于对用attention权重化的位置取平均降低了效果，但是我使用Multi-Head Attention进行抵消，具体描述见 3.2。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Self-attention, sometimes called <span class="word_hot_synth" title="intra-attention [!≈ 'ɪntrə əˈtenʃn]">intra-attention</span> is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.<span class="des" title="Self-attention，有时称为intra-attention，是一种attention机制，它关联单个序列的不同位置以计算序列的表示。"></span></div>
+    <div class="src">Self-attention has been used successfully in a variety of tasks including reading comprehension, <span class="word_hot" title="abstractive [æb'strækәtiv]">abstractive</span> <span class="word_hot" title="summarization [ˌsʌmərɪ'zeɪʃən]">summarization</span>, <span class="word_hot" title="textual [ˈtekstʃuəl]">textual</span> <span class="word_hot" title="entailment [en'teɪlmənt]">entailment</span> and learning <span class="word_hot_synth" title="task-independent [!≈ tɑ:sk ˌɪndɪˈpendənt]">task-independent</span> sentence representations [4, 27, 28, 22].<span class="des" title=" Self-attention已成功用于各种任务，包括阅读理解、摘要概括、文本蕴涵和学习与任务无关的句子表征[4, 27, 28, 22]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">End-to-end memory networks are based on a <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> attention mechanism instead of <span class="word_hot_synth" title="sequence-aligned [!≈ ˈsi:kwəns ə'laɪnd]">sequence-aligned</span> recurrence and have been shown to perform well on <span class="word_hot_synth" title="simple-language [!≈ ˈsɪmpl ˈlæŋgwɪdʒ]">simple-language</span> question answering and language modeling tasks [34].<span class="des" title="端到端的记忆网络基于循环attention机制，而不是序列对齐的循环，并且已被证明在简单语言的问答和语言建模任务中表现良好[34]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">To the best of our knowledge, however, the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> is the first <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> model relying entirely on self-attention to compute representations of its input and output without using <span class="word_hot_synth" title="sequence-aligned [!≈ ˈsi:kwəns ə'laɪnd]">sequence-aligned</span> RNNs or convolution.<span class="des" title="然而，就我们所知，Transformer是第一个完全依靠self-attention来计算输入和输出表示而不使用序列对齐RNN或卷积的转导模型。"></span></div>
+    <div class="src">In the following sections, we will describe the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span>, motivate self-attention and discuss its advantages over models such as [17, 18] and [9].<span class="des" title=" 在下面的章节中，我们将描述Transformer、引出self-attention并讨论它相对[17, 18]和[9]几个模型的优势。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3 Model Architecture<span class="des" title="3 模型架构"></span></div>
+</div>
+    <br>
+<figure style="text-align: center;">
+    <img src=""/>
+</figure>
+<div class="paragraph_part">
+    <div class="src">Figure 1: The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> - model architecture.<span class="des" title="图1： Transformer — 模型架构。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Most competitive neural sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> models have an <span class="word_hot_synth" title="encoder-decoder [!≈ ɪn'kəʊdə ˌdi:ˈkəʊdə(r)]">encoder-decoder</span> structure [5, 2, 35].<span class="des" title="大部分神经序列转导模型都有一个编码器-解码器结构[5, 2, 35]。"></span></div>
+    <div class="src">Here, the encoder maps an input sequence of symbol representations (x1,..., <span class="word_hot_rare">xn</span>) to a sequence of continuous representations z = (z1,..., <span class="word_hot_rare">zn</span>).<span class="des" title=" 这里，编码器映射一个用符号表示的输入序列(x1,...,xn) 到一个连续的表示z = (z1,...,zn)。"></span></div>
+    <div class="src">Given z, the decoder then generates an output sequence (y1,..., <span class="word_hot_rare">ym</span>) of symbols one element at a time.<span class="des" title=" 根据z，解码器生成符号的一个输出序列(y1,...,ym) ，一次一个元素。"></span></div>
+    <div class="src">At each step the model is <span class="word_hot_synth" title="auto-regressive [!≈ ˈɔ:təʊ rɪˈgresɪv]">auto-regressive</span> [10], consuming the previously generated symbols as additional input when generating the next.<span class="des" title=" 在每一步中，模型都是自回归的[10]，当生成下一个时，使用先前生成的符号作为附加输入。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> follows this overall architecture using stacked self-attention and <span class="word_hot_synth" title="point-wise [!≈ pɔɪnt waɪz]">point-wise</span>, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.<span class="des" title="Transformer遵循这种整体架构，编码器和解码器都使用self-attention堆叠和point-wise、完全连接的层，分别显示在图1的左边和右边。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.1 Encoder and Decoder Stacks<span class="des" title="3.1 编码器和解码器堆栈"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Encoder: The encoder is composed of a stack of N = 6 identical layers.<span class="des" title="编码器： 编码器由N = 6 个完全相同的层堆叠而成。"></span></div>
+    <div class="src">Each layer has two <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span>.<span class="des" title=" 每一层都有两个子层。"></span></div>
+    <div class="src">The first is a multi-head self-attention mechanism, and the second is a simple, <span class="word_hot_synth" title="position-wise [!≈ pəˈzɪʃn waɪz]">position-wise</span> fully connected <span class="word_hot" title="feed-forward ['fi:df'ɔ:wəd]">feed-forward</span> network.<span class="des" title=" 第一个子层是一个multi-head self-attention机制，第二个子层是一个简单的、位置完全连接的前馈网络。"></span></div>
+    <div class="src">We employ a <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> connection [11] around each of the two <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span>, followed by layer normalization [1].<span class="des" title=" 我们对每个子层再采用一个残差连接[11] ，接着进行层标准化[1]。"></span></div>
+    <div class="src">That is, the output of each <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span> is <span class="word_hot_rare">LayerNorm</span>(x + <span class="word_hot" title="Sublayer ['sʌb'leiә]">Sublayer</span>(x)), where <span class="word_hot" title="Sublayer ['sʌb'leiә]">Sublayer</span>(x) is the function implemented by the <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span> itself.<span class="des" title=" 也就是说，每个子层的输出是LayerNorm(x + Sublayer(x))，其中Sublayer(x) 是由子层本身实现的函数。"></span></div>
+    <div class="src">To facilitate these <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> connections, all <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span> in the model, as well as the embedding layers, produce outputs of dimension <span class="word_hot_rare">dmodel</span> = 512.<span class="des" title=" 为了方便这些残差连接，模型中的所有子层以及嵌入层产生的输出维度都为dmodel = 512。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Decoder: The decoder is also composed of a stack of N = 6 identical layers.<span class="des" title="解码器： 解码器同样由N = 6 个完全相同的层堆叠而成。"></span></div>
+    <div class="src">In addition to the two <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span> in each encoder layer, the decoder inserts a third <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span>, which performs multi-head attention over the output of the encoder stack.<span class="des" title=" 除了每个编码器层中的两个子层之外，解码器还插入第三个子层，该层对编码器堆栈的输出执行multi-head attention。"></span></div>
+    <div class="src">Similar to the encoder, we employ <span class="word_hot" title="residual [rɪˈzɪdjuəl]">residual</span> connections around each of the <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span>, followed by layer normalization.<span class="des" title=" 与编码器类似，我们在每个子层再采用残差连接，然后进行层标准化。"></span></div>
+    <div class="src">We also modify the self-attention <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span> in the decoder stack to prevent positions from attending to subsequent positions.<span class="des" title=" 我们还修改解码器堆栈中的self-attention子层，以防止位置关注到后面的位置。"></span></div>
+    <div class="src">This masking, combined with fact that the output <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.<span class="des" title=" 这种掩码结合将输出嵌入偏移一个位置，确保对位置的预测 i 只能依赖小于i 的已知输出。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.2 Attention<span class="des" title="3.2 Attention"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">An attention function can be described as mapping a query and a set of <span class="word_hot_synth" title="key-value [!≈ ki: ˈvælju:]">key-value</span> pairs to an output, where the query, keys, values, and output are all vectors.<span class="des" title="Attention函数可以描述为将query和一组key-value对映射到输出，其中query、key、value和输出都是向量。"></span></div>
+    <div class="src">The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.<span class="des" title=" 输出为value的加权和，其中分配给每个value的权重通过query与相应key的兼容函数来计算。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.2.1 Scaled <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">Dot-Product</span> Attention<span class="des" title="3.2.1 缩放版的点积attention"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We call our particular attention &quot;Scaled <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">Dot-Product</span> Attention" (Figure 2).<span class="des" title="我们称我们特殊的attention为“缩放版的点积attention”（图 2）。"></span></div>
+    <div class="src">The input consists of queries and keys of dimension $d_k$, and values of dimension $d_v$.<span class="des" title=" 输入由query、$d_k$维的key和$d_v$ 维的value组成。"></span></div>
+    <div class="src">We compute the dot products of the query with all keys, divide each by $\sqrt {d_k}$, and apply a softmax function to obtain the weights on the values.<span class="des" title=" 我们计算query和所有key的点积、用$\sqrt {d_k}$相除，然后应用一个softmax函数以获得值的权重。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q.<span class="des" title="在实践中，我们同时计算一组query的attention函数，并将它们组合成一个矩阵Q。"></span></div>
+    <div class="src">The keys and values are also packed together into matrices K and V.<span class="des" title=" key和value也一起打包成矩阵 K 和 V 。"></span></div>
+    <div class="src">We compute the matrix of outputs as:<span class="des" title=" 我们计算输出矩阵为："></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ \text{Attention}(Q, K, V) = \text{softmax} ( \frac {QK^T} {\sqrt{d_k}} ) V \tag{1} $$</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The two most commonly used attention functions are <span class="word_hot" title="additive [ˈædətɪv]">additive</span> attention [2], and <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">dot-product</span> (<span class="word_hot" title="multiplicative ['mʌltɪplɪkeɪtɪv]">multiplicative</span>) attention.<span class="des" title="两个最常用的attention函数是加法attention[2]和点积（乘法）attention。"></span></div>
+    <div class="src"><span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">Dot-product</span> attention is identical to our algorithm, except for the scaling factor of $\frac 1 {\sqrt{d_k}}$.<span class="des" title=" 除了缩放因子$\frac 1 {\sqrt{d_k}}$之外，点积attention与我们的算法相同。"></span></div>
+    <div class="src"><span class="word_hot" title="additive [ˈædətɪv]">Additive</span> attention computes the compatibility function using a <span class="word_hot" title="feed-forward ['fi:df'ɔ:wəd]">feed-forward</span> network with a single hidden layer.<span class="des" title=" 加法attention使用具有单个隐藏层的前馈网络计算兼容性函数。"></span></div>
+    <div class="src">While the two are similar in theoretical complexity, <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">dot-product</span> attention is much faster and more <span class="word_hot_synth" title="space-efficient [!≈ speɪs ɪˈfɪʃnt]">space-efficient</span> in practice, since it can be implemented using highly optimized matrix <span class="word_hot" title="multiplication [ˌmʌltɪplɪˈkeɪʃn]">multiplication</span> code.<span class="des" title=" 虽然两者在理论上的复杂性相似，但在实践中点积attention的速度更快、更节省空间，因为它可以使用高度优化的矩阵乘法代码来实现。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">While for small values of $d_k$ the two mechanisms perform similarly, <span class="word_hot" title="additive [ˈædətɪv]">additive</span> attention outperforms dot product attention without scaling for larger values of $d_k$ [3].<span class="des" title="当dk的值比较小的时候，这两个机制的性能相差相近，当dk比较大时，加法attention比不带缩放的点积attention性能好[3]。"></span></div>
+    <div class="src">We suspect that for large values of <span class="word_hot" title="dk ['di:k'eɪ]">dk</span>, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients (To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and <span class="word_hot" title="variance [ˈveəriəns]">variance</span> 1.<span class="des" title=" 我们怀疑，对于很大的dk值，点积大幅度增长，将softmax函数推向具有极小梯度的区域(4为了说明点积为什么变大，假设q和k的组成是均值为0和方差为1的独立随机变量。"></span></div>
+    <div class="src">Then their dot product, q ⋅ k = ∑ i=1dk <span class="word_hot_rare">qiki</span>, has mean 0 and <span class="word_hot" title="variance [ˈveəriəns]">variance</span> <span class="word_hot" title="dk ['di:k'eɪ]">dk</span>).<span class="des" title=" 那么它们的点积q ⋅ k = ∑ i=1dk qi ki 的均值为0，方差为dk)。"></span></div>
+    <div class="src">To <span class="word_hot" title="counteract [ˌkaʊntərˈækt]">counteract</span> this effect, we scale the dot products by $\frac 1 {\sqrt{d_k}}$.<span class="des" title=" 为了抵消这种影响，我们缩小点积 $\frac 1 {\sqrt{d_k}}$倍。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.2.2 Multi-Head Attention<span class="des" title="3.2.2 Multi-Head Attention"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Figure 2: (left) Scaled <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">Dot-Product</span> Attention.<span class="des" title="图2： （左）缩放版的点积attention。"></span></div>
+    <div class="src">(right) Multi-Head Attention consists of several attention layers running in parallel.<span class="des" title=" （右）Multi-Head Attention，由多个并行运行的attention层组成。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Instead of performing a single attention function with $d$ <span class="word_hot_synth" title="model-dimensional [!≈ ˈmɒdl dɪ'menʃənəl]">model-dimensional</span> keys, values and queries, we found it beneficial to <span class="word_hot" title="linearly [ˈliniəli]">linearly</span> project the queries, keys and values $h$ times with different, learned linear projections to $d_k$, $d_k$ and $d_v$ dimensions, respectively.<span class="des" title="我们发现将query、key和value分别用不同的、学到的线性映射h倍到dk、dk和dv维效果更好，而不是用d model维的query、key和value执行单个attention函数。"></span></div>
+    <div class="src">On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding $d_v$-dimensional output values.<span class="des" title=" 基于每个映射版本的query、key和value，我们并行执行attention函数，产生dv 维输出值。"></span></div>
+    <div class="src">These are <span class="word_hot" title="concatenate [kɒn'kætɪneɪt]">concatenated</span> and once again projected, resulting in the final values, as depicted in Figure 2.<span class="des" title=" 将它们连接并再次映射，产生最终值，如图所示 2。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Multi-head attention allows the model to <span class="word_hot" title="jointly [dʒɔɪntlɪ]">jointly</span> attend to information from different representation subspaces at different positions.<span class="des" title="Multi-head attention允许模型的不同表示子空间联合关注不同位置的信息。"></span></div>
+    <div class="src">With a single attention head, averaging inhibits this.<span class="des" title=" 如果只有一个attention head，它的平均值会削弱这个信息。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ \text{MultiHead}(Q,K,V ) = \text{Concat}(\text{head}_1,\cdots, \text{head}_h)W^O $$</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$\text{where}  \text{head}_i= \text{Attention}(QW_i^Q,KW_i^K,VW_i^V)$$</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Where the projections are parameter matrices $W_i^Q \in \mathbb R^{d_{model}\times d_k}$ , $W_i^K \in \mathbb R^{d_{model}\times d_k}$ , $W_i^V \in \mathbb R^{d_{model}\times d_v}$ and $W^O \in \mathbb R^{hd_{v} \times d_{model}}$.<span class="des" title="其中，映射为参数矩阵WiQ ∈ ℝdmodel×dk , WiK ∈ ℝdmodel×dk , WiV ∈ ℝdmodel×dv 及W O ∈ ℝhdv×dmodel。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In this work we employ $h = 8$ parallel attention layers, or heads.<span class="des" title="在这项工作中，我们采用h = 8 个并行attention层或head。"></span></div>
+    <div class="src">For each of these we use $d_k = d_v = d_{model}/ h = 64$.<span class="des" title=" 对每个head，我们使用dk =dv =dmodel ∕ h = 64。"></span></div>
+    <div class="src">Due to the reduced dimension of each head, the total computational cost is similar to that of single-head attention with full dimensionality.<span class="des" title=" 由于每个head的大小减小，总的计算成本与具有全部维度的单个head attention相似。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.2.3 Applications of Attention in our Model<span class="des" title="3.2.3 Attention在我们的模型中的应用"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> uses multi-head attention in three different ways:<span class="des" title="Transformer使用以3种方式使用multi-head attention："></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In &quot;<span class="word_hot_synth" title="encoder-decoder [!≈ ɪn'kəʊdə ˌdi:ˈkəʊdə(r)]">encoder-decoder</span> attention" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.<span class="des" title="在“编码器—解码器attention”层，query来自上面的解码器层，key和value来自编码器的输出。"></span></div>
+    <div class="src">This allows every position in the decoder to attend over all positions in the input sequence.<span class="des" title=" 这允许解码器中的每个位置能关注到输入序列中的所有位置。"></span></div>
+    <div class="src">This <span class="word_hot" title="mimic [ˈmɪmɪk]">mimics</span> the typical <span class="word_hot_synth" title="encoder-decoder [!≈ ɪn'kəʊdə ˌdi:ˈkəʊdə(r)]">encoder-decoder</span> attention mechanisms in sequence-to-sequence models such as [38, 2, 9].<span class="des" title=" 这模仿序列到序列模型中典型的编码器—解码器的attention机制，例如[38, 2, 9]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The encoder contains self-attention layers.<span class="des" title="编码器包含self-attention层。"></span></div>
+    <div class="src">In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder.<span class="des" title=" 在self-attention层中，所有的key、value和query来自同一个地方，在这里是编码器中前一层的输出。"></span></div>
+    <div class="src">Each position in the encoder can attend to all positions in the previous layer of the encoder.<span class="des" title=" 编码器中的每个位置都可以关注编码器上一层的所有位置。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.<span class="des" title="类似地，解码器中的self-attention层允许解码器中的每个位置都关注解码器中直到并包括该位置的所有位置。"></span></div>
+    <div class="src">We need to prevent <span class="word_hot" title="leftward [ˈleftwəd]">leftward</span> information flow in the decoder to preserve the <span class="word_hot_synth" title="auto-regressive [!≈ ˈɔ:təʊ rɪˈgresɪv]">auto-regressive</span> property.<span class="des" title=" 我们需要防止解码器中的向左信息流来保持自回归属性。"></span></div>
+    <div class="src">We implement this inside of scaled <span class="word_hot_synth" title="dot-product [!≈ dɒt ˈprɒdʌkt]">dot-product</span> attention by masking out (setting to -∞) all values in the input of the softmax which correspond to illegal connections.<span class="des" title=" 通过屏蔽softmax的输入中所有不合法连接的值（设置为-∞），我们在缩放版的点积attention中实现。"></span></div>
+    <div class="src">See Figure 2.<span class="des" title=" 见图 2."></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.3 <span class="word_hot_synth" title="position-wise [!≈ pəˈzɪʃn waɪz]">Position-wise</span> <span class="word_hot" title="feed-forward ['fi:df'ɔ:wəd]">Feed-Forward</span> Networks<span class="des" title="3.3 基于位置的前馈网络"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In addition to attention <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layers</span>, each of the layers in our encoder and decoder contains a fully connected <span class="word_hot" title="feed-forward ['fi:df'ɔ:wəd]">feed-forward</span> network, which is applied to each position separately and <span class="word_hot" title="identically [aɪ'dentɪklɪ]">identically</span>.<span class="des" title="除了attention子层之外，我们的编码器和解码器中的每个层都包含一个完全连接的前馈网络，该前馈网络单独且相同地应用于每个位置。"></span></div>
+    <div class="src">This consists of two linear transformations with a ReLU activation in between.<span class="des" title=" 它由两个线性变换组成，之间有一个ReLU激活。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ \text{FFN} (x) = \max (0, xW_1 + b_1)W_2 + b_2 \tag{2} $$<span class="des" title=" FFN (x) = max (0,xW1 + b1)W2 + b2 (2)"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">While the linear transformations are the same across different positions, they use different parameters from layer to layer.<span class="des" title="尽管线性变换在不同位置上是相同的，但它们层与层之间使用不同的参数。"></span></div>
+    <div class="src">Another way of describing this is as two convolutions with kernel size 1.<span class="des" title=" 它的另一种描述方式是两个内核大小为1的卷积。"></span></div>
+    <div class="src">The dimensionality of input and output is $d_{model} = 512$, and the <span class="word_hot_synth" title="inner-layer [!≈ ˈɪnə(r) ˈleɪə(r)]">inner-layer</span> has dimensionality $d_{ff} = 2048$.<span class="des" title=" 输入和输出的维度为dmodel = 512，内部层的维度为dff = 2048。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.4 <span class="word_hot" title="embeddings [ɪm'bɛd]">Embeddings</span> and Softmax<span class="des" title="3.4 嵌入和Softmax"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Similarly to other sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> models, we use learned <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> to convert the input tokens and output tokens to vectors of dimension <span class="word_hot_rare">dmodel</span>.<span class="des" title="与其他序列转导模型类似，我们使用学习到的嵌入将输入词符和输出词符转换为维度为dmodel的向量。"></span></div>
+    <div class="src">We also use the usual learned linear transformation and softmax function to convert the decoder output to predicted <span class="word_hot_synth" title="next-token [!≈ nekst ˈtəʊkən]">next-token</span> probabilities.<span class="des" title=" 我们还使用普通的线性变换和softmax函数将解码器输出转换为预测的下一个词符的概率。"></span></div>
+    <div class="src">In our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [30].<span class="des" title=" 在我们的模型中，两个嵌入层之间和pre-softmax线性变换共享相同的权重矩阵，类似于[30]。"></span></div>
+    <div class="src">In the embedding layers, we multiply those weights by $\sqrt{d_{model}}$.<span class="des" title=" 在嵌入层中，我们将这些权重乘以√ ----- dmodel。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">3.5 <span class="word_hot" title="positional [pəˈzɪʃənəl]">Positional</span> Encoding<span class="des" title="3.5 位置编码"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence.<span class="des" title="由于我们的模型不包含循环和卷积，为了让模型利用序列的顺序，我们必须注入序列中关于词符相对或者绝对位置的一些信息。"></span></div>
+    <div class="src">To this end, we add &quot;<span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot_synth" title="encodings [!≈ ɪn'kəʊdɪŋz]">encodings</span>&quot; to the input <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> at the bottoms of the encoder and decoder stacks.<span class="des" title=" 为此，我们将“位置编码”添加到编码器和解码器堆栈底部的输入嵌入中。"></span></div>
+    <div class="src">The <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot_synth" title="encodings [!≈ ɪn'kəʊdɪŋz]">encodings</span> have the same dimension <span class="word_hot_rare">dmodel</span> as the <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span>, so that the two can be summed.<span class="des" title=" 位置编码和嵌入的维度dmodel相同，所以它们俩可以相加。"></span></div>
+    <div class="src">There are many choices of <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot_synth" title="encodings [!≈ ɪn'kəʊdɪŋz]">encodings</span>, learned and fixed [9].<span class="des" title=" 有多种位置编码可以选择，例如通过学习得到的位置编码和固定的位置编码[9]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In this work, we use <span class="word_hot" title="sine [saɪn]">sine</span> and <span class="word_hot" title="cosine [ˈkəʊsaɪn]">cosine</span> functions of different frequencies:<span class="des" title="在这项工作中，我们使用不同频率的正弦和余弦函数："></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ PE(pos, 2i) = sin(pos/10000^{2i/d_{model}}) $$<span class="des" title="PE(pos,2i) = sin(pos ∕ 100002i ∕ dmodel)		"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ PE(pos, 2i+1) = cos(pos/10000^{2i/d_{model}}) $$<span class="des" title="PE(pos,2i+1) = cos(pos ∕ 100002i ∕ dmodel)		"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">where $pos$ is the position and $i$ is the dimension.<span class="des" title="其中pos 是位置，i 是维度。"></span></div>
+    <div class="src">That is, each dimension of the <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> encoding corresponds to a <span class="word_hot" title="sinusoid ['saɪnəsɔɪd]">sinusoid</span>.<span class="des" title=" 也就是说，位置编码的每个维度对应于一个正弦曲线。"></span></div>
+    <div class="src">The wavelengths form a <span class="word_hot" title="geometric [ˌdʒi:əˈmetrɪk]">geometric</span> <span class="word_hot" title="progression [prəˈgreʃn]">progression</span> from $2\pi$ to $10000 \cdot 2\pi$.<span class="des" title=" 这些波长形成一个几何级数，从2π 到10000 ⋅ 2π。"></span></div>
+    <div class="src">We chose this function because we <span class="word_hot" title="hypothesize [haɪˈpɒθəsaɪz]">hypothesized</span> it would allow the model to easily learn to attend by relative positions, since for any fixed offset $k$, $PE_{pos+k}$ can be represented as a linear function of $PE_{pos}$.<span class="des" title=" 我们选择这个函数是因为我们假设它允许模型很容易学习对相对位置的关注，因为对任意确定的偏移k, PEpos+k可以表示为PEpos的线性函数。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We also experimented with using learned <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> [9] instead, and found that the two versions produced nearly identical results (see Table 3 row (E)).<span class="des" title="我们还使用学习到的位置嵌入9进行了试验，发现这两个版本产生几乎相同的结果（参见表 3 行(E)）。"></span></div>
+    <div class="src">We chose the <span class="word_hot" title="sinusoidal [ˌsɪnə'sɔɪdl]">sinusoidal</span> version because it may allow the model to <span class="word_hot" title="extrapolate [ɪkˈstræpəleɪt]">extrapolate</span> to sequence lengths longer than the ones encountered during training.<span class="des" title=" 我们选择了正弦曲线，因为它可以允许模型推断比训练期间遇到的更长的序列。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">4 Why Self-Attention<span class="des" title="4 为什么选择Self-Attention"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In this section we compare various aspects of self-attention layers to the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> and convolutional layers commonly used for mapping one <span class="word_hot" title="variable-length ['veərɪəbll'eŋθ]">variable-length</span> sequence of symbol representations $(x_1,\cdots,x_n)$ to another sequence of equal length $(z_1,\cdots,z_n)$, with $x_i$, $z_i \in \mathbb R^d$, such as a hidden layer in a typical sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> encoder or decoder.<span class="des" title="本节，我们比较self-attention与循环层和卷积层的各个方面，它们通常用于映射变长的符号序列表示(x1,...,xn) 到另一个等长的序列(z1,...,zn)，其中xi,zi ∈ ℝd，例如一个典型的序列转导编码器或解码器中的隐藏层。"></span></div>
+    <div class="src">Motivating our use of self-attention we consider three <span class="word_hot" title="desiderata [dɪˌzɪdə'reɪtə]">desiderata</span>.<span class="des" title=" 我们使用self-attention是考虑到解决三个问题。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">One is the total computational complexity per layer.<span class="des" title="一个是每层计算的总复杂度。"></span></div>
+    <div class="src">Another is the amount of computation that can be <span class="word_hot" title="parallelized ['pærəlelaɪz]">parallelized</span>, as measured by the minimum number of <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> operations required.<span class="des" title=" 另一个是可以并行的计算量，以所需的最小顺序操作的数量来衡量。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The third is the path length between <span class="word_hot" title="long-range [lɒŋ reɪndʒ]">long-range</span> dependencies in the network.<span class="des" title="第三个是网络中长距离依赖之间的路径长度。"></span></div>
+    <div class="src">Learning <span class="word_hot" title="long-range [lɒŋ reɪndʒ]">long-range</span> dependencies is a key challenge in many sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> tasks.<span class="des" title=" 学习长距离依赖性是许多序列转导任务中的关键挑战。"></span></div>
+    <div class="src">One key factor affecting the ability to learn such dependencies is the length of the paths forward and backward signals have to <span class="word_hot" title="traverse [trəˈvɜ:s]">traverse</span> in the network.<span class="des" title=" 影响学习这种依赖性能力的一个关键因素是前向和后向信号必须在网络中传播的路径长度。"></span></div>
+    <div class="src">The shorter these paths between any combination of positions in the input and output sequences, the easier it is to learn <span class="word_hot" title="long-range [lɒŋ reɪndʒ]">long-range</span> dependencies [12].<span class="des" title=" 输入和输出序列中任意位置组合之间的这些路径越短，学习远距离依赖性就越容易[12]。"></span></div>
+    <div class="src">Hence we also compare the maximum path length between any two input and output positions in networks composed of the different layer types.<span class="des" title=" 因此，我们还比较了由不同图层类型组成的网络中任意两个输入和输出位置之间的最大路径长度。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Table 1: Maximum path lengths, per-layer complexity and minimum number of <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> operations for different layer types.<span class="des" title="表1： 不同图层类型的最大路径长度、每层复杂度和最少顺序操作数。"></span></div>
+    <div class="src">$n$ is the sequence length, $d$ is the representation dimension, $k$ is the kernel size of convolutions and $r$ the size of the neighborhood in restricted self-attention.<span class="des" title=" n 为序列的长度，d 为表示的维度，k 为卷积的核的大小，r 为受限self-attention中邻域的大小。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">As noted in Table 1, a self-attention layer connects all positions with a constant number of <span class="word_hot" title="sequentially [sɪ'kwenʃəlɪ]">sequentially</span> executed operations, whereas a <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layer requires $O(n)$ <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> operations.<span class="des" title="如表1所示，self-attention层将所有位置连接到恒定数量的顺序执行的操作，而循环层需要O(n) 顺序操作。"></span></div>
+    <div class="src">In terms of computational complexity, self-attention layers are faster than <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers when the sequence length n is smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as <span class="word_hot_synth" title="word-piece [!≈ wɜ:d pi:s]">word-piece</span> [38] and <span class="word_hot_synth" title="byte-pair [!≈ baɪt peə(r)]">byte-pair</span> [31] representations.<span class="des" title=" 在计算复杂性方面，当序列长度n 小于表示维度d 时，self-attention层比循环层快，这是机器翻译中最先进的模型最常见情况，例如单词[38]表示法和字节对[31]表示法。"></span></div>
+    <div class="src">To improve computational performance for tasks involving very long sequences, self-attention could be restricted to considering only a neighborhood of size $r$ in the input sequence centered around the respective output position.<span class="des" title=" 为了提高涉及很长序列的任务的计算性能，可以将self-attention限制在仅考虑大小为r 的邻域。"></span></div>
+    <div class="src">This would increase the maximum path length to $O(n/r)$.<span class="des" title=" 这会将最大路径长度增加到O(n ∕ r)。"></span></div>
+    <div class="src">We plan to investigate this approach further in future work.<span class="des" title=" 我们计划在未来的工作中进一步调查这种方法。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">A single convolutional layer with kernel width $k &lt; n$ does not connect all pairs of input and output positions.<span class="des" title="核宽度为k < n的单层卷积不会连接每一对输入和输出的位置。"></span></div>
+    <div class="src">Doing so requires a stack of $O(n/k)$ convolutional layers in the case of <span class="word_hot" title="contiguous [kənˈtɪgjuəs]">contiguous</span> kernels, or O(<span class="word_hot_rare">logk</span>(n)) in the case of <span class="word_hot" title="dilate [daɪˈleɪt]">dilated</span> convolutions [18], increasing the length of the longest paths between any two positions in the network.<span class="des" title=" 要这么做，在邻近核的情况下需要O(n∕k) 个卷积层， 在扩展卷积的情况下需要O(logk(n)) 个层[18]，它们增加了网络中任意两个位置之间的最长路径的长度。"></span></div>
+    <div class="src">Convolutional layers are generally more expensive than <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers, by a factor of k.<span class="des" title=" 卷积层通常比循环层更昂贵，与因子k有关。"></span></div>
+    <div class="src"><span class="word_hot" title="separable [ˈsepərəbl]">Separable</span> convolutions [6], however, decrease the complexity considerably, to $O(k\cdot n \cdot d + n\cdot d^2)$.<span class="des" title="然而，可分卷积[6]大幅减少复杂度到O(k ⋅n⋅d + n⋅d2)。"></span></div>
+    <div class="src">Even with $k = n$, however, the complexity of a <span class="word_hot" title="separable [ˈsepərəbl]">separable</span> convolution is equal to the combination of a self-attention layer and a <span class="word_hot_synth" title="point-wise [!≈ pɔɪnt waɪz]">point-wise</span> <span class="word_hot" title="feed-forward ['fi:df'ɔ:wəd]">feed-forward</span> layer, the approach we take in our model.<span class="des" title=" 然而，即使k = n，一个可分卷积的复杂度等同于self-attention层和point-wise前向层的组合，即我们的模型采用的方法。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">As side benefit, self-attention could yield more <span class="word_hot" title="interpretable [ɪn'tɜ:prɪtəbl]">interpretable</span> models.<span class="des" title="间接的好处是self-attention可以产生更可解释的模型。"></span></div>
+    <div class="src">We inspect attention distributions from our models and present and discuss examples in the appendix.<span class="des" title=" 我们从我们的模型中研究attention的分布，并在附录中展示和讨论示例。"></span></div>
+    <div class="src">Not only do individual attention heads clearly learn to perform different tasks, many appear to exhibit behavior related to the <span class="word_hot" title="syntactic [sɪnˈtæktɪk]">syntactic</span> and <span class="word_hot" title="semantic [sɪˈmæntɪk]">semantic</span> structure of the sentences.<span class="des" title=" 每个attention head不仅清楚地学习到执行不同的任务，许多似乎展现与句子的句法和语义结构的行为。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">5 Training<span class="des" title="5 训练"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">This section describes the training regime for our models.<span class="des" title="本节介绍我们的模型训练方法。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">5.1 Training Data and Batching<span class="des" title="5.1 训练数据和批次"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We trained on the standard <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 <span class="word_hot_synth" title="English-German [!≈ 'iŋgliʃ ˈdʒɜ:mən]">English-German</span> dataset consisting of about 4.5 million sentence pairs.<span class="des" title="我们在标准的WMT 2014英语-德语数据集上进行了训练，其中包含约450万个句子对。"></span></div>
+    <div class="src">Sentences were encoded using <span class="word_hot_synth" title="byte-pair [!≈ baɪt peə(r)]">byte-pair</span> encoding [3], which has a shared <span class="word_hot_synth" title="source-target [!≈ sɔ:s ˈtɑ:gɪt]">source-target</span> vocabulary of about 37000 tokens.<span class="des" title=" 这些句子使用字节对编码[3]进行编码，源语句和目标语句共享大约37000个词符的词汇表。"></span></div>
+    <div class="src">For <span class="word_hot_synth" title="English-French [!≈ 'iŋgliʃ frentʃ]">English-French</span>, we used the significantly larger <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 <span class="word_hot_synth" title="English-French [!≈ 'iŋgliʃ frentʃ]">English-French</span> dataset consisting of 36M sentences and split tokens into a 32000 <span class="word_hot_synth" title="word-piece [!≈ wɜ:d pi:s]">word-piece</span> vocabulary [38].<span class="des" title=" 对于英语-法语翻译，我们使用大得多的WMT 2014英法数据集，它包含3600万个句子，并将词符分成32000个word-piece词汇表[38]。"></span></div>
+    <div class="src">Sentence pairs were batched together by approximate sequence length.<span class="des" title=" 序列长度相近的句子一起进行批处理。"></span></div>
+    <div class="src">Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.<span class="des" title=" 每个训练批次的句子对包含大约25000个源词符和25000个目标词符。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">5.2 Hardware and Schedule<span class="des" title="5.2 硬件和时间"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We trained our models on one machine with 8 <span class="word_hot" title="NVIDIA [ɪn'vɪdɪə]">NVIDIA</span> <span class="word_hot_rare">P100</span> GPUs.<span class="des" title="我们在一台具有8个NVIDIA P100 GPU的机器上训练我们的模型。"></span></div>
+    <div class="src">For our base models using the <span class="word_hot_rare">hyperparameters</span> described throughout the paper, each training step took about 0.4 seconds.<span class="des" title=" 使用本文描述的超参数的基础模型，每个训练步骤耗时约0.4秒。"></span></div>
+    <div class="src">We trained the base models for a total of 100,000 steps or 12 hours.<span class="des" title=" 我们的基础模型共训练了10万步或12小时。"></span></div>
+    <div class="src">For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).<span class="des" title=" For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. 大模型训练了30万步（3.5天）。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">5.3 <span class="word_hot" title="optimizer ['ɑ:ptɪmaɪzər]">Optimizer</span><span class="des" title="5.3 优化器"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We used the Adam <span class="word_hot" title="optimizer ['ɑ:ptɪmaɪzər]">optimizer</span> [20] with $\beta_1 = 0.9$, $\beta_2 = 0.98$ and $\epsilon = 10^{-9}$.<span class="des" title="我们使用Adam优化器[20]，其中$\beta_1 = 0.9$, $\beta_2 = 0.98$及$\epsilon = 10^{-9}$。"></span></div>
+    <div class="src">We varied the learning rate over the course of training, according to the formula:<span class="des" title=" 我们根据以下公式在训练过程中改变学习率："></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">$$ lrate = d_{model}^{-0.5}\cdot \min(step\_num^{-0.5}, step\_num\cdot warmup\_steps^{-1.5}) \tag{3} $$</div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">This corresponds to increasing the learning rate <span class="word_hot" title="linearly [ˈliniəli]">linearly</span> for the first warmup_steps training steps, and decreasing it thereafter <span class="word_hot" title="proportionally [prə'pɔ:ʃənlɪ]">proportionally</span> to the <span class="word_hot" title="inverse [ˌɪnˈvɜ:s]">inverse</span> square root of the step number.<span class="des" title="这对应于在第一次warmup_steps 步骤中线性地增加学习速率，并且随后将其与步骤数的平方根成比例地减小。"></span></div>
+    <div class="src">We used warmup_steps = 4000.<span class="des" title=" 我们使用warmup_steps = 4000。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">5.4 Regularization<span class="des" title="5.4 正则化"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We employ three types of regularization during training:<span class="des" title="训练期间我们采用三种正则化："></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src"><span class="word_hot" title="residual [rɪˈzɪdjuəl]">Residual</span> Dropout We apply dropout [33] to the output of each <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span>, before it is added to the <span class="word_hot_synth" title="sub-layer [!≈ sʌb ˈleɪə(r)]">sub-layer</span> input and <span class="word_hot" title="normalize [ˈnɔ:məlaɪz]">normalized</span>.<span class="des" title="残差丢弃 我们将丢弃[33]应用到每个子层的输出，在将它与子层的输入相加和规范化之前。"></span></div>
+    <div class="src">In addition, we apply dropout to the sums of the <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> and the <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot_synth" title="encodings [!≈ ɪn'kəʊdɪŋz]">encodings</span> in both the encoder and decoder stacks.<span class="des" title=" 此外，在编码器和解码器堆栈中，我们将丢弃应用到嵌入和位置编码的和。"></span></div>
+    <div class="src">For the base model, we use a rate of $P_{drop} = 0.1$.<span class="des" title=" 对于基本模型，我们使用$P_{drop} = 0.1$丢弃率。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Label Smoothing During training, we employed label smoothing of value $\epsilon_{ls} = 0.1$ [36].<span class="des" title="Label Smoothing 在训练过程中，我们使用的label smoothing的值为ϵls = 0.1[36]。"></span></div>
+    <div class="src">This hurts <span class="word_hot" title="perplexity [pəˈpleksəti]">perplexity</span>, as the model learns to be more unsure, but improves accuracy and <span class="word_hot" title="BLEU [blju:]">BLEU</span> score.<span class="des" title=" 这让模型不易理解，因为模型学得更加不确定，但提高了准确性和BLEU得分。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">6 Results<span class="des" title="6 结果"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">6.1 Machine Translation<span class="des" title="6.1 机器翻译"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Table 2: The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> achieves better <span class="word_hot" title="BLEU [blju:]">BLEU</span> scores than previous state-of-the-art models on the English-to-German and English-to-French <span class="word_hot_rare">newstest</span>2014 tests at a fraction of the training cost.<span class="des" title="表2： Transformer在英语-德语和英语-法语newstest2014测试中获得的BLEU分数比以前的最新模型的分数更好，且训练成本只是它们的一小部分。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">On the <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-German translation task, the big <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">transformer</span> model (<span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> (big) in Table 2) outperforms the best previously reported models (including <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensembles</span>) by more than 2.0 <span class="word_hot" title="BLEU [blju:]">BLEU</span>, establishing a new state-of-the-art <span class="word_hot" title="BLEU [blju:]">BLEU</span> score of 28.4.  The configuration of this model is listed in the bottom line of Table 3.  Training took 3.5 days on 8 <span class="word_hot_rare">P100</span> GPUs.<span class="des" title="在WMT 2014英语-德语翻译任务中，大型transformer模型（表2中的Transformer (big)）比以前报道的最佳模型（包括整合模型）高出2.0 个BLEU以上，确立了一个全新的最高BLEU分数为28.4。 该模型的配置列在表3的底部。 训练在8 个P100 GPU上花费3.5 天。"></span></div>
+    <div class="src">Even our base model <span class="word_hot" title="surpass [səˈpɑ:s]">surpasses</span> all previously published models and <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensembles</span>, at a fraction of the training cost of any of the competitive models.<span class="des" title=" 即使我们的基础模型也超过了以前发布的所有模型和整合模型，且训练成本只是这些模型的一小部分。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">On the <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-French translation task, our big model achieves a <span class="word_hot" title="BLEU [blju:]">BLEU</span> score of 41.0, outperforming all of the previously published single models, at less than 1∕4 the training cost of the previous state-of-the-art model.<span class="des" title="在WMT 2014英语-法语翻译任务中，我们的大型模型的BLEU得分为41.0，超过了之前发布的所有单一模型，训练成本低于先前最先进模型的1 ∕ 4 。"></span></div>
+    <div class="src">The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> (big) model trained for English-to-French used dropout rate <span class="word_hot_rare">Pdrop</span> = 0.1, instead of 0.3.<span class="des" title=" 英语-法语的Transformer (big) 模型使用丢弃率为Pdrop = 0.1，而不是0.3。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals.<span class="des" title="对于基础模型，我们使用的单个模型来自最后5个检查点的平均值，这些检查点每10分钟写一次。"></span></div>
+    <div class="src">For the big models, we averaged the last 20 checkpoints.<span class="des" title=" 对于大型模型，我们对最后20个检查点进行了平均。"></span></div>
+    <div class="src">We used beam search with a beam size of 4 and length penalty α = 0.6 [38].<span class="des" title=" 我们使用beam search，beam大小为4 ，长度惩罚α = 0.6 [38]。"></span></div>
+    <div class="src">These <span class="word_hot_rare">hyperparameters</span> were chosen after <span class="word_hot" title="experimentation [ɪkˌsperɪmenˈteɪʃn]">experimentation</span> on the development set.<span class="des" title=" 这些超参数是在开发集上进行实验后选定的。"></span></div>
+    <div class="src">We set the maximum output length during inference to input length + 50, but terminate early when possible [38].<span class="des" title=" 在推断时，我们设置最大输出长度为输入长度+50，但在可能时尽早终止[38]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature.<span class="des" title="表2总结了我们的结果，并将我们的翻译质量和训练成本与文献中的其他模型体系结构进行了比较。"></span></div>
+    <div class="src">We estimate the number of floating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision <span class="word_hot" title="floating-point ['fləʊtɪŋ'pɔɪnt]">floating-point</span> capacity of each GPU (We used values of 2.8, 3.7, 6.0 and 9.5 <span class="word_hot_synth" title="TFLOPS [!≈ ti: ef el əu pi: es]">TFLOPS</span> for <span class="word_hot_rare">K80</span>, <span class="word_hot_rare">K40</span>, <span class="word_hot_rare">M40</span> and <span class="word_hot_rare">P100</span>, respectively).<span class="des" title=" 我们通过将训练时间、所使用的GPU的数量以及每个GPU的持续单精度浮点能力的估计相乘来估计用于训练模型的浮点运算的数量(对于K80、K40、M40和P100，我们分别使用2.8、3.7、6.0和9.5 TFLOPS的值)。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">6.2 Model Variations<span class="des" title="6.2 模型的变体"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Table 3: Variations on the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> architecture.<span class="des" title="表3： Transformer架构的变体。"></span></div>
+    <div class="src"><span class="word_hot" title="Unlisted [ˌʌnˈlɪstɪd]">Unlisted</span> values are identical to those of the base model.<span class="des" title=" 未列出的值与基本模型的值相同。 所有指标都基于英文到德文翻译开发集newstest2013。"></span></div>
+    <div class="src">All metrics are on the English-to-German translation development set, <span class="word_hot_rare">newstest</span>2013. Listed <span class="word_hot" title="perplexity [pəˈpleksəti]">perplexities</span> are <span class="word_hot_rare">per-wordpiece</span>, according to our <span class="word_hot_synth" title="byte-pair [!≈ baɪt peə(r)]">byte-pair</span> encoding, and should not be compared to per-word <span class="word_hot" title="perplexity [pəˈpleksəti]">perplexities</span>.<span class="des" title=" Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to per-word perplexities."></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">To evaluate the importance of different components of the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span>, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, <span class="word_hot_rare">newstest</span>2013.<span class="des" title="为了评估Transformer不同组件的重要性，我们以不同的方式改变我们的基础模型，测量开发集newstest2013上英文-德文翻译的性能变化。"></span></div>
+    <div class="src">We used beam search as described in the previous section, but no checkpoint averaging.<span class="des" title=" 我们使用前一节所述的beam搜索，但没有平均检查点。"></span></div>
+    <div class="src">We present these results in Table 3.<span class="des" title=" 我们在表中列出这些结果 3."></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2.  While single-head attention is 0.9 <span class="word_hot" title="BLEU [blju:]">BLEU</span> worse than the best setting, quality also drops off with too many heads.<span class="des" title="在表3的行（A）中，我们改变attention head的数量和attention key和value的维度，保持计算量不变，如3.2.2节所述。 虽然只有一个head attention比最佳设置差0.9 BLEU，但质量也随着head太多而下降。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In Table 3 rows (B), we observe that reducing the attention key size <span class="word_hot" title="dk ['di:k'eɪ]">dk</span> hurts model quality.<span class="des" title="在表3行（B）中，我们观察到减小key的大小dk会有损模型质量。"></span></div>
+    <div class="src">This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneficial.<span class="des" title=" 这表明确定兼容性并不容易，并且比点积更复杂的兼容性函数可能更有用。"></span></div>
+    <div class="src">We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding <span class="word_hot_synth" title="over-fitting [!≈ ˈəʊvə(r) ˈfɪtɪŋ]">over-fitting</span>.<span class="des" title=" 我们在行（C）和（D）中进一步观察到，如预期的那样，更大的模型更好，并且丢弃对避免过度拟合非常有帮助。"></span></div>
+    <div class="src">In row (E) we replace our <span class="word_hot" title="sinusoidal [ˌsɪnə'sɔɪdl]">sinusoidal</span> <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> encoding with learned <span class="word_hot" title="positional [pəˈzɪʃənəl]">positional</span> <span class="word_hot" title="embeddings [ɪm'bɛd]">embeddings</span> [9], and observe nearly identical results to the base model.<span class="des" title=" 在行（E）中，我们用学习到的位置嵌入[9]来替换我们的正弦位置编码，并观察到与基本模型几乎相同的结果。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">6.3 English <span class="word_hot" title="constituency [kənˈstɪtjuənsi]">Constituency</span> <span class="word_hot" title="parse [pɑ:z]">Parsing</span><span class="des" title="6.3 English Constituency Parsing"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Table 4: The <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> generalizes well to English <span class="word_hot" title="constituency [kənˈstɪtjuənsi]">constituency</span> <span class="word_hot" title="parse [pɑ:z]">parsing</span> (Results are on Section 23 of <span class="word_hot_synth" title="WSJ [!≈ 'dʌblju: es dʒeɪ]">WSJ</span>)<span class="des" title="表4： The Transformer generalizes well to English constituency parsing (Results are on Section 23 of WSJ)"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">To evaluate if the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> can generalize to other tasks we performed experiments on English <span class="word_hot" title="constituency [kənˈstɪtjuənsi]">constituency</span> <span class="word_hot" title="parse [pɑ:z]">parsing</span>. This task presents specific challenges: the output is subject to strong structural constraints and is significantly longer than the input.<span class="des" title="To evaluate if the Transformer can generalize to other tasks we performed experiments on English constituency parsing. 这项任务提出特别的挑战：输出受到很强的结构性约束，并且比输入要长很多。"></span></div>
+    <div class="src">Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in <span class="word_hot_synth" title="small-data [!≈ smɔ:l ˈdeɪtə]">small-data</span> regimes [37].<span class="des" title=" 此外，RNN序列到序列模型还没有能够在小数据[37]中获得最好的结果。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We trained a 4-layer <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">transformer</span> with <span class="word_hot_rare">dmodel</span> = 1024 on the Wall Street Journal (<span class="word_hot_synth" title="WSJ [!≈ 'dʌblju: es dʒeɪ]">WSJ</span>) portion of the <span class="word_hot" title="Penn [pen]">Penn</span> <span class="word_hot" title="Treebank [ˈtri:bænk]">Treebank</span> [25], about 40K training sentences.<span class="des" title="我们用dmodel = 1024 在Penn Treebank[25]的Wall Street Journal（WSJ）部分训练了一个4层transformer，约40K个训练句子。"></span></div>
+    <div class="src">We also trained it in a <span class="word_hot_synth" title="semi-supervised [!≈ ˈsemi 'sju:pəvaɪzd]">semi-supervised</span> setting, using the larger high-confidence and <span class="word_hot_rare">BerkleyParser</span> <span class="word_hot" title="corpora [ˈkɔ:pərə]">corpora</span> from with approximately 17M sentences [37].<span class="des" title=" 我们还使用更大的高置信度和BerkleyParser语料库，在半监督环境中对其进行了训练，大约17M个句子[37]。"></span></div>
+    <div class="src">We used a vocabulary of 16K tokens for the <span class="word_hot_synth" title="WSJ [!≈ 'dʌblju: es dʒeɪ]">WSJ</span> only setting and a vocabulary of 32K tokens for the <span class="word_hot_synth" title="semi-supervised [!≈ ˈsemi 'sju:pəvaɪzd]">semi-supervised</span> setting.<span class="des" title=" 我们使用了一个16K词符的词汇表作为WSJ唯一设置，和一个32K词符的词汇表用于半监督设置。"></span></div>
+    <div class="src">表4中我们的结果表明，尽管缺少特定任务的调优，我们的模型表现得非常好，得到的结果比之前报告的除循环神经网络语法[8]之外的所有模型都好。 </div>
+    <div class="src">In contrast to RNN sequence-to-sequence models [37], the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> outperforms the <span class="word_hot_rare">BerkeleyParser</span> [29] even when training only on the <span class="word_hot_synth" title="WSJ [!≈ 'dʌblju: es dʒeɪ]">WSJ</span> training set of 40K sentences.<span class="des" title="与RNN序列到序列模型[37]相比，即使仅在WSJ训练40K句子组训练时，Transformer也胜过BerkeleyParser [29]。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">7 Conclusion<span class="des" title="7 结论"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">In this work, we presented the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span>, the first sequence <span class="word_hot" title="transduction [træns'dʌkʃən]">transduction</span> model based entirely on attention, replacing the <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> layers most commonly used in <span class="word_hot_synth" title="encoder-decoder [!≈ ɪn'kəʊdə ˌdi:ˈkəʊdə(r)]">encoder-decoder</span> architectures with multi-headed self-attention.<span class="des" title="在这项工作中，我们提出了Transformer，第一个完全基于关注的序列转导模型，用multi-headed self-attention取代了编码器-解码器架构中最常用的循环层。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">For translation tasks, the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> can be trained significantly faster than architectures based on <span class="word_hot" title="recurrent [rɪˈkʌrənt]">recurrent</span> or convolutional layers.<span class="des" title="对于翻译任务，Transformer可以比基于循环或卷积层的体系结构训练更快。"></span></div>
+    <div class="src">On both <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-German and <span class="word_hot_synth" title="WMT [!≈ 'dʌblju: em ti:]">WMT</span> 2014 English-to-French translation tasks, we achieve a new state of the art.<span class="des" title=" 在WMT 2014英语-德语和WMT 2014英语-法语翻译任务中，我们取得了最好的结果。"></span></div>
+    <div class="src">In the former task our best model outperforms even all previously reported <span class="word_hot" title="ensemble [ɒnˈsɒmbl]">ensembles</span>.<span class="des" title=" 在前面的任务中，我们最好的模型甚至胜过以前报道过的所有整合模型。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">We are excited about the future of attention-based models and plan to apply them to other tasks.<span class="des" title="我们对基于attention的模型的未来感到兴奋，并计划将它们应用于其他任务。"></span></div>
+    <div class="src">We plan to extend the <span class="word_hot" title="transformer [trænsˈfɔ:mə(r)]">Transformer</span> to problems involving input and output <span class="word_hot" title="modality [məʊˈdæləti]">modalities</span> other than text and to investigate local, restricted attention mechanisms to efficiently handle large inputs and outputs such as images, audio and video.<span class="des" title=" 我们计划将Transformer扩展到除文本之外的涉及输入和输出模式的问题，并调查局部的、受限attention机制以有效处理大型输入和输出，如图像、音频和视频。"></span></div>
+    <div class="src">Making generation less <span class="word_hot" title="sequential [sɪˈkwenʃl]">sequential</span> is another research goals of ours.<span class="des" title=" 让生成具有更少的顺序性是我们的另一个研究目标。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">The code we used to train and evaluate our models is available at https://github.com/tensorflow/tensor2tensor.<span class="des" title="我们用于训练和评估模型的代码可以在https://github.com/tensorflow/tensor2tensor上找到。"></span></div>
+</div>
+    <br>
+<div class="paragraph_part">
+    <div class="src">Acknowledgements We are grateful to <span class="word_hot_rare">Nal</span> <span class="word_hot_rare">Kalchbrenner</span> and <span class="word_hot_rare">Stephan</span> <span class="word_hot_rare">Gouws</span> for their fruitful comments, corrections and inspiration.<span class="des" title="致谢 我们感谢Nal Kalchbrenner和Stephan Gouws富有成效的评论、更正和灵感。"></span></div>
+</div>
+    <br>
+
+</div>
+<div class="panel">
+<div class="panel-btn" title="Toggle unfolding Chinese" onclick="display_des()">➥</div>
+<div class="panel-btn" title="Toggle display by sentences" onclick="display_lines()">☵</div>
+<div class="panel-btn" title="Toggle display of word list" onclick="display_words()">ᙡ</div>
+</div>
+<div id="wordPage" style="visibility:hidden;">
+<div style="position: fixed; width: 100%; height: 100%; top:0; left:0;background-color:#333; z-index:1; opacity:0.5; " onclick="display_words()"></div>
+<iframe src="./Attention Is All You Need_words.html" scrolling="auto" frameborder="0"></iframe>
+</div>
+<script type="text/javascript">
+font_default_color = "#666"
+var cnLines = document.getElementsByClassName("des");
+if (cnLines.length==0){
+   var btns = document.getElementsByClassName("panel")[0];
+    btns.removeChild(btns.children[0]); btns.removeChild(btns.children[2])
+} else
+for (var i = 0; i < cnLines.length; i++) {
+    var line = cnLines[i];
+    line.style.marginLeft="0.5em";line.style.marginRight="0.5em"; line.className="des off";
+    if (line.title=="") { continue;}
+    line.style.fontSize = "90%"; line.style.color=font_default_color;
+    line.innerHTML = line.title; line.removeAttribute("title"); 
+    line.addEventListener("click",handler,false);
+    line.addEventListener("mouseover",handler,false);
+    line.addEventListener("mouseout",handler,false);
+}
+</script>
+</body>
+</html>
